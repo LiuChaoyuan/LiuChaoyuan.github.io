@@ -1,0 +1,9 @@
+body {
+    cursor:url(' /img/anormal.cur'),
+          default;
+  }
+  a,
+  img {
+    cursor:url(' /img/apointer.cur'),
+          default;
+  }
