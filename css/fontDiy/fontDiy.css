@@ -1,0 +1,27 @@
+/* 导入第一个字体 
+@font-face {
+  font-family: 'qiji';
+  src: url('qiji-combo.ttf'); /* 自定义字体1 */
+}
+*/
+
+
+/* 导入第四个字体 */
+@font-face {
+  font-family: 'Jinghualaosongti';
+  src: url('Jinghualaosongti-v2.002.ttf'); /* 自定义字体2 */
+}
+
+/* 设置 body 的字体优先级 */
+body {
+  font-family: Jinghualaosongti,ModernSerif,-apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Lato, Roboto, "PingFang SC", "STZhongsong", "Lantinghei SC", sans-serif;
+
+  /*font-size: 1.2rem;  设定相对于根元素的字体大小 */
+}
+
+
+/* font-size: 16px;：设置 body 的字体大小为16像素。你可以根据需要调整这个值，比如 14px、18px 等。
+px（像素）是常见的单位，除此之外，你还可以使用其他单位，比如：
+em：相对于父元素字体大小的单位。
+rem：相对于根元素（HTML）的字体大小。
+%：相对于父元素的百分比*/
