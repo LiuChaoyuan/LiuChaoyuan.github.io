@@ -1,0 +1,566 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Python Relearning-datetime | The Site Of Liu</title><meta name="author" content="Sinohope"><meta name="copyright" content="Sinohope"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="&#x2F;&#x2F;文章描述">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python Relearning-datetime">
+<meta property="og:url" content="http://liuchaoyuan.github.io/2024/08/03/Python%20Relearning-datetime/index.html">
+<meta property="og:site_name" content="The Site Of Liu">
+<meta property="og:description" content="&#x2F;&#x2F;文章描述">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp">
+<meta property="article:published_time" content="2024-08-03T05:00:54.000Z">
+<meta property="article:modified_time" content="2025-08-26T13:57:42.492Z">
+<meta property="article:author" content="Sinohope">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="datetime">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp"><link rel="shortcut icon" href="/image/cat.png"><link rel="canonical" href="http://liuchaoyuan.github.io/2024/08/03/Python%20Relearning-datetime/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.clarity.ms"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "oic38wrclh");</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"简","msgToSimplifiedChinese":"繁"},
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been(现在距离此文章的最后更新日期已经过了)","messageNext":"days since the last update, the content of the article may be outdated.(天，文章的内容可能过时，请注意甄别)"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Python Relearning-datetime',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-08-26 21:57:42'
+}</script><script src="/styles/fish.js"></script><script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script><link rel="stylesheet" href="/css/bilibili.css"><link rel="stylesheet" href="/css/chamber/cursors.css"><link rel="stylesheet" href="/css/fontDiy/fontDiy.css"><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-image: url(https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/cloud_and_moon.webp);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/%E5%89%91%E5%BF%83.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">101</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/update"><i class="fa-fw fas fa-bell"></i><span> 动态</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-chart-pie"></i><span> 博客统计</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/charts/"><i class="fa-fw far fa-chart-bar"></i><span> 文章统计</span></a></li><li><a class="site-page child" href="/census/"><i class="fa-fw fas fa-chart-area"></i><span> 访问统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/top/"><i class="fa-fw fab fa-hotjar"></i><span> 阅读排行榜</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/books/"><i class="fa-fw fas fa-book"></i><span> 书籍</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/songs/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/cat.png" alt="Logo"><span class="site-name">The Site Of Liu</span></a><a class="nav-page-title" href="/"><span class="site-name">Python Relearning-datetime</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/update"><i class="fa-fw fas fa-bell"></i><span> 动态</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-chart-pie"></i><span> 博客统计</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/charts/"><i class="fa-fw far fa-chart-bar"></i><span> 文章统计</span></a></li><li><a class="site-page child" href="/census/"><i class="fa-fw fas fa-chart-area"></i><span> 访问统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/top/"><i class="fa-fw fab fa-hotjar"></i><span> 阅读排行榜</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/books/"><i class="fa-fw fas fa-book"></i><span> 书籍</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/songs/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Python Relearning-datetime</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-08-03T05:00:54.000Z" title="发表于 2024-08-03 13:00:54">2024-08-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-08-26T13:57:42.492Z" title="更新于 2025-08-26 21:57:42">2025-08-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/">计算机</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">3.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>16分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="日期和时间的格式化符号"><a href="#日期和时间的格式化符号" class="headerlink" title="日期和时间的格式化符号"></a>日期和时间的格式化符号</h1><p>如下表：</p>
+
+
+<p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.date" title="datetime.date"><code>date</code></a>, <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.datetime" title="datetime.datetime"><code>datetime</code></a> 和 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time" title="datetime.time"><code>time</code></a> 对象都支持 <code>strftime(format)</code> 方法，可用来创建由一个显式格式字符串所控制的表示时间的字符串。</p>
+<p>相反地，<a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.datetime.strptime" title="datetime.datetime.strptime"><code>datetime.strptime()</code></a> 类会根据表示日期和时间的字符串和相应的格式字符串来创建一个 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.datetime" title="datetime.datetime"><code>datetime</code></a> 对象。</p>
+<h1 id="strftime-与-strptime-的高层级比较："><a href="#strftime-与-strptime-的高层级比较：" class="headerlink" title="strftime()与 strptime() 的高层级比较："></a>strftime()与 strptime() 的高层级比较：</h1><p>下表提供了 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.datetime.strftime" title="datetime.datetime.strftime"><code>strftime()</code></a> 与 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.datetime.strptime" title="datetime.datetime.strptime"><code>strptime()</code></a> 的高层级比较：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>strftime</code></th>
+<th><code>strptime</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>用法</td>
+<td>根据给定的格式将对象转换为字符串</td>
+<td>将字符串解析为给定相应格式的 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.datetime" title="datetime.datetime"><code>datetime</code></a> 对象</td>
+</tr>
+<tr>
+<td>方法类型</td>
+<td>实例方法</td>
+<td>类方法</td>
+</tr>
+<tr>
+<td>方法</td>
+<td><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.date" title="datetime.date"><code>date</code></a>; <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.datetime" title="datetime.datetime"><code>datetime</code></a>; <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time" title="datetime.time"><code>time</code></a></td>
+<td><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.datetime" title="datetime.datetime"><code>datetime</code></a></td>
+</tr>
+<tr>
+<td>签名</td>
+<td><code>strftime(format)</code></td>
+<td><code>strptime(date_string, format)</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="datetime-timedelta对象"><a href="#datetime-timedelta对象" class="headerlink" title="datetime.timedelta对象"></a>datetime.timedelta对象</h1><p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.timedelta" title="datetime.timedelta"><code>timedelta</code></a> 对象表示一段持续的时间，即两个 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.datetime" title="datetime.datetime"><code>datetime</code></a> 或 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.date" title="datetime.date"><code>date</code></a> 实例之间的差值。</p>
+<h2 id="基本实现"><a href="#基本实现" class="headerlink" title="基本实现"></a>基本实现</h2><p><code>mydelta=datetime.timedelta(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0)</code></p>
+<p>所有参数都是可选的并且默认为 0。 这些参数可以是整数或者浮点数，并可以为正值或者负值。</p>
+<p>只有 <em>days</em>, <em>seconds</em> 和 <em>microseconds</em> 会存储在内部。 参数单位的换算规则如下</p>
+<ul>
+<li><p>1毫秒会转换成1000微秒。</p>
+</li>
+<li><p>1分钟会转换成60秒。</p>
+</li>
+<li><p>1小时会转换成3600秒。</p>
+</li>
+<li><p>1星期会转换成7天。</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line">delta = datetime.timedelta(</span><br><span class="line">    days=<span class="number">50</span>,</span><br><span class="line">    seconds=<span class="number">27</span>,</span><br><span class="line">    microseconds=<span class="number">10</span>,</span><br><span class="line">    milliseconds=<span class="number">29000</span>,</span><br><span class="line">    minutes=<span class="number">5</span>,</span><br><span class="line">    hours=<span class="number">8</span>,</span><br><span class="line">    weeks=<span class="number">2</span></span><br><span class="line">)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;持续时间为:&#x27;</span>,delta)</span><br><span class="line"><span class="comment"># 输出64 days, 8:05:56.000010</span></span><br></pre></td></tr></table></figure>
+<p>在有任何参数为浮点型并且 microseconds 值为小数的情况下，从所有参数中余下的微秒数将被合并，并使用四舍五入偶不入奇的规则将总计值舍入到最接近的整数微秒值。 如果没有任何参数为浮点型的情况下，则转换和标准化过程将是完全精确的（不会丢失信息）。</p>
+<p>如果标准化后的 days 数值超过了指定范围，将会抛出 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/exceptions.html#OverflowError" title="OverflowError"><code>OverflowError</code></a> 异常。</p>
+<h2 id="类属性"><a href="#类属性" class="headerlink" title="类属性"></a>类属性</h2><ul>
+<li><p><code>datetime.timedelta.min</code></p>
+<p>最小的时间间隔， -999999999 days, 0:0</p>
+</li>
+<li><p><code>datetime.timedelta.max</code></p>
+<p>最大的时间间隔， 999999999 days, 23:59:59.999999</p>
+</li>
+<li><p><code>datetime.timedelta.resolution</code></p>
+<p>两个不相等的 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.timedelta" title="datetime.timedelta"><code>timedelta</code></a> 类对象最小的间隔为 <code>timedelta(microseconds=1)</code>。</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mindelta=datetime.timedelta.<span class="built_in">min</span></span><br><span class="line">maxdelta=datetime.timedelta.<span class="built_in">max</span></span><br><span class="line">resolution=datetime.timedelta.resolution</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;mindelta is:&#x27;</span>,mindelta)      <span class="comment"># -999999999 days, 0:00:00</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;maxdelta is:&#x27;</span>,maxdelta)      <span class="comment"># 999999999 days, 23:59:59.999999</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;resolution is:&#x27;</span>,resolution)      <span class="comment"># 0:00:00.000001</span></span><br></pre></td></tr></table></figure>
+<h2 id="支持数学算术运算"><a href="#支持数学算术运算" class="headerlink" title="支持数学算术运算"></a>支持数学算术运算</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>运算</th>
+<th>结果：</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>t1 = t2 + t3</code></td>
+<td><code>t2</code> 和 <code>t3</code> 之和。 运算后 <code>t1 - t2 == t3</code> 且 <code>t1 - t3 == t2</code> 为真值。 (1)</td>
+</tr>
+<tr>
+<td><code>t1 = t2 - t3</code></td>
+<td><code>t2</code> 和 <code>t3</code> 之差。 运算后 <code>t1 == t2 - t3</code> 且 <code>t2 == t1 + t3</code> 为真值。 (1)(6)</td>
+</tr>
+<tr>
+<td><code>t1 = t2 * i or t1 = i * t2</code></td>
+<td>时差乘以一个整数。 运算后如果 <code>i != 0</code> 则 <code>t1 // i == t2</code> 为真值。</td>
+</tr>
+<tr>
+<td></td>
+<td>通常情况下，<code>t1  * i == t1 * (i-1) + t1</code> 为真值。 (1)</td>
+</tr>
+<tr>
+<td><code>t1 = t2 * f or t1 = f * t2</code></td>
+<td>乘以一个浮点数，结果会被舍入到 timedelta 最接近的整数倍。 精度使用四舍五偶入奇不入规则。</td>
+</tr>
+<tr>
+<td><code>f = t2 / t3</code></td>
+<td>总时长 <code>t2</code> 除以间隔单位 <code>t3</code> (3)。 返回一个 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/functions.html#float" title="float"><code>float</code></a> 对象。</td>
+</tr>
+<tr>
+<td><code>t1 = t2 / f or t1 = t2 / i</code></td>
+<td>除以一个浮点数或整数。 结果会被舍入到 timedelta 最接近的整数倍。 精度使用四舍五偶入奇不入规则。</td>
+</tr>
+<tr>
+<td><code>t1 = t2 // i</code> or <code>t1 = t2 // t3</code></td>
+<td>计算底数，其余部分（如果有）将被丢弃。在第二种情况下，将返回整数。 （3）</td>
+</tr>
+<tr>
+<td><code>t1 = t2 % t3</code></td>
+<td>余数为一个 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.timedelta" title="datetime.timedelta"><code>timedelta</code></a> 对象。(3)</td>
+</tr>
+<tr>
+<td><code>q, r = divmod(t1, t2)</code></td>
+<td>通过 : <code>q = t1 // t2</code> (3) and <code>r = t1 % t2</code> 计算出商和余数。q是一个整数，r是一个 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.timedelta" title="datetime.timedelta"><code>timedelta</code></a> 对象。</td>
+</tr>
+<tr>
+<td><code>+t1</code></td>
+<td>返回一个相同数值的 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.timedelta" title="datetime.timedelta"><code>timedelta</code></a> 对象。</td>
+</tr>
+<tr>
+<td><code>-t1</code></td>
+<td>等于 <code>timedelta(-t1.days, -t1.seconds*, -t1.microseconds)</code>，以及 <code>t1 * -1</code>。 (1)(4)</td>
+</tr>
+<tr>
+<td><code>abs(t)</code></td>
+<td>当 <code>t.days &gt;= 0</code> 时等于 <code>+t</code>，而当 <code>t.days &lt; 0</code> 时等于 <code>-t</code>。 (2)</td>
+</tr>
+<tr>
+<td><code>str(t)</code></td>
+<td>返回一个形如 <code>[D day[s], ][H]H:MM:SS[.UUUUUU]</code> 的字符串，当 <code>t</code> 为负数的时候， D 也为负数。 (5)</td>
+</tr>
+<tr>
+<td><code>repr(t)</code></td>
+<td>返回一个 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.timedelta" title="datetime.timedelta"><code>timedelta</code></a> 对象的字符串表示形式，作为附带正规属性值的构造器调用。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="转化为秒数"><a href="#转化为秒数" class="headerlink" title="转化为秒数"></a>转化为秒数</h2><p><code>timedelta.total_seconds()</code></p>
+<p>返回期间占用了多少秒。等价于 <code>td / timedelta(seconds=1)</code>。对于秒以外的间隔单位，直接使用除法形式 (例如 <code>td / timedelta(microseconds=1)</code>)。</p>
+<p>需要注意的是，时间间隔较大时，这个方法的结果中的微秒将会失真（大多数平台上大于270年视为一个较大的时间间隔）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">total_seconds=delta.total_seconds()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;The total_seconds of delta is :&#x27;</span>,total_seconds)</span><br><span class="line"><span class="comment"># 5558756.00001</span></span><br></pre></td></tr></table></figure>
+<h1 id="datetime-date对象"><a href="#datetime-date对象" class="headerlink" title="datetime.date对象"></a>datetime.date对象</h1><p>首先，创建一个日期对象</p>
+<h2 id="创建日期对象"><a href="#创建日期对象" class="headerlink" title="创建日期对象"></a>创建日期对象</h2><h3 id="创建日期对象-1"><a href="#创建日期对象-1" class="headerlink" title="创建日期对象"></a>创建日期对象</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建一个日期对象</span></span><br><span class="line">birth = datetime.date(<span class="number">2004</span>, <span class="number">2</span>, <span class="number">18</span>)</span><br><span class="line"><span class="built_in">print</span>(birth)  <span class="comment"># Output: 2004-01-28</span></span><br></pre></td></tr></table></figure>
+<h3 id="日期对象的表示范围"><a href="#日期对象的表示范围" class="headerlink" title="日期对象的表示范围"></a>日期对象的表示范围</h3><p>最小值是公元元年1月1日，最大值是公元9999年12月31日</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 表示范围</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;datetime.date的最大值：&#x27;</span>,datetime.date.<span class="built_in">max</span>)       <span class="comment"># 9999-12-31 </span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;datetime.date的最小值：&#x27;</span>,datetime.date.<span class="built_in">min</span>)       <span class="comment"># 0001-01-01</span></span><br></pre></td></tr></table></figure>
+<h3 id="获取各个年-月-日"><a href="#获取各个年-月-日" class="headerlink" title="获取各个年/月/日"></a>获取各个年/月/日</h3><p>直接调用其属性，<code>year,month,day</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 获得各个部分</span></span><br><span class="line">y=birth.year</span><br><span class="line">m=birth.month</span><br><span class="line">d=birth.day</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;The month of birth:&#x27;</span>,m)   <span class="comment"># 输出： 2</span></span><br></pre></td></tr></table></figure>
+<h2 id="日期对象格式化为字符串、修改日期"><a href="#日期对象格式化为字符串、修改日期" class="headerlink" title="日期对象格式化为字符串、修改日期"></a>日期对象格式化为字符串、修改日期</h2><h3 id="使用strftime精细控制格式化"><a href="#使用strftime精细控制格式化" class="headerlink" title="使用strftime精细控制格式化"></a>使用strftime精细控制格式化</h3><p>使用方法是<code>mydate.strftime(&#39;格式化字符串&#39;)</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用strftime精细控制,表示时、分或秒的格式代码值将为 0</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;formated birth is :&quot;</span>,birth.strftime(<span class="string">&quot;%Y年%m月%d日&quot;</span>))</span><br><span class="line"><span class="comment"># 输出2004年02月18日</span></span><br></pre></td></tr></table></figure>
+<h3 id="格式化为YYYY-MM-DD"><a href="#格式化为YYYY-MM-DD" class="headerlink" title="格式化为YYYY-MM-DD"></a>格式化为YYYY-MM-DD</h3><p>使用方法是<code>mydate.isoformat()</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 输出iso8601日期格式字符串YYYY-MM-DD</span></span><br><span class="line">birth_iso_format=birth.isoformat()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;birth_iso_format is <span class="subst">&#123;birth_iso_format&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="comment"># 2004-02-18</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="格式化为-’Weekday-month-day-h-m-s-YYYY’"><a href="#格式化为-’Weekday-month-day-h-m-s-YYYY’" class="headerlink" title="格式化为:’Weekday month day h-m-s YYYY’"></a>格式化为:’Weekday month day h-m-s YYYY’</h3><p>使用方法是<code>mydate.ctime()</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 日期格式化为:&#x27;Wed Dec  4 00:00:00 2002&#x27;</span></span><br><span class="line">birth_ctime=birth.ctime()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;birth_ctime is <span class="subst">&#123;birth_ctime&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="comment"># Wed Feb 18 00:00:00 2004</span></span><br></pre></td></tr></table></figure>
+<h3 id="修改日期"><a href="#修改日期" class="headerlink" title="修改日期"></a>修改日期</h3><p>  使用方法是<code>mydate.replace(year=newyear,month=newmonth,day=newday)</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改日期</span></span><br><span class="line"><span class="comment"># newdate=date.replace(year=self.year, month=self.month, day=self.day)</span></span><br><span class="line">revised_birth= birth.replace(month=<span class="number">1</span>,day=<span class="number">28</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;修改了月份和天的birth是:&#x27;</span>,revised_birth)</span><br></pre></td></tr></table></figure>
+<h2 id="关于周几和距离公元元年1月1日的距离"><a href="#关于周几和距离公元元年1月1日的距离" class="headerlink" title="关于周几和距离公元元年1月1日的距离"></a>关于周几和距离公元元年1月1日的距离</h2><h3 id="获取0-6表示的weekday"><a href="#获取0-6表示的weekday" class="headerlink" title="获取0~6表示的weekday"></a>获取0~6表示的weekday</h3><p><code>mydate.weekday()</code>返回一个整数代表星期几，星期一为0，星期天为6</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 返回一个整数代表星期几，星期一为0，星期天为6</span></span><br><span class="line">week = <span class="number">1</span> + birth.weekday()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;birth是周&#x27;</span>,week)</span><br></pre></td></tr></table></figure>
+<h3 id="获取1-7表示的weekday"><a href="#获取1-7表示的weekday" class="headerlink" title="获取1~7表示的weekday"></a>获取1~7表示的weekday</h3><p><code>mydate.isoweekday()</code>返回一个整数代表星期几，星期一为1，星期天为7</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 直接用iso标准，1~7</span></span><br><span class="line">week=birth.isoweekday()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;birth是周&#x27;</span>,week)</span><br></pre></td></tr></table></figure>
+<h3 id="获取『某年某周周几』是『某年某月某日』"><a href="#获取『某年某周周几』是『某年某月某日』" class="headerlink" title="获取『某年某周周几』是『某年某月某日』"></a>获取『某年某周周几』是『某年某月某日』</h3><p><code>mydate.fromisocalendar(YYYY,week,weekday)</code>返回确切的年月日</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 获取『某年某周周几』是『几月几日』</span></span><br><span class="line">day3=datetime.date.fromisocalendar(<span class="number">2024</span>,<span class="number">45</span>,<span class="number">1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;2024年45周周一是:&#x27;</span>,day3)</span><br><span class="line"><span class="comment"># 2024-11-04</span></span><br></pre></td></tr></table></figure>
+<h3 id="获取『某年某月某日』是『某年某周周几』"><a href="#获取『某年某月某日』是『某年某周周几』" class="headerlink" title="获取『某年某月某日』是『某年某周周几』"></a>获取『某年某月某日』是『某年某周周几』</h3><p><code>mydate.fromisocalendar(YYYY,week,weekday)</code>返回确切的年月日</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 获取当前日期的iso历法 ：year, week 和 weekday</span></span><br><span class="line">birth=datetime.date(<span class="number">2004</span>,<span class="number">2</span>,<span class="number">18</span>)</span><br><span class="line">birth_iso_cal=birth.isocalendar()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;2004-2-18 is <span class="subst">&#123;birth_iso_cal&#125;</span>&#x27;</span>)     <span class="comment">#datetime.IsoCalendarDate(year=2004, week=8, weekday=3)</span></span><br></pre></td></tr></table></figure>
+<h2 id="其他-字符串解析为日期对象、修改日期、获取当前日期"><a href="#其他-字符串解析为日期对象、修改日期、获取当前日期" class="headerlink" title="其他(字符串解析为日期对象、修改日期、获取当前日期)"></a>其他(字符串解析为日期对象、修改日期、获取当前日期)</h2><h3 id="字符串解析为日期对象"><a href="#字符串解析为日期对象" class="headerlink" title="字符串解析为日期对象"></a>字符串解析为日期对象</h3><p>使用<code>datetime.datetime.striptime(myString,&#39;格式化字符串&#39;)</code>方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将字符串解析为日期对象</span></span><br><span class="line">str_date=<span class="string">&#x27;2004-01-28&#x27;</span></span><br><span class="line">obj_str_date=datetime.datetime.strptime(str_date,<span class="string">&quot;%Y-%m-%d&quot;</span>).date()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;obj_str_date的类型是:&#x27;</span>,<span class="built_in">type</span>(obj_str_date))   <span class="comment"># 输出 &lt;class &#x27;datetime.date&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="修改日期-1"><a href="#修改日期-1" class="headerlink" title="修改日期"></a>修改日期</h3><p>使用方法是<code>mydate.replace(year=newyear,month=newmonth,day=newday)</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改日期</span></span><br><span class="line"><span class="comment"># newdate=date.replace(year=self.year, month=self.month, day=self.day)</span></span><br><span class="line">revised_birth= birth.replace(month=<span class="number">1</span>,day=<span class="number">28</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;修改了月份和天的birth是:&#x27;</span>,revised_birth)</span><br></pre></td></tr></table></figure>
+<h3 id="获取当前日期"><a href="#获取当前日期" class="headerlink" title="获取当前日期"></a>获取当前日期</h3><p>使用<code>datetime.datetime.today</code>法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;datetime.datetime&#x27;</span>.center(<span class="number">40</span>,<span class="string">&#x27;-&#x27;</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;今天是:&#x27;</span>,datetime.date.today())     <span class="comment"># 今天是: 2024-08-05</span></span><br></pre></td></tr></table></figure>
+<h2 id="支持数学算术运算-1"><a href="#支持数学算术运算-1" class="headerlink" title="支持数学算术运算"></a>支持数学算术运算</h2><p>支持的运算：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>运算</th>
+<th>结果：</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>date2 = date1 + timedelta</code></td>
+<td><code>date2</code> 将为 <code>date1</code> 之后的 <code>timedelta.days</code> 日。<strong>可以后退</strong> (1)</td>
+</tr>
+<tr>
+<td><code>date2 = date1 - timedelta</code></td>
+<td>计算 <code>date2</code> 使得 <code>date2 + timedelta == date1</code>。 (2)</td>
+</tr>
+<tr>
+<td><code>timedelta = date1 - date2</code></td>
+<td>(3）<strong>精确结果</strong></td>
+</tr>
+<tr>
+<td><code>date1 == date2</code><br><br><code>date1 != date2</code></td>
+<td>相等性比较。 (4)</td>
+</tr>
+<tr>
+<td><code>date1 &lt; date2</code><br><br><code>date1 &gt; date2</code><br><br><code>date1 &lt;= date2</code><br><br><code>date1 &gt;= date2</code></td>
+<td><strong>顺序比较</strong>。 (5)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>注释：</p>
+<ol>
+<li><p>如果 <code>timedelta.days &gt; 0</code> 则 <em>date2</em> 将在时间线上前进，如果 <code>timedelta.days &lt; 0</code> 则将后退。 操作完成后 <code>date2 - date1 == timedelta.days</code>。 <code>timedelta.seconds</code> 和 <code>timedelta.microseconds</code> 会被忽略。 如果 <code>date2.year</code> 将小于 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.MINYEAR" title="datetime.MINYEAR"><code>MINYEAR</code></a> 或大于 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.MAXYEAR" title="datetime.MAXYEAR"><code>MAXYEAR</code></a> 则会引发 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/exceptions.html#OverflowError" title="OverflowError"><code>OverflowError</code></a>。</p>
+</li>
+<li><p><code>timedelta.seconds</code> 和 <code>timedelta.microseconds</code> 会被忽略。</p>
+</li>
+<li><p>该值是<strong>精确的</strong>，且不会溢出。 运算后 <code>timedelta.seconds</code> 和 <code>timedelta.microseconds</code> 均为 0，且 <code>date2 + timedelta == date1</code>。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.date" title="datetime.date"><code>date</code></a> 对象在表示相同的日期时相等。</p>
+</li>
+<li><p>当 <em>date1</em> 的时间在 <em>date2</em> 之前则认为 <em>date1</em> 小于 <em>date2</em>。 换句话说，当且仅当 <code>date1.toordinal() &lt; date2.toordinal()</code> 时 <code>date1 &lt; date2</code>。</p>
+</li>
+</ol>
+<p>在布尔运算中，<strong>所有 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.date" title="datetime.date"><code>date</code></a> 对象都会被视为真值。</strong></p>
+<h1 id="datetime-datetime"><a href="#datetime-datetime" class="headerlink" title="datetime.datetime"></a>datetime.datetime</h1><p>对象是包含来自 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.date" title="datetime.date"><code>date</code></a> 对象和 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time" title="datetime.time"><code>time</code></a> 对象的所有信息的单一对象。</p>
+<p>与 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.date" title="datetime.date"><code>date</code></a> 对象一样，<a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.datetime" title="datetime.datetime"><code>datetime</code></a> 假定当前的格列高利历向前后两个方向无限延伸；与 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time" title="datetime.time"><code>time</code></a> 对象一样，<a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.datetime" title="datetime.datetime"><code>datetime</code></a> 假定每一天恰好有 3600*24 秒。</p>
+<p>构造器 ：</p>
+<p><code>class datetime.datetime(year, month, day, hour=0, minute=0, second=0, microsecond=0, tzinfo=None, *, fold=0)</code></p>
+<p><strong><em>year</em>, <em>month</em> 和 <em>day</em> 参数是必须的</strong>。 <em>tzinfo</em> 可以是 <code>None</code> 或者是一个 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.tzinfo" title="datetime.tzinfo"><code>tzinfo</code></a> 子类的实例。 其余的参数必须是在下面范围内的整数：</p>
+<ul>
+<li><p><code>MINYEAR &lt;= year &lt;= MAXYEAR</code>,</p>
+</li>
+<li><p><code>1 &lt;= month &lt;= 12</code>,</p>
+</li>
+<li><p><code>1 &lt;= day &lt;= 指定年月的天数</code>,</p>
+</li>
+<li><p><code>0 &lt;= hour &lt; 24</code>,</p>
+</li>
+<li><p><code>0 &lt;= minute &lt; 60</code>,</p>
+</li>
+<li><p><code>0 &lt;= second &lt; 60</code>,</p>
+</li>
+<li><p><code>0 &lt;= microsecond &lt; 1000000</code>,</p>
+</li>
+<li><p><code>fold in [0, 1]</code>.</p>
+</li>
+</ul>
+<p>如果参数不在这些范围内，则抛出 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/exceptions.html#ValueError" title="ValueError"><code>ValueError</code></a> 异常。</p>
+<h2 id="获取当前时间"><a href="#获取当前时间" class="headerlink" title="获取当前时间"></a>获取当前时间</h2><p>利用<code>datetime.datetime.today()</code>或者<code>datetime.datetime.now()</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 当前日期和时间</span></span><br><span class="line"><span class="comment"># 方法一</span></span><br><span class="line">today1=datetime.datetime.today()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;今天是:&#x27;</span>,today1)     <span class="comment"># 今天是: 2024-08-05 18:40:49.937493</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法二</span></span><br><span class="line">today2=datetime.datetime.now()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;今天是:&#x27;</span>,today2)     <span class="comment"># 今天是: 2024-08-05 18:42:38.699239</span></span><br></pre></td></tr></table></figure>
+<h2 id="距离『公元元年1月1日』的距离"><a href="#距离『公元元年1月1日』的距离" class="headerlink" title="距离『公元元年1月1日』的距离"></a>距离『公元元年1月1日』的距离</h2><h3 id="获得距离『公元元年1月1日』指定天数的具体日期-某年某月某日』"><a href="#获得距离『公元元年1月1日』指定天数的具体日期-某年某月某日』" class="headerlink" title="获得距离『公元元年1月1日』指定天数的具体日期(某年某月某日』)"></a>获得距离『公元元年1月1日』指定天数的具体日期(某年某月某日』)</h3><p>利用<code>datetime.datetime.fromordinal(天数)</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">after999999=datetime.datetime.fromordinal(<span class="number">999999</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;999999days after 1,1,1 is :&#x27;</span>,after999999)        <span class="comment"># 2738-11-27 00:00:00</span></span><br></pre></td></tr></table></figure>
+<h2 id="字符串解析为datetime对象"><a href="#字符串解析为datetime对象" class="headerlink" title="字符串解析为datetime对象"></a>字符串解析为datetime对象</h2><h3 id="用datetime-datetime-fromisoformat-yourString-方法。"><a href="#用datetime-datetime-fromisoformat-yourString-方法。" class="headerlink" title="用datetime.datetime.fromisoformat(yourString)方法。"></a>用datetime.datetime.fromisoformat(yourString)方法。</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt;<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</span><br><span class="line">&gt;&gt;&gt;datetime.fromisoformat(<span class="string">&#x27;2011-11-04&#x27;</span>)</span><br><span class="line">datetime.datetime(<span class="number">2011</span>, <span class="number">11</span>, <span class="number">4</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">&gt;&gt;&gt;datetime.fromisoformat(<span class="string">&#x27;20111104&#x27;</span>)</span><br><span class="line">datetime.datetime(<span class="number">2011</span>, <span class="number">11</span>, <span class="number">4</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">&gt;&gt;&gt;datetime.fromisoformat(<span class="string">&#x27;2011-11-04T00:05:23&#x27;</span>)</span><br><span class="line">datetime.datetime(<span class="number">2011</span>, <span class="number">11</span>, <span class="number">4</span>, <span class="number">0</span>, <span class="number">5</span>, <span class="number">23</span>)</span><br><span class="line">&gt;&gt;&gt;datetime.fromisoformat(<span class="string">&#x27;2011-11-04T00:05:23Z&#x27;</span>)</span><br><span class="line">datetime.datetime(<span class="number">2011</span>, <span class="number">11</span>, <span class="number">4</span>, <span class="number">0</span>, <span class="number">5</span>, <span class="number">23</span>, tzinfo=datetime.timezone.utc)</span><br><span class="line">&gt;&gt;&gt;datetime.fromisoformat(<span class="string">&#x27;20111104T000523&#x27;</span>)</span><br><span class="line">datetime.datetime(<span class="number">2011</span>, <span class="number">11</span>, <span class="number">4</span>, <span class="number">0</span>, <span class="number">5</span>, <span class="number">23</span>)</span><br><span class="line">&gt;&gt;&gt;datetime.fromisoformat(<span class="string">&#x27;2011-W01-2T00:05:23.283&#x27;</span>)</span><br><span class="line">datetime.datetime(<span class="number">2011</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">0</span>, <span class="number">5</span>, <span class="number">23</span>, <span class="number">283000</span>)</span><br><span class="line">&gt;&gt;&gt;datetime.fromisoformat(<span class="string">&#x27;2011-11-04 00:05:23.283&#x27;</span>)</span><br><span class="line">datetime.datetime(<span class="number">2011</span>, <span class="number">11</span>, <span class="number">4</span>, <span class="number">0</span>, <span class="number">5</span>, <span class="number">23</span>, <span class="number">283000</span>)</span><br><span class="line">&gt;&gt;&gt;datetime.fromisoformat(<span class="string">&#x27;2011-11-04 00:05:23.283+00:00&#x27;</span>)</span><br><span class="line">datetime.datetime(<span class="number">2011</span>, <span class="number">11</span>, <span class="number">4</span>, <span class="number">0</span>, <span class="number">5</span>, <span class="number">23</span>, <span class="number">283000</span>, tzinfo=datetime.timezone.utc)</span><br><span class="line">&gt;&gt;&gt;datetime.fromisoformat(<span class="string">&#x27;2011-11-04T00:05:23+04:00&#x27;</span>)   </span><br><span class="line">datetime.datetime(<span class="number">2011</span>, <span class="number">11</span>, <span class="number">4</span>, <span class="number">0</span>, <span class="number">5</span>, <span class="number">23</span>,</span><br><span class="line">    tzinfo=datetime.timezone(datetime.timedelta(seconds=<span class="number">14400</span>)))</span><br></pre></td></tr></table></figure>
+<h3 id="strptime-方法将字符串解析为datetime-datetime对象"><a href="#strptime-方法将字符串解析为datetime-datetime对象" class="headerlink" title="strptime()方法将字符串解析为datetime.datetime对象"></a>strptime()方法将字符串解析为datetime.datetime对象</h3><p>用strptime()方法:</p>
+<p><code>datetime.strptime(*date_string*, *format*)</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">birth=<span class="string">&#x27;2004年2月18日&#x27;</span></span><br><span class="line">birth_datetime=datetime.datetime.strptime(birth,<span class="string">&#x27;%Y年%m月%d日&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;birth_datetime is:&#x27;</span>,birth_datetime)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;The type of birth_datetime is:&#x27;</span>,<span class="built_in">type</span>(birth_datetime))</span><br><span class="line"><span class="comment"># 2004-02-18 00:00:00</span></span><br><span class="line"><span class="comment"># &lt;class &#x27;datetime.datetime&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="datetime类格式化为字符串、计算周几"><a href="#datetime类格式化为字符串、计算周几" class="headerlink" title="datetime类格式化为字符串、计算周几"></a>datetime类格式化为字符串、计算周几</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">birth=datetime.datetime(<span class="number">2004</span>,<span class="number">2</span>,<span class="number">18</span>)</span><br><span class="line">birth_1=birth.weekday()     <span class="comment"># 2</span></span><br><span class="line">birth_2=birth.isoweekday()      <span class="comment"># 3</span></span><br><span class="line">birth_3=birth.isocalendar()     <span class="comment"># datetime.IsoCalendarDate(year=2004, week=8, weekday=3)</span></span><br><span class="line">birth_4=birth.isoformat()       <span class="comment"># &#x27;2004-02-18T00:00:00&#x27;  </span></span><br><span class="line">birth_5=birth.ctime()     <span class="comment"># &#x27;Wed Feb 18 00:00:00 2004&#x27;</span></span><br><span class="line">birth_6=birth.strftime(<span class="string">&#x27;%Y年%m月%d日&#x27;</span>)        <span class="comment"># &#x27;2004年02月18日&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>注意:</p>
+<p><code>datetime.isoformat(*sep=&#39;T&#39;*, *timespec=&#39;auto&#39;*)</code><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.datetime.isoformat" title="Link to this definition"></a></p>
+<p>返回一个以 ISO 8601 格式表示的日期和时间字符串：</p>
+<ul>
+<li><p><code>YYYY-MM-DDTHH:MM:SS.ffffff</code>，如果 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.datetime.microsecond" title="datetime.datetime.microsecond"><code>microsecond</code></a> 不为 0</p>
+</li>
+<li><p><code>YYYY-MM-DDTHH:MM:SS</code>，如果 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.datetime.microsecond" title="datetime.datetime.microsecond"><code>microsecond</code></a> 为 0</p>
+</li>
+</ul>
+<h1 id="datetime-time"><a href="#datetime-time" class="headerlink" title="datetime.time"></a>datetime.time</h1><p>一个 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time" title="datetime.time"><code>time</code></a> 对象代表某日的（本地）时间，它独立于任何特定日期，并可通过 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.tzinfo" title="datetime.tzinfo"><code>tzinfo</code></a> 对象来调整。</p>
+<p><em>class</em> datetime.time(<em>hour=0</em>, <em>minute=0</em>, <em>second=0</em>, <em>microsecond=0</em>, <em>tzinfo=None</em>, <em>**, </em>fold=0*)<a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time" title="Link to this definition"></a></p>
+<p>所有参数都是可选的。 <em>tzinfo</em> 可以是 <code>None</code>，或者是一个 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.tzinfo" title="datetime.tzinfo"><code>tzinfo</code></a> 子类的实例。 其余的参数必须是在下面范围内的整数：</p>
+<ul>
+<li><p><code>0 &lt;= hour &lt; 24</code>,</p>
+</li>
+<li><p><code>0 &lt;= minute &lt; 60</code>,</p>
+</li>
+<li><p><code>0 &lt;= second &lt; 60</code>,</p>
+</li>
+<li><p><code>0 &lt;= microsecond &lt; 1000000</code>,</p>
+</li>
+<li><p><code>fold in [0, 1]</code>.</p>
+</li>
+</ul>
+<p>如果给出一个此范围以外的参数，则会引发 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/exceptions.html#ValueError" title="ValueError"><code>ValueError</code></a>。 所有参数默认值均为 0 但 <em>tzinfo</em> 除外，其默认值为 <code>None</code>。</p>
+<p>类属性：</p>
+<ul>
+<li><code>time.min</code></li>
+</ul>
+<p>早最的可表示 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time" title="datetime.time"><code>time</code></a>, <code>time(0, 0, 0, 0)</code>。</p>
+<ul>
+<li><code>time.max</code></li>
+</ul>
+<p>最晚的可表示 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time" title="datetime.time"><code>time</code></a>, <code>time(23, 59, 59, 999999)</code>。</p>
+<ul>
+<li><code>time.resolution</code></li>
+</ul>
+<p>两个不相等的 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time" title="datetime.time"><code>time</code></a> 对象之间可能的最小间隔，<code>timedelta(microseconds=1)</code>，但是请注意 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time" title="datetime.time"><code>time</code></a> 对象并不支持算术运算。</p>
+<p>实例属性（只读）：</p>
+<ul>
+<li><code>time.hour</code></li>
+</ul>
+<p>取值范围是 <code>range(24)</code>。</p>
+<ul>
+<li><code>time.minute</code></li>
+</ul>
+<p>取值范围是 <code>range(60)</code>。</p>
+<ul>
+<li><code>time.second</code></li>
+</ul>
+<p>取值范围是 <code>range(60)</code>。</p>
+<ul>
+<li><code>time.microsecond</code></li>
+</ul>
+<p>取值范围是 <code>range(1000000)</code>。</p>
+<h2 id="datetime-time对象格式化为字符串"><a href="#datetime-time对象格式化为字符串" class="headerlink" title="datetime.time对象格式化为字符串"></a>datetime.time对象格式化为字符串</h2><h3 id="使用time-isoformat-timespec-’auto’-方法"><a href="#使用time-isoformat-timespec-’auto’-方法" class="headerlink" title="使用time.isoformat(timespec=’auto’)方法"></a>使用time.isoformat(<em>timespec=’auto’</em>)方法</h3><p>返回表示为下列 ISO 8601 格式之一的时间字符串：</p>
+<ul>
+<li><p><code>HH:MM:SS.ffffff</code>，如果 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time.microsecond" title="datetime.time.microsecond"><code>microsecond</code></a> 不为 0</p>
+</li>
+<li><p><code>HH:MM:SS</code>，如果 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time.microsecond" title="datetime.time.microsecond"><code>microsecond</code></a> 为 0</p>
+</li>
+<li><p><code>HH:MM:SS.ffffff+HH:MM[:SS[.ffffff]]</code>，如果 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time.utcoffset" title="datetime.time.utcoffset"><code>utcoffset()</code></a> 不返回 <code>None</code></p>
+</li>
+<li><p><code>HH:MM:SS+HH:MM[:SS[.ffffff]]</code>，如果 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time.microsecond" title="datetime.time.microsecond"><code>microsecond</code></a> 为 0 并且 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time.utcoffset" title="datetime.time.utcoffset"><code>utcoffset()</code></a> 不返回 <code>None</code></p>
+</li>
+</ul>
+<p>可选参数 <em>timespec</em> 要包含的额外时间组件值 (默认为 <code>&#39;auto&#39;</code>)。它可以是以下值之一：</p>
+<ul>
+<li><p><code>&#39;auto&#39;</code>: 如果 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time.microsecond" title="datetime.time.microsecond"><code>microsecond</code></a> 为 0 则与 <code>&#39;seconds&#39;</code> 相同，否则与 <code>&#39;microseconds&#39;</code> 相同。</p>
+</li>
+<li><p><code>&#39;hours&#39;</code>: 以两个数码的 <code>HH</code> 格式 包含 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time.hour" title="datetime.time.hour"><code>hour</code></a>。</p>
+</li>
+<li><p><code>&#39;minutes&#39;</code>: 以 <code>HH:MM</code> 格式包含 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time.hour" title="datetime.time.hour"><code>hour</code></a> 和 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time.minute" title="datetime.time.minute"><code>minute</code></a>。</p>
+</li>
+<li><p><code>&#39;seconds&#39;</code>: 以 <code>HH:MM:SS</code> 格式包含 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time.hour" title="datetime.time.hour"><code>hour</code></a>, <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time.minute" title="datetime.time.minute"><code>minute</code></a> 和 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time.second" title="datetime.time.second"><code>second</code></a>。</p>
+</li>
+<li><p><code>&#39;milliseconds&#39;</code>: 包含完整时间，但将秒值的小数部分截断至毫秒。 格式为 <code>HH:MM:SS.sss</code>。</p>
+</li>
+<li><p><code>&#39;microseconds&#39;</code>: 以 <code>HH:MM:SS.ffffff</code> 格式包含完整时间。</p>
+</li>
+</ul>
+<p>备注</p>
+<p>排除掉的时间部分将被截断，而不是被舍入。</p>
+<h3 id="使用-datetime-time-strftime-format-方法"><a href="#使用-datetime-time-strftime-format-方法" class="headerlink" title="使用 datetime.time.strftime(format)方法"></a>使用 datetime.time.strftime(<em>format</em>)方法</h3><p>方法参见<code>datetime.datetime</code>和<code>datetime.date</code>对象的方法</p>
+<h2 id="字符串解析为datetime-time对象"><a href="#字符串解析为datetime-time对象" class="headerlink" title="字符串解析为datetime.time对象"></a>字符串解析为datetime.time对象</h2><h3 id="使用datetime-time-fromisoformat-‘string’-方法"><a href="#使用datetime-time-fromisoformat-‘string’-方法" class="headerlink" title="使用datetime.time.fromisoformat(‘string’)方法"></a>使用datetime.time.fromisoformat(‘string’)方法</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt;<span class="keyword">from</span> datetime <span class="keyword">import</span> time</span><br><span class="line">&gt;&gt;&gt;time.fromisoformat(<span class="string">&#x27;04:23:01&#x27;</span>)</span><br><span class="line">datetime.time(<span class="number">4</span>, <span class="number">23</span>, <span class="number">1</span>)</span><br><span class="line">&gt;&gt;&gt;time.fromisoformat(<span class="string">&#x27;T04:23:01&#x27;</span>)</span><br><span class="line">datetime.time(<span class="number">4</span>, <span class="number">23</span>, <span class="number">1</span>)</span><br><span class="line">&gt;&gt;&gt;time.fromisoformat(<span class="string">&#x27;T042301&#x27;</span>)</span><br><span class="line">datetime.time(<span class="number">4</span>, <span class="number">23</span>, <span class="number">1</span>)</span><br><span class="line">&gt;&gt;&gt;time.fromisoformat(<span class="string">&#x27;04:23:01.000384&#x27;</span>)</span><br><span class="line">datetime.time(<span class="number">4</span>, <span class="number">23</span>, <span class="number">1</span>, <span class="number">384</span>)</span><br><span class="line">&gt;&gt;&gt;time.fromisoformat(<span class="string">&#x27;04:23:01,000384&#x27;</span>)</span><br><span class="line">datetime.time(<span class="number">4</span>, <span class="number">23</span>, <span class="number">1</span>, <span class="number">384</span>)</span><br><span class="line">&gt;&gt;&gt;time.fromisoformat(<span class="string">&#x27;04:23:01+04:00&#x27;</span>)</span><br><span class="line">datetime.time(<span class="number">4</span>, <span class="number">23</span>, <span class="number">1</span>, tzinfo=datetime.timezone(datetime.timedelta(seconds=<span class="number">14400</span>)))</span><br><span class="line">&gt;&gt;&gt;time.fromisoformat(<span class="string">&#x27;04:23:01Z&#x27;</span>)</span><br><span class="line">datetime.time(<span class="number">4</span>, <span class="number">23</span>, <span class="number">1</span>, tzinfo=datetime.timezone.utc)</span><br><span class="line">&gt;&gt;&gt;time.fromisoformat(<span class="string">&#x27;04:23:01+00:00&#x27;</span>)</span><br><span class="line">datetime.time(<span class="number">4</span>, <span class="number">23</span>, <span class="number">1</span>, tzinfo=datetime.timezone.utc)</span><br></pre></td></tr></table></figure>
+<h2 id="修改datetime-time类"><a href="#修改datetime-time类" class="headerlink" title="修改datetime.time类"></a>修改datetime.time类</h2><p><code>time.replace(*hour=self.hour*, *minute=self.minute*, *second=self.second*, *microsecond=self.microsecond*, *tzinfo=self.tzinfo*, ***, *fold=0*)</code></p>
+<p>返回一个具有同样属性值的 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time" title="datetime.time"><code>time</code></a>，除非通过任何关键字参数指定了某些属性值。 请注意可以通过指定 <code>tzinfo=None</code> 从一个感知型 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time" title="datetime.time"><code>time</code></a> 创建一个简单型 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#datetime.time" title="datetime.time"><code>time</code></a>，而不必转换时间数据。</p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/datetime.html#strftime-strptime-behavior">https://docs.python.org/zh-cn/3/library/datetime.html#strftime-strptime-behavior</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://liuchaoyuan.github.io">Sinohope</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://liuchaoyuan.github.io/2024/08/03/Python%20Relearning-datetime/">http://liuchaoyuan.github.io/2024/08/03/Python%20Relearning-datetime/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://liuchaoyuan.github.io" target="_blank">The Site Of Liu</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Python/">Python</a><a class="post-meta__tags" href="/tags/datetime/">datetime</a></div><div class="post-share"><div class="social-share" data-image="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" data-sites="qq,wechat,weibo,facebook,twitter"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>投喂作者</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/image/reward/wechatpay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/reward/wechatpay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/image/reward/alipay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/reward/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="prev-post pull-left" href="/2024/08/03/Python%20Relearning-Namespaces%20Scope/" title="Python Relearning-Namespaces Scope"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Python Relearning-Namespaces Scope</div></div></a><a class="next-post pull-right" href="/2024/08/08/C%20language%20Relearning-String/" title="C language Relearning-String"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/C%20lang.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">C language Relearning-String</div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a href="/2024/07/27/Python%20Relearing-Function%20lambda%20re/" title="Python Relearing-Function&#x2F;lambda&#x2F;re"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-27</div><div class="title">Python Relearing-Function&#x2F;lambda&#x2F;re</div></div></a><a href="/2024/07/25/Python%20Relearning-Branches,%20loops,%20comprehensions%20and%20iterators/" title="Python Relearning-Branches, loops, comprehensions and iterators"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-25</div><div class="title">Python Relearning-Branches, loops, comprehensions and iterators</div></div></a><a href="/2024/08/20/Python%20Relearning-Generator%20and%20Iterator/" title="Python Relearning-Generator and Iterator"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-20</div><div class="title">Python Relearning-Generator and Iterator</div></div></a><a href="/2024/08/22/Python%20Relearning-MultiProcessing/" title="Python Relearning-MultiProcessing"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-22</div><div class="title">Python Relearning-MultiProcessing</div></div></a><a href="/2024/08/03/Python%20Relearning-Namespaces%20Scope/" title="Python Relearning-Namespaces Scope"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-03</div><div class="title">Python Relearning-Namespaces Scope</div></div></a><a href="/2024/07/24/Python%20Relearning-ListTupleDictSet/" title="Python Relearning-List&#x2F;Tuple&#x2F;Dict&#x2F;Set"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-24</div><div class="title">Python Relearning-List&#x2F;Tuple&#x2F;Dict&#x2F;Set</div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/%E5%89%91%E5%BF%83.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Sinohope</div><div class="author-info-description">The World Of Sinohope</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">101</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/LiuChaoyuan"><i class="fab fa-github"></i><span>Follow Me On Github</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到小刘的小站</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8C%96%E7%AC%A6%E5%8F%B7"><span class="toc-number">1.</span> <span class="toc-text">日期和时间的格式化符号</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#strftime-%E4%B8%8E-strptime-%E7%9A%84%E9%AB%98%E5%B1%82%E7%BA%A7%E6%AF%94%E8%BE%83%EF%BC%9A"><span class="toc-number">2.</span> <span class="toc-text">strftime()与 strptime() 的高层级比较：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#datetime-timedelta%E5%AF%B9%E8%B1%A1"><span class="toc-number">3.</span> <span class="toc-text">datetime.timedelta对象</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.1.</span> <span class="toc-text">基本实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E5%B1%9E%E6%80%A7"><span class="toc-number">3.2.</span> <span class="toc-text">类属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%AF%E6%8C%81%E6%95%B0%E5%AD%A6%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97"><span class="toc-number">3.3.</span> <span class="toc-text">支持数学算术运算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AC%E5%8C%96%E4%B8%BA%E7%A7%92%E6%95%B0"><span class="toc-number">3.4.</span> <span class="toc-text">转化为秒数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#datetime-date%E5%AF%B9%E8%B1%A1"><span class="toc-number">4.</span> <span class="toc-text">datetime.date对象</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%97%A5%E6%9C%9F%E5%AF%B9%E8%B1%A1"><span class="toc-number">4.1.</span> <span class="toc-text">创建日期对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%97%A5%E6%9C%9F%E5%AF%B9%E8%B1%A1-1"><span class="toc-number">4.1.1.</span> <span class="toc-text">创建日期对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A5%E6%9C%9F%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%A1%A8%E7%A4%BA%E8%8C%83%E5%9B%B4"><span class="toc-number">4.1.2.</span> <span class="toc-text">日期对象的表示范围</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%90%84%E4%B8%AA%E5%B9%B4-%E6%9C%88-%E6%97%A5"><span class="toc-number">4.1.3.</span> <span class="toc-text">获取各个年&#x2F;月&#x2F;日</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A5%E6%9C%9F%E5%AF%B9%E8%B1%A1%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%BA%E5%AD%97%E7%AC%A6%E4%B8%B2%E3%80%81%E4%BF%AE%E6%94%B9%E6%97%A5%E6%9C%9F"><span class="toc-number">4.2.</span> <span class="toc-text">日期对象格式化为字符串、修改日期</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8strftime%E7%B2%BE%E7%BB%86%E6%8E%A7%E5%88%B6%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-number">4.2.1.</span> <span class="toc-text">使用strftime精细控制格式化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%BAYYYY-MM-DD"><span class="toc-number">4.2.2.</span> <span class="toc-text">格式化为YYYY-MM-DD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%BA-%E2%80%99Weekday-month-day-h-m-s-YYYY%E2%80%99"><span class="toc-number">4.2.3.</span> <span class="toc-text">格式化为:’Weekday month day h-m-s YYYY’</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E6%97%A5%E6%9C%9F"><span class="toc-number">4.2.4.</span> <span class="toc-text">修改日期</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E5%91%A8%E5%87%A0%E5%92%8C%E8%B7%9D%E7%A6%BB%E5%85%AC%E5%85%83%E5%85%83%E5%B9%B41%E6%9C%881%E6%97%A5%E7%9A%84%E8%B7%9D%E7%A6%BB"><span class="toc-number">4.3.</span> <span class="toc-text">关于周几和距离公元元年1月1日的距离</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%960-6%E8%A1%A8%E7%A4%BA%E7%9A%84weekday"><span class="toc-number">4.3.1.</span> <span class="toc-text">获取0~6表示的weekday</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%961-7%E8%A1%A8%E7%A4%BA%E7%9A%84weekday"><span class="toc-number">4.3.2.</span> <span class="toc-text">获取1~7表示的weekday</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E3%80%8E%E6%9F%90%E5%B9%B4%E6%9F%90%E5%91%A8%E5%91%A8%E5%87%A0%E3%80%8F%E6%98%AF%E3%80%8E%E6%9F%90%E5%B9%B4%E6%9F%90%E6%9C%88%E6%9F%90%E6%97%A5%E3%80%8F"><span class="toc-number">4.3.3.</span> <span class="toc-text">获取『某年某周周几』是『某年某月某日』</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E3%80%8E%E6%9F%90%E5%B9%B4%E6%9F%90%E6%9C%88%E6%9F%90%E6%97%A5%E3%80%8F%E6%98%AF%E3%80%8E%E6%9F%90%E5%B9%B4%E6%9F%90%E5%91%A8%E5%91%A8%E5%87%A0%E3%80%8F"><span class="toc-number">4.3.4.</span> <span class="toc-text">获取『某年某月某日』是『某年某周周几』</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96-%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A7%A3%E6%9E%90%E4%B8%BA%E6%97%A5%E6%9C%9F%E5%AF%B9%E8%B1%A1%E3%80%81%E4%BF%AE%E6%94%B9%E6%97%A5%E6%9C%9F%E3%80%81%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E6%97%A5%E6%9C%9F"><span class="toc-number">4.4.</span> <span class="toc-text">其他(字符串解析为日期对象、修改日期、获取当前日期)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A7%A3%E6%9E%90%E4%B8%BA%E6%97%A5%E6%9C%9F%E5%AF%B9%E8%B1%A1"><span class="toc-number">4.4.1.</span> <span class="toc-text">字符串解析为日期对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E6%97%A5%E6%9C%9F-1"><span class="toc-number">4.4.2.</span> <span class="toc-text">修改日期</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E6%97%A5%E6%9C%9F"><span class="toc-number">4.4.3.</span> <span class="toc-text">获取当前日期</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%AF%E6%8C%81%E6%95%B0%E5%AD%A6%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97-1"><span class="toc-number">4.5.</span> <span class="toc-text">支持数学算术运算</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#datetime-datetime"><span class="toc-number">5.</span> <span class="toc-text">datetime.datetime</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E6%97%B6%E9%97%B4"><span class="toc-number">5.1.</span> <span class="toc-text">获取当前时间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%9D%E7%A6%BB%E3%80%8E%E5%85%AC%E5%85%83%E5%85%83%E5%B9%B41%E6%9C%881%E6%97%A5%E3%80%8F%E7%9A%84%E8%B7%9D%E7%A6%BB"><span class="toc-number">5.2.</span> <span class="toc-text">距离『公元元年1月1日』的距离</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%BE%97%E8%B7%9D%E7%A6%BB%E3%80%8E%E5%85%AC%E5%85%83%E5%85%83%E5%B9%B41%E6%9C%881%E6%97%A5%E3%80%8F%E6%8C%87%E5%AE%9A%E5%A4%A9%E6%95%B0%E7%9A%84%E5%85%B7%E4%BD%93%E6%97%A5%E6%9C%9F-%E6%9F%90%E5%B9%B4%E6%9F%90%E6%9C%88%E6%9F%90%E6%97%A5%E3%80%8F"><span class="toc-number">5.2.1.</span> <span class="toc-text">获得距离『公元元年1月1日』指定天数的具体日期(某年某月某日』)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A7%A3%E6%9E%90%E4%B8%BAdatetime%E5%AF%B9%E8%B1%A1"><span class="toc-number">5.3.</span> <span class="toc-text">字符串解析为datetime对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8datetime-datetime-fromisoformat-yourString-%E6%96%B9%E6%B3%95%E3%80%82"><span class="toc-number">5.3.1.</span> <span class="toc-text">用datetime.datetime.fromisoformat(yourString)方法。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#strptime-%E6%96%B9%E6%B3%95%E5%B0%86%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A7%A3%E6%9E%90%E4%B8%BAdatetime-datetime%E5%AF%B9%E8%B1%A1"><span class="toc-number">5.3.2.</span> <span class="toc-text">strptime()方法将字符串解析为datetime.datetime对象</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#datetime%E7%B1%BB%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%BA%E5%AD%97%E7%AC%A6%E4%B8%B2%E3%80%81%E8%AE%A1%E7%AE%97%E5%91%A8%E5%87%A0"><span class="toc-number">5.4.</span> <span class="toc-text">datetime类格式化为字符串、计算周几</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#datetime-time"><span class="toc-number">6.</span> <span class="toc-text">datetime.time</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#datetime-time%E5%AF%B9%E8%B1%A1%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%BA%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">6.1.</span> <span class="toc-text">datetime.time对象格式化为字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8time-isoformat-timespec-%E2%80%99auto%E2%80%99-%E6%96%B9%E6%B3%95"><span class="toc-number">6.1.1.</span> <span class="toc-text">使用time.isoformat(timespec&#x3D;’auto’)方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-datetime-time-strftime-format-%E6%96%B9%E6%B3%95"><span class="toc-number">6.1.2.</span> <span class="toc-text">使用 datetime.time.strftime(format)方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A7%A3%E6%9E%90%E4%B8%BAdatetime-time%E5%AF%B9%E8%B1%A1"><span class="toc-number">6.2.</span> <span class="toc-text">字符串解析为datetime.time对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8datetime-time-fromisoformat-%E2%80%98string%E2%80%99-%E6%96%B9%E6%B3%95"><span class="toc-number">6.2.1.</span> <span class="toc-text">使用datetime.time.fromisoformat(‘string’)方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9datetime-time%E7%B1%BB"><span class="toc-number">6.3.</span> <span class="toc-text">修改datetime.time类</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-number">7.</span> <span class="toc-text">参考文章</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/12/15/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E9%A1%B5/" title="Operating-System-存储管理之分页"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating-System-存储管理之分页"/></a><div class="content"><a class="title" href="/2024/12/15/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E9%A1%B5/" title="Operating-System-存储管理之分页">Operating-System-存储管理之分页</a><time datetime="2024-12-15T11:37:25.000Z" title="发表于 2024-12-15 19:37:25">2024-12-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/14/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E5%8C%BA/" title="Operating System-存储管理之分区"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating System-存储管理之分区"/></a><div class="content"><a class="title" href="/2024/12/14/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E5%8C%BA/" title="Operating System-存储管理之分区">Operating System-存储管理之分区</a><time datetime="2024-12-14T12:54:53.000Z" title="发表于 2024-12-14 20:54:53">2024-12-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/14/Operating-System-%E7%BA%BF%E7%A8%8B/" title="Operating System-线程"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating System-线程"/></a><div class="content"><a class="title" href="/2024/12/14/Operating-System-%E7%BA%BF%E7%A8%8B/" title="Operating System-线程">Operating System-线程</a><time datetime="2024-12-14T04:25:03.000Z" title="发表于 2024-12-14 12:25:03">2024-12-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/13/Operating-System-%E6%AD%BB%E9%94%81/" title="Operating System-死锁"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating System-死锁"/></a><div class="content"><a class="title" href="/2024/12/13/Operating-System-%E6%AD%BB%E9%94%81/" title="Operating System-死锁">Operating System-死锁</a><time datetime="2024-12-13T13:03:24.000Z" title="发表于 2024-12-13 21:03:24">2024-12-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/12/Matrix-Computations-%E5%8F%A4%E5%85%B8%E8%BF%AD%E4%BB%A3%E6%B3%95%E6%B1%82%E8%A7%A3%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84/" title="Matrix Computations-古典迭代法求解线性方程组"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Matrix Computations-古典迭代法求解线性方程组"/></a><div class="content"><a class="title" href="/2024/12/12/Matrix-Computations-%E5%8F%A4%E5%85%B8%E8%BF%AD%E4%BB%A3%E6%B3%95%E6%B1%82%E8%A7%A3%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84/" title="Matrix Computations-古典迭代法求解线性方程组">Matrix Computations-古典迭代法求解线性方程组</a><time datetime="2024-12-12T03:44:39.000Z" title="发表于 2024-12-12 11:44:39">2024-12-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By Sinohope</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+      
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/gh/xiabo2/CDN@latest/fishes.js"></script><script type="text/javascript" src="/js/fairyDustCursor.js"></script><div class="aplayer no-destroy" data-id="12355351036" data-server="netease" data-type="playlist" data-fixed="true" data-mini="true" data-listFolded="true" data-order="random" data-preload="auto" data-autoplay="false" muted></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>

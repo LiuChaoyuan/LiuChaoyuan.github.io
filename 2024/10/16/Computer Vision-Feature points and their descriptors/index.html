@@ -1,0 +1,407 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Computer Vision-Feature points and their descriptors | The Site Of Liu</title><meta name="author" content="Sinohope"><meta name="copyright" content="Sinohope"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文主要讲了特征点及其描述子">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Computer Vision-Feature points and their descriptors">
+<meta property="og:url" content="http://liuchaoyuan.github.io/2024/10/16/Computer%20Vision-Feature%20points%20and%20their%20descriptors/index.html">
+<meta property="og:site_name" content="The Site Of Liu">
+<meta property="og:description" content="本文主要讲了特征点及其描述子">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/AIgraph0.webp">
+<meta property="article:published_time" content="2024-10-16T10:38:55.000Z">
+<meta property="article:modified_time" content="2025-08-26T13:57:42.376Z">
+<meta property="article:author" content="Sinohope">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/AIgraph0.webp"><link rel="shortcut icon" href="/image/cat.png"><link rel="canonical" href="http://liuchaoyuan.github.io/2024/10/16/Computer%20Vision-Feature%20points%20and%20their%20descriptors/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.clarity.ms"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "oic38wrclh");</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"简","msgToSimplifiedChinese":"繁"},
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been(现在距离此文章的最后更新日期已经过了)","messageNext":"days since the last update, the content of the article may be outdated.(天，文章的内容可能过时，请注意甄别)"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Computer Vision-Feature points and their descriptors',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-08-26 21:57:42'
+}</script><script src="/styles/fish.js"></script><script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script><link rel="stylesheet" href="/css/bilibili.css"><link rel="stylesheet" href="/css/chamber/cursors.css"><link rel="stylesheet" href="/css/fontDiy/fontDiy.css"><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-image: url(https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/cloud_and_moon.webp);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/%E5%89%91%E5%BF%83.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">101</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/update"><i class="fa-fw fas fa-bell"></i><span> 动态</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-chart-pie"></i><span> 博客统计</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/charts/"><i class="fa-fw far fa-chart-bar"></i><span> 文章统计</span></a></li><li><a class="site-page child" href="/census/"><i class="fa-fw fas fa-chart-area"></i><span> 访问统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/top/"><i class="fa-fw fab fa-hotjar"></i><span> 阅读排行榜</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/books/"><i class="fa-fw fas fa-book"></i><span> 书籍</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/songs/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/AIgraph0.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/cat.png" alt="Logo"><span class="site-name">The Site Of Liu</span></a><a class="nav-page-title" href="/"><span class="site-name">Computer Vision-Feature points and their descriptors</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/update"><i class="fa-fw fas fa-bell"></i><span> 动态</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-chart-pie"></i><span> 博客统计</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/charts/"><i class="fa-fw far fa-chart-bar"></i><span> 文章统计</span></a></li><li><a class="site-page child" href="/census/"><i class="fa-fw fas fa-chart-area"></i><span> 访问统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/top/"><i class="fa-fw fab fa-hotjar"></i><span> 阅读排行榜</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/books/"><i class="fa-fw fas fa-book"></i><span> 书籍</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/songs/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Computer Vision-Feature points and their descriptors</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-10-16T10:38:55.000Z" title="发表于 2024-10-16 18:38:55">2024-10-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-08-26T13:57:42.376Z" title="更新于 2025-08-26 21:57:42">2025-08-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/">计算机</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">3.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>13分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="特征点及其性质"><a href="#特征点及其性质" class="headerlink" title="特征点及其性质"></a>特征点及其性质</h1><h2 id="特征点定义"><a href="#特征点定义" class="headerlink" title="特征点定义"></a>特征点定义</h2><p>图像中具有独特局部性质的点。</p>
+<h2 id="特征点性质"><a href="#特征点性质" class="headerlink" title="特征点性质"></a>特征点性质</h2><ul>
+<li><strong>局部性</strong>：特征是局部的，对遮挡和混乱场景鲁棒</li>
+<li><strong>数量</strong>：一幅图像中可以产生足够数量的特征点，比如成百上</li>
+<li><strong>独特性</strong>：可以和其他图像中大多数点相区分</li>
+<li><strong>高效性</strong>：能够进行实时的检测和比较</li>
+<li><strong>可重复性</strong>：对图像进行旋转平移等操作后，仍能被检测到</li>
+</ul>
+<h1 id="特征点检测"><a href="#特征点检测" class="headerlink" title="特征点检测"></a>特征点检测</h1><h2 id="角点定义"><a href="#角点定义" class="headerlink" title="角点定义"></a>角点定义</h2><p>在一个以角点为中心的局部窗口内沿着 任意方向移动都会给亮度带来显著变化。</p>
+<h2 id="局部窗口内的亮度变化"><a href="#局部窗口内的亮度变化" class="headerlink" title="局部窗口内的亮度变化"></a>局部窗口内的亮度变化</h2><p>某个以$(x,y)$为中心的局部窗口$𝑊$经过$(𝑢,𝑣)$的微小偏移后，窗口 内部亮度发生的变化量，可以用梯度近似$SSD$表示为</p>
+<script type="math/tex; mode=display">
+\begin{align}
+E(u,v)&=\sum_{(x,y)\in W}\left(I(x+u,y+v)-I(x,y)\right)^{2} \\
+&= \sum_{(u,v)\in W_{xy}}\left(I(u,v)-I(u+\delta u,v+\delta v)\right)^{2}
+\end{align}</script><p>对图像 $I$ 进行一阶泰勒展开，</p>
+<script type="math/tex; mode=display">
+I(x+u,y+v)\approx I(x,y)+[I_x I_y]\left[\begin{array}{c}u\\v\end{array}\right]</script><p>其中，$I_x,I_y$ 分别是图像在 $x，y$ 方向的梯度，可以用Sobel算子等来计算，将其代入上式，可以得到</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+E(u,v) &= \sum_{(x,y)\in W}\left(I(x+u,y+v)-I(x,y)\right)^{2} \\
+& \approx\sum_{(x,y)\in W}\left(I(x,y)+I_{x}(x,y)u+I_{y}(x,y)v-I(x,y)\right)^{2} \\
+&\approx\sum_{(x,y)\in W}\left(I_{x}(x,y)u+I_{y}(x,y)v\right)^{2} \\
+&\approx\sum_{(x,y)\in W}\left(I_{x}^{2}u^{2}+2I_{x}I_{y}uv+I_{y}^{2}v^{2}\right)\\
+&=u^{2}\sum_{x,y}I_{x}^{2}+2u\nu\sum_{x,y}I_{x}I_{y}+\nu^{2}\sum_{x,y}I_{y}^{2} \\
+&\left.=\left[\begin{array}{cc}{u}&{\nu}\\\end{array}\right.\right]\left[\begin{array}{cc}{\sum_{x,y}I_{x}^{2}}&{\sum_{x,y}I_{x}I_{y}}\\{\sum_{x,y}I_{x}I_{y}}&{\sum_{x,y}I_{y}^{2}}\\\end{array}\right]\left[\begin{array}{c}{u}\\{\nu}\\\end{array}\right]
+\end{aligned}</script><p>如果将上式中的二阶矩矩阵的元素表示为：</p>
+<script type="math/tex; mode=display">
+A=\sum\limits_{(x,y)\in W}I_x^2\quad B=\sum\limits_{(x,y)\in W}I_xI_y\quad C=\sum\limits_{(x,y)\in W}I_y^2</script><p>那么，亮度变化可以近似为：</p>
+<script type="math/tex; mode=display">
+\left.E(u,v)\approx\left[\begin{array}{cc}u&v\end{array}\right.\right]\left[\begin{array}{cc}A&B\\B&C\end{array}\right]\left[\begin{array}{c}u\\v\end{array}\right]</script><h2 id="对该二阶矩矩阵的理解"><a href="#对该二阶矩矩阵的理解" class="headerlink" title="对该二阶矩矩阵的理解"></a>对该二阶矩矩阵的理解</h2><h3 id="水平方向的边缘"><a href="#水平方向的边缘" class="headerlink" title="水平方向的边缘"></a>水平方向的边缘</h3><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/2024/10/16/Computer%20Vision-Feature%20points%20and%20their%20descriptors/image-20241016185533481.png" class="" alt="image-20241016185533481">
+<h3 id="竖直方向的边缘"><a href="#竖直方向的边缘" class="headerlink" title="竖直方向的边缘"></a>竖直方向的边缘</h3><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/2024/10/16/Computer%20Vision-Feature%20points%20and%20their%20descriptors/image-20241016185613607.png" class="" alt="image-20241016185613607">
+<h2 id="与特征值的关系"><a href="#与特征值的关系" class="headerlink" title="与特征值的关系"></a>与特征值的关系</h2><p>我们知道，二次型对应一个椭圆。</p>
+<p>当 $A$ 和 $C$ 都非 $0$ 时，对曲面 $E$ 进行横切，形成一个椭圆如下：</p>
+<script type="math/tex; mode=display">
+\begin{pmatrix}u &v
+\end{pmatrix}
+H \begin{pmatrix}u\\v\end{pmatrix}=\mathrm{const}</script><p>椭圆的长短轴长度由二阶矩矩阵的特征值来决定，椭圆的角度由二阶矩矩阵的特征向量来决定：</p>
+<script type="math/tex; mode=display">
+Hx_{\max}=\lambda_{\max}x_{\max}\\Hx_{\min}=\lambda_{\min}x_{\min}</script><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/2024/10/16/Computer%20Vision-Feature%20points%20and%20their%20descriptors/image-20241016190132885.png" class="" alt="image-20241016190132885">
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/2024/10/16/Computer%20Vision-Feature%20points%20and%20their%20descriptors/image-20241016190849937.png" class="" alt="image-20241016190849937">
+<h2 id="特征值与角点检测"><a href="#特征值与角点检测" class="headerlink" title="特征值与角点检测"></a>特征值与角点检测</h2><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/2024/10/16/Computer%20Vision-Feature%20points%20and%20their%20descriptors/image-20241016191337583.png" class="" alt="image-20241016191337583">
+<p>概括来说，就是：</p>
+<ul>
+<li>$\lambda_1$ 和 $\lambda_2$ 都很大，且相差不大，$\rightarrow$ 角点</li>
+<li>$\lambda_1$ 远远大于 $\lambda_2$ $\rightarrow$ 水平方向的边</li>
+<li>$\lambda_2$ 远远大于 $\lambda_1$ $\rightarrow$ 竖直方向的边</li>
+<li>$\lambda_1$ 和 $\lambda_2$ 都很小，且相差不大，$\rightarrow$ 平坦区域</li>
+</ul>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/2024/10/16/Computer%20Vision-Feature%20points%20and%20their%20descriptors/image-20241016191034434.png" class="" alt="image-20241016191034434">
+<h1 id="Harris角点检测器"><a href="#Harris角点检测器" class="headerlink" title="Harris角点检测器"></a>Harris角点检测器</h1><h2 id="Harris角点响应函数"><a href="#Harris角点响应函数" class="headerlink" title="Harris角点响应函数"></a>Harris角点响应函数</h2><p>定义如下:</p>
+<script type="math/tex; mode=display">
+\begin{align}
+R&=\det(H)-k(\mathrm {Tr} (H))^2\\
+&=\lambda_1\lambda_2-k(\lambda_1+\lambda_2)^2
+\end{align}</script><p>其中，$k$ 一般取 $[0.04,0.06]$</p>
+<p>实际计算 $H$ 时还可以根据与中心的距离进行加权</p>
+<script type="math/tex; mode=display">
+H=\sum\limits_{(x,y)\in W}w_{x,y}\left[\begin{array}{cc}I_x^2&I_xI_y\\I_xI_y&I_y^2\end{array}\right]</script><h2 id="用Harris角点响应函数检测"><a href="#用Harris角点响应函数检测" class="headerlink" title="用Harris角点响应函数检测"></a>用Harris角点响应函数检测</h2><h3 id="判据"><a href="#判据" class="headerlink" title="判据"></a>判据</h3><ul>
+<li>$R&gt;0$ ，角点</li>
+<li>$R&lt;0$ ，边</li>
+<li>$|R|$ 很小，平坦区域</li>
+</ul>
+<h1 id="角点检测流程"><a href="#角点检测流程" class="headerlink" title="角点检测流程"></a>角点检测流程</h1><ul>
+<li>计算图像梯度，比如Sobel算子</li>
+<li>根据图像梯度为每个点计算二阶矩矩阵特征值或者Harris角点 响应函数</li>
+<li>寻找具有较大响应的点（$\lambda_\min$ 或 $R$ 大于阈值）</li>
+<li>选择那些 $\lambda_\min$ 或 $R$ 是局部最大值的点作为关键点（非最大值抑 制）</li>
+</ul>
+<h1 id="角点检测性质"><a href="#角点检测性质" class="headerlink" title="角点检测性质"></a>角点检测性质</h1><h2 id="旋转不变性-Rotation-Invariance"><a href="#旋转不变性-Rotation-Invariance" class="headerlink" title="旋转不变性 (Rotation Invariance)"></a><strong>旋转不变性</strong> (Rotation Invariance)</h2><p><strong>性质</strong>：Harris角点检测器对图像旋转具有不变性。这是因为角点的检测依赖于局部梯度的变化，而旋转不会改变局部结构的梯度大小或方向分布。因此，即使图像发生旋转，角点仍会被准确检测。</p>
+<p><strong>举例</strong>：如果图像旋转了90度，角点的位置仍然能准确检测。</p>
+<h2 id="平移不变性-Translation-Invariance"><a href="#平移不变性-Translation-Invariance" class="headerlink" title="平移不变性 (Translation Invariance)"></a><strong>平移不变性</strong> (Translation Invariance)</h2><ul>
+<li><strong>性质</strong>：Harris角点检测器对图像的平移有很好的不变性。如果图像整体平移，局部的梯度信息和结构不会发生改变，因此角点的位置相对于图像区域会保持不变。</li>
+<li><strong>举例</strong>：图像中某个局部区域的角点不会因为图像平移而丢失。</li>
+</ul>
+<h2 id="局部抗噪性-Local-Robustness-to-Noise"><a href="#局部抗噪性-Local-Robustness-to-Noise" class="headerlink" title="局部抗噪性 (Local Robustness to Noise)"></a><strong>局部抗噪性</strong> (Local Robustness to Noise)</h2><ul>
+<li><strong>性质</strong>：通过高斯滤波平滑图像，Harris角点检测器在一定程度上能够减少噪声的影响，但并不完全对噪声不变。局部抗噪性是基于图像平滑处理的效果。</li>
+</ul>
+<p>但是，不具备下列性质</p>
+<ol>
+<li><strong>尺度不变性</strong> (Scale Invariance)<ul>
+<li><strong>不足</strong>：Harris角点检测器不具备尺度不变性。当图像的尺度发生变化时，角点的检测结果会发生改变。原因在于其检测依赖于固定窗口的局部结构，而窗口大小不随尺度变化调整。因此，图像缩放会导致原来的角点被漏检或新角点被误检。</li>
+<li><strong>举例</strong>：如果将图像缩小或放大，原本的角点可能会消失，或在不同位置检测到新的角点。</li>
+</ul>
+</li>
+<li><strong>仿射不变性</strong> (Affine Invariance)<ul>
+<li><strong>不足</strong>：Harris角点检测器不具备对仿射变换（如旋转加缩放、剪切等复杂变换）的不变性。仿射变换会改变图像中的几何结构，从而影响角点检测的结果。</li>
+<li><strong>举例</strong>：在拍摄角度发生改变或者图像进行了仿射变换后，角点的检测结果可能不一致。</li>
+</ul>
+</li>
+<li><strong>光照不变性</strong> (Illumination Invariance)<ul>
+<li><strong>不足</strong>：Harris角点检测器对光照变化较为敏感。如果图像的光照条件发生明显变化（如亮度增加或减少、对比度变化等），角点的检测效果可能会受到影响。</li>
+<li><strong>举例</strong>：在光照较暗或较亮的场景中，相同位置的角点可能会因为光照变化而检测不到</li>
+</ul>
+</li>
+</ol>
+<h1 id="尺度不变特征变换-Scale-Invariant-Feature-Transform-SIFT"><a href="#尺度不变特征变换-Scale-Invariant-Feature-Transform-SIFT" class="headerlink" title="尺度不变特征变换 (Scale-Invariant Feature  Transform, SIFT)"></a>尺度不变特征变换 (Scale-Invariant Feature  Transform, SIFT)</h1><h2 id="公式基础"><a href="#公式基础" class="headerlink" title="公式基础"></a>公式基础</h2><p>在图像处理和信号处理领域，<strong>unit impulse</strong>、<strong>Gaussian</strong>、<strong>Laplacian of Gaussian (LoG)</strong> 以及<strong>高斯差分 (DoG)</strong> 这些函数之间有紧密的联系。它们都涉及对图像的边缘、特征等信息的提取。以下是它们之间的联系和公式总结：</p>
+<h3 id="1-Unit-Impulse-函数-δ函数"><a href="#1-Unit-Impulse-函数-δ函数" class="headerlink" title="1. Unit Impulse 函数 (δ函数)"></a>1. <strong>Unit Impulse 函数 (δ函数)</strong></h3><ul>
+<li><strong>定义</strong>：单位脉冲函数，记作 (\delta(x))，在数学上是一个理想化的函数，具有无限高的尖峰，并且在 (x = 0) 处为1，其积分为1。它的作用是挑出函数中特定点的值。</li>
+<li><strong>公式</strong>：<br>[<br>\delta(x) =<br>\begin{cases}<br>0, &amp; x \neq 0 \<br>\infty, &amp; x = 0<br>\end{cases}, \quad \int_{-\infty}^{\infty} \delta(x) dx = 1<br>]</li>
+<li><strong>与其他函数的联系</strong>：可以看作是信号或图像在某点上的“瞬间激发”。Gaussian 函数和 LoG、DoG 都可以看作是对信号的平滑或差分，能够从信号中提取出更丰富的信息，而脉冲函数是这些操作的基础。</li>
+</ul>
+<h3 id="2-Gaussian-函数"><a href="#2-Gaussian-函数" class="headerlink" title="2. Gaussian 函数"></a>2. <strong>Gaussian 函数</strong></h3><ul>
+<li><strong>定义</strong>：高斯函数是一种平滑函数，广泛应用于图像模糊、降噪等操作。它通过卷积来平滑图像，并压制噪声，使得边缘更加明显。</li>
+<li><strong>公式</strong>（一维高斯函数）：<br>[<br>G(x) = \frac{1}{\sqrt{2\pi}\sigma} \exp\left(-\frac{x^2}{2\sigma^2}\right)<br>]<br>二维高斯函数：<br>[<br>G(x, y) = \frac{1}{2\pi\sigma^2} \exp\left(-\frac{x^2 + y^2}{2\sigma^2}\right)<br>]</li>
+<li><strong>与Unit Impulse的联系</strong>：高斯函数可以看作是单位脉冲函数在空间域中进行平滑处理的结果，通过调节参数 (\sigma) 来控制平滑程度。</li>
+<li><strong>与LoG和DoG的联系</strong>：Gaussian 是构建 LoG 和 DoG 的基础。它通过卷积核的形式应用于图像平滑，之后可以用于提取边缘信息。</li>
+</ul>
+<h3 id="3-Laplacian-of-Gaussian-LoG"><a href="#3-Laplacian-of-Gaussian-LoG" class="headerlink" title="3. Laplacian of Gaussian (LoG)"></a>3. <strong>Laplacian of Gaussian (LoG)</strong></h3><ul>
+<li><strong>定义</strong>：Laplacian of Gaussian 是先对图像应用高斯平滑，然后计算其拉普拉斯算子，用于检测图像的边缘。Laplacian 是二阶微分算子，敏感于亮度快速变化的位置（即边缘）。</li>
+<li><strong>公式</strong>：<br>结合高斯函数和拉普拉斯算子，二维 LoG 可以写作：<br>[<br>\text{LoG}(x, y) = \nabla^2 G(x, y) = \left(\frac{x^2 + y^2 - 2\sigma^2}{\sigma^4}\right) \exp\left(-\frac{x^2 + y^2}{2\sigma^2}\right)<br>]<br>其中，(\nabla^2) 表示拉普拉斯算子，它是二阶导数的和：<br>[<br>\nabla^2 f(x, y) = \frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 f}{\partial y^2}<br>]</li>
+<li><strong>与Gaussian的联系</strong>：LoG 是对高斯函数先平滑图像，再用拉普拉斯算子来检测图像中的变化（如边缘）。通过高斯平滑抑制噪声，再使用拉普拉斯算子找到边缘位置。</li>
+</ul>
+<h3 id="4-高斯差分-Difference-of-Gaussian-DoG"><a href="#4-高斯差分-Difference-of-Gaussian-DoG" class="headerlink" title="4. 高斯差分 (Difference of Gaussian, DoG)"></a>4. <strong>高斯差分 (Difference of Gaussian, DoG)</strong></h3><ul>
+<li><strong>定义</strong>：DoG 是通过对图像分别应用两个不同尺度的高斯模糊（不同 (\sigma) 值），然后计算它们的差分。DoG 是一种近似LoG的边缘检测方法，但计算更高效。</li>
+<li><strong>公式</strong>：<br>给定两个不同尺度的高斯函数 (G(x, y, \sigma_1)) 和 (G(x, y, \sigma_2))，高斯差分为：<br>[<br>\text{DoG}(x, y) = G(x, y, \sigma_1) - G(x, y, \sigma_2)<br>]<br>在频域上，可以近似为：<br>[<br>\text{DoG}(x, y) \approx k \cdot \nabla^2 G(x, y)<br>]<br>其中 (k) 是常数。</li>
+<li><strong>与Gaussian的联系</strong>：DoG 是两个不同尺度的高斯函数之差。它通过高效的差分操作，近似计算 LoG，从而实现快速边缘检测。</li>
+</ul>
+<h3 id="几个函数之间的联系总结："><a href="#几个函数之间的联系总结：" class="headerlink" title="几个函数之间的联系总结："></a>几个函数之间的联系总结：</h3><ul>
+<li><strong>Unit Impulse (δ函数)</strong> 是理想的“点”操作基础，在信号处理中常用于理论分析。</li>
+<li><strong>Gaussian (高斯函数)</strong> 是平滑滤波函数，通过模糊处理减小噪声，常作为卷积核进行信号平滑。</li>
+<li><strong>Laplacian of Gaussian (LoG)</strong> 是对高斯平滑后的图像进行二阶导数，找到图像中快速变化的区域（即边缘），可以更准确地检测边缘。</li>
+<li><strong>Difference of Gaussian (DoG)</strong> 是通过两个不同尺度的高斯函数求差，近似实现了 LoG 的边缘检测，但计算效率更高。</li>
+</ul>
+<p>因此，<strong>Gaussian 是构建 LoG 和 DoG 的基础函数</strong>，而 LoG 和 DoG 都可以用来进行边缘检测，不同之处在于 LoG 是通过二阶导数直接计算边缘，而 DoG 是通过不同尺度的高斯函数相减来近似这种效果。</p>
+<h2 id="SIFT流程"><a href="#SIFT流程" class="headerlink" title="SIFT流程"></a>SIFT流程</h2><p>SIFT（尺度不变特征变换，Scale-Invariant Feature Transform）是一种经典的计算机视觉算法，能够检测图像中的关键点，并生成不受尺度、旋转等影响的特征描述子。SIFT描述子的流程分为几个主要步骤，详细说明如下：</p>
+<h3 id="SIFT描述子的完整流程"><a href="#SIFT描述子的完整流程" class="headerlink" title="SIFT描述子的完整流程"></a>SIFT描述子的完整流程</h3><h4 id="1-构建尺度空间-Scale-Space-Construction"><a href="#1-构建尺度空间-Scale-Space-Construction" class="headerlink" title="1. 构建尺度空间 (Scale-Space Construction)"></a>1. <strong>构建尺度空间 (Scale-Space Construction)</strong></h4><ul>
+<li><strong>目的</strong>：为了检测图像在不同尺度下的关键点，SIFT通过在图像的不同尺度下检测极值点，确保关键点对尺度变化具有不变性。</li>
+<li><strong>步骤</strong>：<ul>
+<li>通过高斯核对原始图像进行不同程度的模糊处理，生成一系列具有不同模糊程度的图像，称为“高斯金字塔”。</li>
+<li>在每个尺度上，用差分高斯（Difference of Gaussian, DoG）图像来近似Laplacian算子，以此找到图像中的关键点。这些差分高斯图像是通过在不同模糊图像之间相减得到的。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-关键点检测-Keypoint-Detection"><a href="#2-关键点检测-Keypoint-Detection" class="headerlink" title="2. 关键点检测 (Keypoint Detection)"></a>2. <strong>关键点检测 (Keypoint Detection)</strong></h4><ul>
+<li><strong>目的</strong>：通过在尺度空间中寻找局部极值点来检测关键点，确保这些点是图像中的显著特征。</li>
+<li><strong>步骤</strong>：<ul>
+<li>在DoG图像的每一个像素，SIFT会在其相邻的尺度层次和空间上搜索局部极值点。</li>
+<li>如果一个像素点在它的8个邻域（同一尺度）以及上下两个尺度的相邻区域内都是最大或最小值，那么该像素点就被标记为潜在的关键点。</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-关键点精确定位-Keypoint-Localization"><a href="#3-关键点精确定位-Keypoint-Localization" class="headerlink" title="3. 关键点精确定位 (Keypoint Localization)"></a>3. <strong>关键点精确定位 (Keypoint Localization)</strong></h4><ul>
+<li><strong>目的</strong>：对初步检测出的关键点进行精确定位和过滤，排除那些低对比度的点和边缘响应较强的点（这些点通常不稳定）。</li>
+<li><strong>步骤</strong>：<ul>
+<li>使用泰勒展开式对检测到的局部极值点进行精确拟合，以确定其亚像素级别的精确位置。</li>
+<li>计算该点的对比度值，如果低于设定的阈值，则将其去除。</li>
+<li>同时，通过主曲率的比值来判断该点是否是边缘点，若边缘响应较强也将其去除。</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-关键点方向分配-Orientation-Assignment"><a href="#4-关键点方向分配-Orientation-Assignment" class="headerlink" title="4. 关键点方向分配 (Orientation Assignment)"></a>4. <strong>关键点方向分配 (Orientation Assignment)</strong></h4><ul>
+<li><strong>目的</strong>：为每个关键点分配一个主方向，确保关键点描述子对图像的旋转具有不变性。</li>
+<li><strong>步骤</strong>：<ul>
+<li>对每个关键点周围区域的图像梯度进行计算，包括梯度的幅度和方向。</li>
+<li>统计梯度方向的直方图，并在360度范围内划分36个方向区间，找到具有最多数量的方向区域（主方向），并将其分配给该关键点。若有多个方向的响应接近主方向，则该关键点可以拥有多个方向。</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-关键点描述子生成-Keypoint-Descriptor-Generation"><a href="#5-关键点描述子生成-Keypoint-Descriptor-Generation" class="headerlink" title="5. 关键点描述子生成 (Keypoint Descriptor Generation)"></a>5. <strong>关键点描述子生成 (Keypoint Descriptor Generation)</strong></h4><ul>
+<li><strong>目的</strong>：生成具有旋转、尺度不变性的特征描述子，用于后续的图像匹配和识别。</li>
+<li><strong>步骤</strong>：<ul>
+<li>在每个关键点周围的区域内，取16x16的像素块作为窗口，计算每个窗口内的梯度信息，并将其划分为4x4的子块，每个子块为4x4像素。</li>
+<li>对每个子块计算梯度方向直方图，通常将360度分成8个方向区间，每个子块生成一个8维的方向直方图。</li>
+<li>对所有的4x4子块生成的8维直方图组合成128维的特征向量，称为SIFT描述子。</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-特征向量归一化-Descriptor-Normalization"><a href="#6-特征向量归一化-Descriptor-Normalization" class="headerlink" title="6. 特征向量归一化 (Descriptor Normalization)"></a>6. <strong>特征向量归一化 (Descriptor Normalization)</strong></h4><ul>
+<li><strong>目的</strong>：对特征向量进行归一化处理，增强其对光照变化和对比度变化的鲁棒性。</li>
+<li><strong>步骤</strong>：<ul>
+<li>将每个描述子的128维向量进行归一化，使其总长度为1（通常使用L2范数）。</li>
+<li>通过归一化，SIFT描述子对光照变化具有更好的不变性。对于梯度幅度较大的值会进行截断（通常将最大值截断到0.2），然后再进行一次归一化。</li>
+</ul>
+</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>SIFT描述子生成的主要流程包括：</p>
+<ol>
+<li><strong>构建尺度空间</strong>：使用高斯模糊和差分高斯图像检测图像的多尺度特征。</li>
+<li><strong>关键点检测</strong>：找到图像中的局部极值点作为初步的关键点。</li>
+<li><strong>关键点精确定位</strong>：精确确定关键点的位置并过滤掉不稳定点。</li>
+<li><strong>方向分配</strong>：为每个关键点分配一个或多个主方向，确保旋转不变性。</li>
+<li><strong>描述子生成</strong>：通过关键点周围的梯度方向信息生成128维的特征描述子。</li>
+<li><strong>归一化处理</strong>：对特征向量进行归一化，以提升其对光照和对比度变化的鲁棒性。</li>
+</ol>
+<p>SIFT描述子生成的整个过程旨在确保关键点和描述子具有<strong>尺度、旋转、平移</strong>等不变性，广泛应用于图像匹配、物体识别等领域。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://liuchaoyuan.github.io">Sinohope</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://liuchaoyuan.github.io/2024/10/16/Computer%20Vision-Feature%20points%20and%20their%20descriptors/">http://liuchaoyuan.github.io/2024/10/16/Computer%20Vision-Feature%20points%20and%20their%20descriptors/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://liuchaoyuan.github.io" target="_blank">The Site Of Liu</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/AIgraph0.webp" data-sites="qq,wechat,weibo,facebook,twitter"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>投喂作者</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/image/reward/wechatpay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/reward/wechatpay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/image/reward/alipay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/reward/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="prev-post pull-left" href="/2024/10/16/Game%20Theory-Applications%20of%20Nash%20Equilibrium/" title="Game Theory-Applications of Nash Equilibrium"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/John_F_Nash.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Game Theory-Applications of Nash Equilibrium</div></div></a><a class="next-post pull-right" href="/2024/10/18/Operating%20System-process/" title="Operating System-process"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/os.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Operating System-process</div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/%E5%89%91%E5%BF%83.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Sinohope</div><div class="author-info-description">The World Of Sinohope</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">101</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/LiuChaoyuan"><i class="fab fa-github"></i><span>Follow Me On Github</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到小刘的小站</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%89%B9%E5%BE%81%E7%82%B9%E5%8F%8A%E5%85%B6%E6%80%A7%E8%B4%A8"><span class="toc-number">1.</span> <span class="toc-text">特征点及其性质</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%B9%E5%BE%81%E7%82%B9%E5%AE%9A%E4%B9%89"><span class="toc-number">1.1.</span> <span class="toc-text">特征点定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%B9%E5%BE%81%E7%82%B9%E6%80%A7%E8%B4%A8"><span class="toc-number">1.2.</span> <span class="toc-text">特征点性质</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%89%B9%E5%BE%81%E7%82%B9%E6%A3%80%E6%B5%8B"><span class="toc-number">2.</span> <span class="toc-text">特征点检测</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%92%E7%82%B9%E5%AE%9A%E4%B9%89"><span class="toc-number">2.1.</span> <span class="toc-text">角点定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B1%80%E9%83%A8%E7%AA%97%E5%8F%A3%E5%86%85%E7%9A%84%E4%BA%AE%E5%BA%A6%E5%8F%98%E5%8C%96"><span class="toc-number">2.2.</span> <span class="toc-text">局部窗口内的亮度变化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E8%AF%A5%E4%BA%8C%E9%98%B6%E7%9F%A9%E7%9F%A9%E9%98%B5%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-number">2.3.</span> <span class="toc-text">对该二阶矩矩阵的理解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B0%B4%E5%B9%B3%E6%96%B9%E5%90%91%E7%9A%84%E8%BE%B9%E7%BC%98"><span class="toc-number">2.3.1.</span> <span class="toc-text">水平方向的边缘</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%96%E7%9B%B4%E6%96%B9%E5%90%91%E7%9A%84%E8%BE%B9%E7%BC%98"><span class="toc-number">2.3.2.</span> <span class="toc-text">竖直方向的边缘</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8E%E7%89%B9%E5%BE%81%E5%80%BC%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">2.4.</span> <span class="toc-text">与特征值的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%B9%E5%BE%81%E5%80%BC%E4%B8%8E%E8%A7%92%E7%82%B9%E6%A3%80%E6%B5%8B"><span class="toc-number">2.5.</span> <span class="toc-text">特征值与角点检测</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Harris%E8%A7%92%E7%82%B9%E6%A3%80%E6%B5%8B%E5%99%A8"><span class="toc-number">3.</span> <span class="toc-text">Harris角点检测器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Harris%E8%A7%92%E7%82%B9%E5%93%8D%E5%BA%94%E5%87%BD%E6%95%B0"><span class="toc-number">3.1.</span> <span class="toc-text">Harris角点响应函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8Harris%E8%A7%92%E7%82%B9%E5%93%8D%E5%BA%94%E5%87%BD%E6%95%B0%E6%A3%80%E6%B5%8B"><span class="toc-number">3.2.</span> <span class="toc-text">用Harris角点响应函数检测</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A4%E6%8D%AE"><span class="toc-number">3.2.1.</span> <span class="toc-text">判据</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%92%E7%82%B9%E6%A3%80%E6%B5%8B%E6%B5%81%E7%A8%8B"><span class="toc-number">4.</span> <span class="toc-text">角点检测流程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%92%E7%82%B9%E6%A3%80%E6%B5%8B%E6%80%A7%E8%B4%A8"><span class="toc-number">5.</span> <span class="toc-text">角点检测性质</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%8B%E8%BD%AC%E4%B8%8D%E5%8F%98%E6%80%A7-Rotation-Invariance"><span class="toc-number">5.1.</span> <span class="toc-text">旋转不变性 (Rotation Invariance)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%B3%E7%A7%BB%E4%B8%8D%E5%8F%98%E6%80%A7-Translation-Invariance"><span class="toc-number">5.2.</span> <span class="toc-text">平移不变性 (Translation Invariance)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B1%80%E9%83%A8%E6%8A%97%E5%99%AA%E6%80%A7-Local-Robustness-to-Noise"><span class="toc-number">5.3.</span> <span class="toc-text">局部抗噪性 (Local Robustness to Noise)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%BA%E5%BA%A6%E4%B8%8D%E5%8F%98%E7%89%B9%E5%BE%81%E5%8F%98%E6%8D%A2-Scale-Invariant-Feature-Transform-SIFT"><span class="toc-number">6.</span> <span class="toc-text">尺度不变特征变换 (Scale-Invariant Feature  Transform, SIFT)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AC%E5%BC%8F%E5%9F%BA%E7%A1%80"><span class="toc-number">6.1.</span> <span class="toc-text">公式基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Unit-Impulse-%E5%87%BD%E6%95%B0-%CE%B4%E5%87%BD%E6%95%B0"><span class="toc-number">6.1.1.</span> <span class="toc-text">1. Unit Impulse 函数 (δ函数)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Gaussian-%E5%87%BD%E6%95%B0"><span class="toc-number">6.1.2.</span> <span class="toc-text">2. Gaussian 函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Laplacian-of-Gaussian-LoG"><span class="toc-number">6.1.3.</span> <span class="toc-text">3. Laplacian of Gaussian (LoG)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%AB%98%E6%96%AF%E5%B7%AE%E5%88%86-Difference-of-Gaussian-DoG"><span class="toc-number">6.1.4.</span> <span class="toc-text">4. 高斯差分 (Difference of Gaussian, DoG)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%A0%E4%B8%AA%E5%87%BD%E6%95%B0%E4%B9%8B%E9%97%B4%E7%9A%84%E8%81%94%E7%B3%BB%E6%80%BB%E7%BB%93%EF%BC%9A"><span class="toc-number">6.1.5.</span> <span class="toc-text">几个函数之间的联系总结：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SIFT%E6%B5%81%E7%A8%8B"><span class="toc-number">6.2.</span> <span class="toc-text">SIFT流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SIFT%E6%8F%8F%E8%BF%B0%E5%AD%90%E7%9A%84%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B"><span class="toc-number">6.2.1.</span> <span class="toc-text">SIFT描述子的完整流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%9E%84%E5%BB%BA%E5%B0%BA%E5%BA%A6%E7%A9%BA%E9%97%B4-Scale-Space-Construction"><span class="toc-number">6.2.1.1.</span> <span class="toc-text">1. 构建尺度空间 (Scale-Space Construction)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%85%B3%E9%94%AE%E7%82%B9%E6%A3%80%E6%B5%8B-Keypoint-Detection"><span class="toc-number">6.2.1.2.</span> <span class="toc-text">2. 关键点检测 (Keypoint Detection)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%85%B3%E9%94%AE%E7%82%B9%E7%B2%BE%E7%A1%AE%E5%AE%9A%E4%BD%8D-Keypoint-Localization"><span class="toc-number">6.2.1.3.</span> <span class="toc-text">3. 关键点精确定位 (Keypoint Localization)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%85%B3%E9%94%AE%E7%82%B9%E6%96%B9%E5%90%91%E5%88%86%E9%85%8D-Orientation-Assignment"><span class="toc-number">6.2.1.4.</span> <span class="toc-text">4. 关键点方向分配 (Orientation Assignment)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E5%85%B3%E9%94%AE%E7%82%B9%E6%8F%8F%E8%BF%B0%E5%AD%90%E7%94%9F%E6%88%90-Keypoint-Descriptor-Generation"><span class="toc-number">6.2.1.5.</span> <span class="toc-text">5. 关键点描述子生成 (Keypoint Descriptor Generation)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F%E5%BD%92%E4%B8%80%E5%8C%96-Descriptor-Normalization"><span class="toc-number">6.2.1.6.</span> <span class="toc-text">6. 特征向量归一化 (Descriptor Normalization)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">6.2.2.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/12/15/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E9%A1%B5/" title="Operating-System-存储管理之分页"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating-System-存储管理之分页"/></a><div class="content"><a class="title" href="/2024/12/15/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E9%A1%B5/" title="Operating-System-存储管理之分页">Operating-System-存储管理之分页</a><time datetime="2024-12-15T11:37:25.000Z" title="发表于 2024-12-15 19:37:25">2024-12-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/14/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E5%8C%BA/" title="Operating System-存储管理之分区"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating System-存储管理之分区"/></a><div class="content"><a class="title" href="/2024/12/14/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E5%8C%BA/" title="Operating System-存储管理之分区">Operating System-存储管理之分区</a><time datetime="2024-12-14T12:54:53.000Z" title="发表于 2024-12-14 20:54:53">2024-12-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/14/Operating-System-%E7%BA%BF%E7%A8%8B/" title="Operating System-线程"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating System-线程"/></a><div class="content"><a class="title" href="/2024/12/14/Operating-System-%E7%BA%BF%E7%A8%8B/" title="Operating System-线程">Operating System-线程</a><time datetime="2024-12-14T04:25:03.000Z" title="发表于 2024-12-14 12:25:03">2024-12-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/13/Operating-System-%E6%AD%BB%E9%94%81/" title="Operating System-死锁"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating System-死锁"/></a><div class="content"><a class="title" href="/2024/12/13/Operating-System-%E6%AD%BB%E9%94%81/" title="Operating System-死锁">Operating System-死锁</a><time datetime="2024-12-13T13:03:24.000Z" title="发表于 2024-12-13 21:03:24">2024-12-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/12/Matrix-Computations-%E5%8F%A4%E5%85%B8%E8%BF%AD%E4%BB%A3%E6%B3%95%E6%B1%82%E8%A7%A3%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84/" title="Matrix Computations-古典迭代法求解线性方程组"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Matrix Computations-古典迭代法求解线性方程组"/></a><div class="content"><a class="title" href="/2024/12/12/Matrix-Computations-%E5%8F%A4%E5%85%B8%E8%BF%AD%E4%BB%A3%E6%B3%95%E6%B1%82%E8%A7%A3%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84/" title="Matrix Computations-古典迭代法求解线性方程组">Matrix Computations-古典迭代法求解线性方程组</a><time datetime="2024-12-12T03:44:39.000Z" title="发表于 2024-12-12 11:44:39">2024-12-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By Sinohope</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+      
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/gh/xiabo2/CDN@latest/fishes.js"></script><script type="text/javascript" src="/js/fairyDustCursor.js"></script><div class="aplayer no-destroy" data-id="12355351036" data-server="netease" data-type="playlist" data-fixed="true" data-mini="true" data-listFolded="true" data-order="random" data-preload="auto" data-autoplay="false" muted></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>

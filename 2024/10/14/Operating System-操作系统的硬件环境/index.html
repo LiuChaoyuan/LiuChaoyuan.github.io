@@ -1,0 +1,436 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Operating System-操作系统的硬件环境 | The Site Of Liu</title><meta name="author" content="Sinohope"><meta name="copyright" content="Sinohope"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="&#x2F;&#x2F;文章描述">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Operating System-操作系统的硬件环境">
+<meta property="og:url" content="http://liuchaoyuan.github.io/2024/10/14/Operating%20System-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%A1%AC%E4%BB%B6%E7%8E%AF%E5%A2%83/index.html">
+<meta property="og:site_name" content="The Site Of Liu">
+<meta property="og:description" content="&#x2F;&#x2F;文章描述">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/os.png">
+<meta property="article:published_time" content="2024-10-14T01:58:33.000Z">
+<meta property="article:modified_time" content="2025-08-26T13:57:42.466Z">
+<meta property="article:author" content="Sinohope">
+<meta property="article:tag" content="操作系统">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/os.png"><link rel="shortcut icon" href="/image/cat.png"><link rel="canonical" href="http://liuchaoyuan.github.io/2024/10/14/Operating%20System-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%A1%AC%E4%BB%B6%E7%8E%AF%E5%A2%83/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.clarity.ms"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "oic38wrclh");</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"简","msgToSimplifiedChinese":"繁"},
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been(现在距离此文章的最后更新日期已经过了)","messageNext":"days since the last update, the content of the article may be outdated.(天，文章的内容可能过时，请注意甄别)"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Operating System-操作系统的硬件环境',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-08-26 21:57:42'
+}</script><script src="/styles/fish.js"></script><script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script><link rel="stylesheet" href="/css/bilibili.css"><link rel="stylesheet" href="/css/chamber/cursors.css"><link rel="stylesheet" href="/css/fontDiy/fontDiy.css"><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-image: url(https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/cloud_and_moon.webp);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/%E5%89%91%E5%BF%83.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">101</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/update"><i class="fa-fw fas fa-bell"></i><span> 动态</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-chart-pie"></i><span> 博客统计</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/charts/"><i class="fa-fw far fa-chart-bar"></i><span> 文章统计</span></a></li><li><a class="site-page child" href="/census/"><i class="fa-fw fas fa-chart-area"></i><span> 访问统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/top/"><i class="fa-fw fab fa-hotjar"></i><span> 阅读排行榜</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/books/"><i class="fa-fw fas fa-book"></i><span> 书籍</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/songs/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/os.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/cat.png" alt="Logo"><span class="site-name">The Site Of Liu</span></a><a class="nav-page-title" href="/"><span class="site-name">Operating System-操作系统的硬件环境</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/update"><i class="fa-fw fas fa-bell"></i><span> 动态</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-chart-pie"></i><span> 博客统计</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/charts/"><i class="fa-fw far fa-chart-bar"></i><span> 文章统计</span></a></li><li><a class="site-page child" href="/census/"><i class="fa-fw fas fa-chart-area"></i><span> 访问统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/top/"><i class="fa-fw fab fa-hotjar"></i><span> 阅读排行榜</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/books/"><i class="fa-fw fas fa-book"></i><span> 书籍</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/songs/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Operating System-操作系统的硬件环境</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-10-14T01:58:33.000Z" title="发表于 2024-10-14 09:58:33">2024-10-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-08-26T13:57:42.466Z" title="更新于 2025-08-26 21:57:42">2025-08-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/">计算机</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="8086处理器的结构"><a href="#8086处理器的结构" class="headerlink" title="8086处理器的结构"></a>8086处理器的结构</h1><p>8086处理器内部结构有两个功能模块，完成一条指令的取值和执行：</p>
+<ul>
+<li>总线接口单元BIU，主要负责读取指令和操作数；</li>
+<li>执行单元EU，主要负责指令译码和执行。</li>
+</ul>
+<h2 id="8086处理器的寄存器："><a href="#8086处理器的寄存器：" class="headerlink" title="8086处理器的寄存器："></a>8086处理器的寄存器：</h2><ul>
+<li><p>8个通用寄存器（以16位为例）</p>
+<ul>
+<li><p>数据寄存器</p>
+<ul>
+<li><p>AX:累加器(Accumulate Rerister)，使用频度最高，用于算术、逻辑运算以及与外设传送信息等；</p>
+</li>
+<li><p>BX:基址寄存器(Base Rerister)，常用做存放存储器地址；</p>
+</li>
+<li>CX:计数器(Counter Rerister)，作为循环和串操作等指令中的隐含计数器；</li>
+<li>DX:数据寄存器(Data Rerister)，常用来存放双字长数据的高16位，或存放外设端口地址。</li>
+</ul>
+</li>
+<li><p>变址寄存器（常用于存储器寻址时提供地址）</p>
+<ul>
+<li>SI:源变址寄存器 (Source index)</li>
+<li>DI:目的变址寄存器(Destination index)</li>
+</ul>
+</li>
+<li><p>指针寄存器(用于寻址内存堆栈内的数据)</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>- SP:堆栈指针寄存器(Stack Pointer)，指示栈顶的偏移地址
+- BP:基址指针寄存器(Base Pointer)，表示数据在堆栈段中的基地址
+SP和BP寄存器与SS段寄存器联合使用以确定堆栈段中的存储单元地址
+</code></pre><ul>
+<li><p>1个指令指针寄存器</p>
+<p>指令指针寄存器IP，指示代码段中指令的偏移地址。它与代码段寄存器CS联用，确定下一条指令的物理地址</p>
+<p>计算机通过CS : IP寄存器来控制指令序列的执行流程</p>
+<p>IP寄存器是一个专用寄存器</p>
+</li>
+<li><p>1个标志寄存器</p>
+<p>标志（Flag）用于反映指令执行结果或控制指令执行形式</p>
+<p>8086处理器的各种标志形成了一个16位的标志寄存器FLAGS（程序状态字PSW寄存器）</p>
+<p>程序设计需要利用标志的状态,比如C语言里的条件语句，if (a=b) {…}</p>
+</li>
+<li><p>1个段寄存器</p>
+</li>
+</ul>
+<ul>
+<li><p>32位通用寄存器</p>
+<p> EAX  EBX  ECX  EDX</p>
+<p> ESI   EDI   EBP  ESP</p>
+</li>
+</ul>
+<h2 id="标志的分类："><a href="#标志的分类：" class="headerlink" title="标志的分类："></a>标志的分类：</h2><ul>
+<li><p>状态标志</p>
+<p>用来记录程序运行结果的状态信息，许多指令的执行都将相应地设置它</p>
+<ul>
+<li><p>CF 对于无符号数运算，当运算结果的最高有效位有进位（加法）或借位（减法）时，进位标志置1，即CF = 1；否则CF = 0。Debug表示: CY(Carry) CF = 1; NC(No Carry) CF = 0</p>
+</li>
+<li><p>ZF若运算结果为0，则ZF = 1；否则ZF = 0.Debug表示: ZR(Zero) ZF = 1; NZ(No Zero) ZF = 0</p>
+</li>
+<li><p>SF 运算结果最高位为1，则SF = 1；否则SF = 0.Debug表示: NG(Negative) SF = 1; PL(Plus) SF = 0</p>
+</li>
+<li><p>PF</p>
+</li>
+<li><p>OF 对于有符号数运算,若算术运算的结果有溢出，则OF＝1；否则 OF＝0</p>
+<p>Debug表示: OV(Overflow) OF = 1; NV(No Overflow) OF = 0</p>
+</li>
+<li><p>AF</p>
+</li>
+</ul>
+</li>
+<li><p>控制标志</p>
+<p>可由程序根据需要用指令设置，用于控制处理器执行指令的方式</p>
+<ul>
+<li>DF</li>
+<li>IF</li>
+<li>TF</li>
+</ul>
+<p>Debug中对标志位不同状态的表示：</p>
+<p>NV  UP  DI  PL  NZ NA  PO  NC      状态为 0</p>
+<p>OV  DN  EI  NG ZR AC  PE  CY      状态为 1</p>
+</li>
+</ul>
+<h2 id="CPU五类指令"><a href="#CPU五类指令" class="headerlink" title="CPU五类指令:"></a>CPU五类指令:</h2><ul>
+<li>访问存储器指令</li>
+</ul>
+<p>​    处理器和存储器间数据传送</p>
+<ul>
+<li><p>I/O指令</p>
+<p>处理器和I/O模块间数据传送和命令发送</p>
+</li>
+<li><p>算数逻辑指令</p>
+<p>执行数据算数和逻辑操作</p>
+</li>
+<li><p>控制转移指令</p>
+<p>指定一个新的指令的执行起点</p>
+</li>
+<li><p>处理器控制指令</p>
+<p>修改处理器状态，该边处理器工作方式。</p>
+</li>
+</ul>
+<p>数据信息的表达单位：</p>
+<ul>
+<li>二进制位bit:存储一位二进制数，0或者1</li>
+<li>字节Byte：8个二进制位，D7～D0</li>
+<li>字Word：16位，2个字节，D15～D0</li>
+<li>双字DWord：32位，4个字节，D31～D0</li>
+</ul>
+<h1 id="8086的寻址（数据存取）方式"><a href="#8086的寻址（数据存取）方式" class="headerlink" title="8086的寻址（数据存取）方式"></a>8086的寻址（数据存取）方式</h1><h2 id="立即数寻址方式"><a href="#立即数寻址方式" class="headerlink" title="立即数寻址方式"></a>立即数寻址方式</h2><p>指令中的操作数直接存放在机器代码中，紧跟在操作码之后（操作数作为指令的一部分存放在操作码之后的主存单元中）</p>
+<p>这种操作数被称为立即数imm</p>
+<p>它可以是8位数值i8（00H～FFH）</p>
+<p>也可以是16位数值i16（0000H～FFFFH）</p>
+<p>立即数寻址方式常用来给寄存器赋值</p>
+<h2 id="寄存器寻址方式"><a href="#寄存器寻址方式" class="headerlink" title="寄存器寻址方式"></a>寄存器寻址方式</h2><p>操作数存放在CPU的内部寄存器reg中，可以是：</p>
+<p>8位寄存器r8：</p>
+<p>AH、AL、BH、BL、CH、CL、DH、DL</p>
+<p>16位寄存器r16：</p>
+<p>AX、BX、CX、DX、SI、DI、BP、SP</p>
+<p>4个段寄存器seg：</p>
+<p>CS、DS、SS、ES</p>
+<h2 id="存储器寻址方式"><a href="#存储器寻址方式" class="headerlink" title="存储器寻址方式"></a>存储器寻址方式</h2><p>指令中给出操作数的主存地址信息（偏移地址，称之为有效地址EA），而段地址在默认的或用段超越前缀指定的段寄存器中</p>
+<p>8086设计了多种存储器寻址方式</p>
+<h3 id="直接寻址方式"><a href="#直接寻址方式" class="headerlink" title="直接寻址方式"></a>直接寻址方式</h3><p>有效地址在指令中直接给出</p>
+<p>默认的段地址在DS段寄存器，可使用段超越前缀改变</p>
+<p>MOV AX,[2000H]</p>
+<p>；AX←DS:[2000H]</p>
+<p>；指令代码：A10020</p>
+<p>MOV AX,ES:[2000H]</p>
+<p>；AX←ES:[2000H]</p>
+<p>；指令代码：26A10020</p>
+<h3 id="寄存器间接寻址方式"><a href="#寄存器间接寻址方式" class="headerlink" title="寄存器间接寻址方式"></a>寄存器间接寻址方式</h3><p>有效地址存放在基址寄存器BX或变址寄存器SI、DI中</p>
+<p>默认的段地址在DS段寄存器，可使用段超越前缀改变</p>
+<p>MOV AX,[SI] ；AX←DS:[SI]</p>
+<h3 id="寄存器相对寻址方式"><a href="#寄存器相对寻址方式" class="headerlink" title="寄存器相对寻址方式"></a>寄存器相对寻址方式</h3><p>有效地址是寄存器内容与有符号8位或16位位移量之和，寄存器可以是BX、BP或SI、DI</p>
+<p>有效地址＝BX/BP/SI/DI＋8/16位位移量</p>
+<p>段地址对应BX/SI/DI寄存器默认是DS，对应BP寄存器默认是SS；可用段超越前缀改变.</p>
+<h4 id="寄存器相对寻址指令"><a href="#寄存器相对寻址指令" class="headerlink" title="寄存器相对寻址指令"></a>寄存器相对寻址指令</h4><p>MOV AX,[DI+06H]</p>
+<p> ；AX←DS:[DI+06H]</p>
+<p>MOV AX,[BP+06H]</p>
+<p> ；AX←SS:[BP+06H]</p>
+<h3 id="基址变址寻址方式"><a href="#基址变址寻址方式" class="headerlink" title="基址变址寻址方式"></a>基址变址寻址方式</h3><p>有效地址由基址寄存器（BX或BP）的内容加上变址寄存器（SI或DI）的内容构成：</p>
+<p>有效地址＝BX/BP＋SI/DI</p>
+<p>段地址对应BX基址寄存器默认是DS，对应BP基址寄存器默认是SS；可用段超越前缀改变</p>
+<h3 id="相对基址变址寻址方式"><a href="#相对基址变址寻址方式" class="headerlink" title="相对基址变址寻址方式"></a>相对基址变址寻址方式</h3><p>有效地址是基址寄存器（BX/BP）、变址寄存器（SI/DI）与一个8位或16位位移量之和：</p>
+<p>有效地址＝BX/BP＋SI/DI＋8/16位位移量</p>
+<p>段地址对应BX基址寄存器默认是DS，对应BP基址寄存器默认是SS；可用段超越前缀改变</p>
+<h4 id="相对基址变址寻址指令"><a href="#相对基址变址寻址指令" class="headerlink" title="相对基址变址寻址指令"></a>相对基址变址寻址指令</h4><p>MOV AX,[BX+SI+06H]</p>
+<p>；AX←DS:[BX+SI+06H]</p>
+<h1 id="中断机制"><a href="#中断机制" class="headerlink" title="中断机制"></a>中断机制</h1><p>CPU暂停正在执行的程序，保留现场后自动转去执行相应事件的处理程序，处理完成后返回断点，继续执行被打断的程序。</p>
+<p>特点：</p>
+<p>1) 中断是随机的<br>2) 中断是可恢复的<br>3) 中断是自动处理的</p>
+<p>引入中断的目的：</p>
+<p>解决主机与外设的并行工作问题</p>
+<p>实现实时控制</p>
+<h1 id="I-O系统"><a href="#I-O系统" class="headerlink" title="I/O系统"></a>I/O系统</h1><p>I/O控制使用下面几种技术：</p>
+<p>程序控制</p>
+<p>中断驱动</p>
+<p>直接存储器存取（DMA）</p>
+<p>通道</p>
+<h2 id="程序控制I-O技术"><a href="#程序控制I-O技术" class="headerlink" title="程序控制I/O技术"></a>程序控制I/O技术</h2><p>由处理器提供I/O相关指令来实现</p>
+<ul>
+<li><p>I/O处理单元处理请求并设置I/O状态寄存器相关位</p>
+</li>
+<li><p>不中断处理器，也不给处理器警告信息</p>
+</li>
+<li><p>处理器定期轮询I/O单元的状态，直到处理完毕</p>
+</li>
+</ul>
+<p>I/O软件包含直接操纵I/O的指令</p>
+<ul>
+<li><p>控制指令: 用于激活外设，并告诉它做什么</p>
+</li>
+<li><p>状态指令: 用于测试I/O控制中的各种状态和条件</p>
+</li>
+<li><p>数据传送指令: 用于在设备和主存之间来回传送数据</p>
+</li>
+</ul>
+<p>主要缺陷：处理器必须关注I/O处理单元的状态，因而耗费大量时间轮询信息，严重地降低了系统性能</p>
+<h2 id="中断驱动I-O技术"><a href="#中断驱动I-O技术" class="headerlink" title="中断驱动I/O技术"></a>中断驱动I/O技术</h2><p>为了解决程序控制I/O方法的主要问题</p>
+<ul>
+<li><p>应该让处理器从轮询任务中解放出来</p>
+</li>
+<li><p>使I/O操作和指令执行并行起来</p>
+</li>
+</ul>
+<p>具体作法：</p>
+<ul>
+<li><p>当I/O处理单元准备好与设备交互的时候</p>
+</li>
+<li><p>通过物理信号通知处理器，即中断处理器的执行</p>
+</li>
+</ul>
+<h2 id="DMA技术"><a href="#DMA技术" class="headerlink" title="DMA技术"></a>DMA技术</h2><p>中断的引入大大地提高了处理器处理I/O的效率，但是当处理器和I/O间传送数据时，效率仍旧不高。</p>
+<p>解决方法：</p>
+<p>——直接存储器访问（DMA：Direct Memory Access）</p>
+<p>通过系统总线中一独立控制单元——DMA控制器，自动控制成块数据在内存和I/O单元间的传送。</p>
+<p>大大提高处理I/O的效能。</p>
+<h2 id="通道"><a href="#通道" class="headerlink" title="通道"></a>通道</h2><p>通道又称为I/O处理机，独立于中央处理器，是专门负责数据I/O传输的处理机。</p>
+<ul>
+<li><p>它对外设实现统一管理</p>
+</li>
+<li><p>代替CPU对I/O操作进行控制</p>
+</li>
+<li><p>使CPU和外设可以并行工作</p>
+</li>
+</ul>
+<p>引入通道的目的:</p>
+<ul>
+<li><p>为了使CPU从I/O事务中解脱出来</p>
+</li>
+<li><p>同时为了提高CPU/设备、设备/设备之间的并行度</p>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://liuchaoyuan.github.io">Sinohope</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://liuchaoyuan.github.io/2024/10/14/Operating%20System-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%A1%AC%E4%BB%B6%E7%8E%AF%E5%A2%83/">http://liuchaoyuan.github.io/2024/10/14/Operating%20System-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%A1%AC%E4%BB%B6%E7%8E%AF%E5%A2%83/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://liuchaoyuan.github.io" target="_blank">The Site Of Liu</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></div><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/os.png" data-sites="qq,wechat,weibo,facebook,twitter"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>投喂作者</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/image/reward/wechatpay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/reward/wechatpay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/image/reward/alipay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/reward/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="prev-post pull-left" href="/2024/10/12/Butterfly%E4%B8%BB%E9%A2%98%E9%AD%94%E6%94%B9%E6%97%A5%E8%AE%B0/" title="Butterfly主题魔改日记"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/butterfly.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Butterfly主题魔改日记</div></div></a><a class="next-post pull-right" href="/2024/10/16/Game%20Theory-Extensive%20form%20game/" title="Game Theory-Extensive form game"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/John_F_Nash.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Game Theory-Extensive form game</div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a href="/2024/10/09/Operating%20System-Old%20knowledge/" title="Operating System-Old knowledge"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/os.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-09</div><div class="title">Operating System-Old knowledge</div></div></a><a href="/2024/11/05/Operating%20System-Process%20synchronization/" title="Operating System-Process synchronization"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/os.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-05</div><div class="title">Operating System-Process synchronization</div></div></a><a href="/2024/10/20/Operating%20System-process%20scheduling/" title="Operating System-process scheduling"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/os.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-20</div><div class="title">Operating System-process scheduling</div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/%E5%89%91%E5%BF%83.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Sinohope</div><div class="author-info-description">The World Of Sinohope</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">101</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/LiuChaoyuan"><i class="fab fa-github"></i><span>Follow Me On Github</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到小刘的小站</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#8086%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">8086处理器的结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#8086%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84%E5%AF%84%E5%AD%98%E5%99%A8%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">8086处理器的寄存器：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%BF%97%E7%9A%84%E5%88%86%E7%B1%BB%EF%BC%9A"><span class="toc-number">1.2.</span> <span class="toc-text">标志的分类：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CPU%E4%BA%94%E7%B1%BB%E6%8C%87%E4%BB%A4"><span class="toc-number">1.3.</span> <span class="toc-text">CPU五类指令:</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8086%E7%9A%84%E5%AF%BB%E5%9D%80%EF%BC%88%E6%95%B0%E6%8D%AE%E5%AD%98%E5%8F%96%EF%BC%89%E6%96%B9%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">8086的寻址（数据存取）方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%8B%E5%8D%B3%E6%95%B0%E5%AF%BB%E5%9D%80%E6%96%B9%E5%BC%8F"><span class="toc-number">2.1.</span> <span class="toc-text">立即数寻址方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8%E5%AF%BB%E5%9D%80%E6%96%B9%E5%BC%8F"><span class="toc-number">2.2.</span> <span class="toc-text">寄存器寻址方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E5%99%A8%E5%AF%BB%E5%9D%80%E6%96%B9%E5%BC%8F"><span class="toc-number">2.3.</span> <span class="toc-text">存储器寻址方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E5%AF%BB%E5%9D%80%E6%96%B9%E5%BC%8F"><span class="toc-number">2.3.1.</span> <span class="toc-text">直接寻址方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8%E9%97%B4%E6%8E%A5%E5%AF%BB%E5%9D%80%E6%96%B9%E5%BC%8F"><span class="toc-number">2.3.2.</span> <span class="toc-text">寄存器间接寻址方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8%E7%9B%B8%E5%AF%B9%E5%AF%BB%E5%9D%80%E6%96%B9%E5%BC%8F"><span class="toc-number">2.3.3.</span> <span class="toc-text">寄存器相对寻址方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8%E7%9B%B8%E5%AF%B9%E5%AF%BB%E5%9D%80%E6%8C%87%E4%BB%A4"><span class="toc-number">2.3.3.1.</span> <span class="toc-text">寄存器相对寻址指令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E5%9D%80%E5%8F%98%E5%9D%80%E5%AF%BB%E5%9D%80%E6%96%B9%E5%BC%8F"><span class="toc-number">2.3.4.</span> <span class="toc-text">基址变址寻址方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B8%E5%AF%B9%E5%9F%BA%E5%9D%80%E5%8F%98%E5%9D%80%E5%AF%BB%E5%9D%80%E6%96%B9%E5%BC%8F"><span class="toc-number">2.3.5.</span> <span class="toc-text">相对基址变址寻址方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B8%E5%AF%B9%E5%9F%BA%E5%9D%80%E5%8F%98%E5%9D%80%E5%AF%BB%E5%9D%80%E6%8C%87%E4%BB%A4"><span class="toc-number">2.3.5.1.</span> <span class="toc-text">相对基址变址寻址指令</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E6%9C%BA%E5%88%B6"><span class="toc-number">3.</span> <span class="toc-text">中断机制</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#I-O%E7%B3%BB%E7%BB%9F"><span class="toc-number">4.</span> <span class="toc-text">I&#x2F;O系统</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E6%8E%A7%E5%88%B6I-O%E6%8A%80%E6%9C%AF"><span class="toc-number">4.1.</span> <span class="toc-text">程序控制I&#x2F;O技术</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E9%A9%B1%E5%8A%A8I-O%E6%8A%80%E6%9C%AF"><span class="toc-number">4.2.</span> <span class="toc-text">中断驱动I&#x2F;O技术</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DMA%E6%8A%80%E6%9C%AF"><span class="toc-number">4.3.</span> <span class="toc-text">DMA技术</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E9%81%93"><span class="toc-number">4.4.</span> <span class="toc-text">通道</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/12/15/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E9%A1%B5/" title="Operating-System-存储管理之分页"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating-System-存储管理之分页"/></a><div class="content"><a class="title" href="/2024/12/15/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E9%A1%B5/" title="Operating-System-存储管理之分页">Operating-System-存储管理之分页</a><time datetime="2024-12-15T11:37:25.000Z" title="发表于 2024-12-15 19:37:25">2024-12-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/14/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E5%8C%BA/" title="Operating System-存储管理之分区"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating System-存储管理之分区"/></a><div class="content"><a class="title" href="/2024/12/14/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E5%8C%BA/" title="Operating System-存储管理之分区">Operating System-存储管理之分区</a><time datetime="2024-12-14T12:54:53.000Z" title="发表于 2024-12-14 20:54:53">2024-12-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/14/Operating-System-%E7%BA%BF%E7%A8%8B/" title="Operating System-线程"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating System-线程"/></a><div class="content"><a class="title" href="/2024/12/14/Operating-System-%E7%BA%BF%E7%A8%8B/" title="Operating System-线程">Operating System-线程</a><time datetime="2024-12-14T04:25:03.000Z" title="发表于 2024-12-14 12:25:03">2024-12-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/13/Operating-System-%E6%AD%BB%E9%94%81/" title="Operating System-死锁"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating System-死锁"/></a><div class="content"><a class="title" href="/2024/12/13/Operating-System-%E6%AD%BB%E9%94%81/" title="Operating System-死锁">Operating System-死锁</a><time datetime="2024-12-13T13:03:24.000Z" title="发表于 2024-12-13 21:03:24">2024-12-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/12/Matrix-Computations-%E5%8F%A4%E5%85%B8%E8%BF%AD%E4%BB%A3%E6%B3%95%E6%B1%82%E8%A7%A3%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84/" title="Matrix Computations-古典迭代法求解线性方程组"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Matrix Computations-古典迭代法求解线性方程组"/></a><div class="content"><a class="title" href="/2024/12/12/Matrix-Computations-%E5%8F%A4%E5%85%B8%E8%BF%AD%E4%BB%A3%E6%B3%95%E6%B1%82%E8%A7%A3%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84/" title="Matrix Computations-古典迭代法求解线性方程组">Matrix Computations-古典迭代法求解线性方程组</a><time datetime="2024-12-12T03:44:39.000Z" title="发表于 2024-12-12 11:44:39">2024-12-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By Sinohope</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+      
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/gh/xiabo2/CDN@latest/fishes.js"></script><script type="text/javascript" src="/js/fairyDustCursor.js"></script><div class="aplayer no-destroy" data-id="12355351036" data-server="netease" data-type="playlist" data-fixed="true" data-mini="true" data-listFolded="true" data-order="random" data-preload="auto" data-autoplay="false" muted></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>

@@ -1,0 +1,51 @@
+
+/* 齊伋體 */
+@font-face {
+  font-family: 'qiji';
+  src: url('qiji.ttf');
+}
+
+/* 霞婺文楷 */
+@font-face {
+  font-family: 'Xiawu';
+  src: url('LLXGWWenKaiMono-Medium.TTF');
+  src: url('LXGWWenKai-Medium.TTF');
+  src: url('LXGWWenKai-Regular.TTF');
+  src: url('LXGWWenKai-Light.TTF');
+}
+
+/* 寒蝉锦书宋 */
+@font-face {
+  font-family: 'HanChan';
+  src: url('寒蝉锦书宋.otf');
+
+}
+
+/* 方正FW筑紫A老明朝 */
+@font-face {
+  font-family: 'oldMing';
+  src: url('方正FW筑紫A老明朝 简 R.TTF');
+    src: url('方正FW筑紫A老明朝 简 L.TTF');
+
+}
+
+/* 京华老宋体 */
+@font-face {
+  font-family: 'Jinghualaosongti';
+  src: url('Jinghualaosongti-v2.002.ttf');
+}
+
+/* 设置 body 的字体优先级 */
+body {
+  font-family: Xiawu, HanChan,Jinghualaosongti, oldMingR, qiji, ModernSerif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Lato, Roboto, "PingFang SC", "STZhongsong", "Lantinghei SC", sans-serif;
+
+  font-size: 16px;
+  /*设定相对于根元素的字体大小 */
+}
+
+
+/* font-size: 16px;：设置 body 的字体大小为16像素。你可以根据需要调整这个值，比如 14px、18px 等。
+px（像素）是常见的单位，除此之外，你还可以使用其他单位，比如：
+em：相对于父元素字体大小的单位。
+rem：相对于根元素（HTML）的字体大小。
+%：相对于父元素的百分比*/

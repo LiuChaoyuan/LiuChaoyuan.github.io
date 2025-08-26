@@ -1,0 +1,280 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Python Relearning-Namespaces Scope | The Site Of Liu</title><meta name="author" content="Sinohope"><meta name="copyright" content="Sinohope"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="&#x2F;&#x2F;文章描述">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python Relearning-Namespaces Scope">
+<meta property="og:url" content="http://liuchaoyuan.github.io/2024/08/03/Python%20Relearning-Namespaces%20Scope/index.html">
+<meta property="og:site_name" content="The Site Of Liu">
+<meta property="og:description" content="&#x2F;&#x2F;文章描述">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp">
+<meta property="article:published_time" content="2024-08-03T03:18:32.000Z">
+<meta property="article:modified_time" content="2025-08-26T13:57:42.505Z">
+<meta property="article:author" content="Sinohope">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="namespace">
+<meta property="article:tag" content="Scope">
+<meta property="article:tag" content="命名空间">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp"><link rel="shortcut icon" href="/image/cat.png"><link rel="canonical" href="http://liuchaoyuan.github.io/2024/08/03/Python%20Relearning-Namespaces%20Scope/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.clarity.ms"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "oic38wrclh");</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"简","msgToSimplifiedChinese":"繁"},
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been(现在距离此文章的最后更新日期已经过了)","messageNext":"days since the last update, the content of the article may be outdated.(天，文章的内容可能过时，请注意甄别)"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Python Relearning-Namespaces Scope',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-08-26 21:57:42'
+}</script><script src="/styles/fish.js"></script><script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script><link rel="stylesheet" href="/css/bilibili.css"><link rel="stylesheet" href="/css/chamber/cursors.css"><link rel="stylesheet" href="/css/fontDiy/fontDiy.css"><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-image: url(https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/cloud_and_moon.webp);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/%E5%89%91%E5%BF%83.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">101</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/update"><i class="fa-fw fas fa-bell"></i><span> 动态</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-chart-pie"></i><span> 博客统计</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/charts/"><i class="fa-fw far fa-chart-bar"></i><span> 文章统计</span></a></li><li><a class="site-page child" href="/census/"><i class="fa-fw fas fa-chart-area"></i><span> 访问统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/top/"><i class="fa-fw fab fa-hotjar"></i><span> 阅读排行榜</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/books/"><i class="fa-fw fas fa-book"></i><span> 书籍</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/songs/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/cat.png" alt="Logo"><span class="site-name">The Site Of Liu</span></a><a class="nav-page-title" href="/"><span class="site-name">Python Relearning-Namespaces Scope</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/update"><i class="fa-fw fas fa-bell"></i><span> 动态</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-chart-pie"></i><span> 博客统计</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/charts/"><i class="fa-fw far fa-chart-bar"></i><span> 文章统计</span></a></li><li><a class="site-page child" href="/census/"><i class="fa-fw fas fa-chart-area"></i><span> 访问统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/top/"><i class="fa-fw fab fa-hotjar"></i><span> 阅读排行榜</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/books/"><i class="fa-fw fas fa-book"></i><span> 书籍</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/songs/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Python Relearning-Namespaces Scope</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-08-03T03:18:32.000Z" title="发表于 2024-08-03 11:18:32">2024-08-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-08-26T13:57:42.505Z" title="更新于 2025-08-26 21:57:42">2025-08-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/">计算机</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="命名空间-Namespace"><a href="#命名空间-Namespace" class="headerlink" title="命名空间(Namespace)"></a>命名空间(Namespace)</h1><p>命名空间(Namespace)是从名称到对象的映射，大部分的命名空间都是通过 Python 字典来实现的。</p>
+<p>命名空间提供了在项目中避免名字冲突的一种方法。各个命名空间是独立的，没有任何关系的，所以一个命名空间中不能有重名，但不同的命名空间是可以重名而没有任何影响。</p>
+<h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><p>一般有三种命名空间：</p>
+<ul>
+<li><strong>内置名称（built-in names</strong>）， Python 语言内置的名称，比如函数名 abs、char 和异常名称 BaseException、Exception 等等。</li>
+<li><strong>全局名称（global names）</strong>，模块中定义的名称，记录了模块的变量，包括函数、类、其它导入的模块、模块级的变量和常量。</li>
+<li><strong>局部名称（local names）</strong>，函数中定义的名称，记录了函数的变量，包括函数的参数和局部定义的变量。（类中定义的也是）</li>
+</ul>
+<h2 id="查找顺序"><a href="#查找顺序" class="headerlink" title="查找顺序:"></a>查找顺序:</h2><p>假设我们要使用变量 runoob，则 Python 的查找顺序为：<strong>局部的命名空间 -&gt; 全局命名空间 -&gt; 内置命名空间</strong>。</p>
+<p>如果找不到变量，它将放弃查找并引发一个 NameError 异常:</p>
+<h2 id="生命周期："><a href="#生命周期：" class="headerlink" title="生命周期："></a>生命周期：</h2><p>命名空间的生命周期取决于对象的作用域，如果对象执行完成，则该命名空间的生命周期就结束。</p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">var=<span class="number">0</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;所有函数外部，变量var的值是：\n&#x27;</span>,var)</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">out_fun</span>():</span><br><span class="line">    <span class="comment"># 在out_fun内部，in_fun外部定义变量</span></span><br><span class="line">    var=<span class="number">1</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;out_fun内部，in_fun外部,变量var的值是：\n&quot;</span>,var)</span><br><span class="line">    <span class="comment"># 内部函数</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">in_fun</span>():</span><br><span class="line">        var=<span class="number">2</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;in_fun内部,变量var的值是：\n&quot;</span>, var)</span><br><span class="line">    <span class="comment"># 内部函数实现</span></span><br><span class="line">    in_fun()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(var)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 外部函数实现</span></span><br><span class="line">out_fun()</span><br><span class="line"><span class="comment"># 依次输出0,1和 2</span></span><br></pre></td></tr></table></figure>
+<h1 id="作用域（Scope）"><a href="#作用域（Scope）" class="headerlink" title="作用域（Scope）"></a>作用域（Scope）</h1><p>作用域就是一个 Python 程序可以直接访问命名空间的正文区域。</p>
+<p>在一个 python 程序中，直接访问一个变量，会从内到外依次访问所有的作用域直到找到，否则会报未定义的错误。</p>
+<p>Python 中，程序的变量并不是在哪个位置都可以访问的，访问权限决定于这个变量是在哪里赋值的。</p>
+<h2 id="作用域分类"><a href="#作用域分类" class="headerlink" title="作用域分类"></a>作用域分类</h2><p>变量的作用域决定了在哪一部分程序可以访问哪个特定的变量名称。Python 的作用域一共有4种，分别是：</p>
+<p>有四种作用域：</p>
+<ul>
+<li><strong>L（Local）</strong>：最内层，包含局部变量，比如一个函数/方法内部。</li>
+<li><strong>E（Enclosing）</strong>：包含了非局部(non-local)也非全局(non-global)的变量。比如两个嵌套函数，一个函数（或类） A 里面又包含了一个函数 B ，那么对于 B 中的名称来说 A 中的作用域就为 nonlocal。</li>
+<li><strong>G（Global）</strong>：当前脚本的最外层，比如当前模块的全局变量。</li>
+<li><strong>B（Built-in）</strong>： 包含了内建的变量/关键字等，最后被搜索。</li>
+</ul>
+<p>规则顺序： <strong>L –&gt; E –&gt; G –&gt; B</strong>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">g_count = <span class="number">0</span>  <span class="comment"># 全局作用域</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">outer</span>():</span><br><span class="line">    o_count = <span class="number">1</span>  <span class="comment"># 闭包函数外的函数中</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">inner</span>():</span><br><span class="line">        i_count = <span class="number">2</span>  <span class="comment"># 局部作用域</span></span><br></pre></td></tr></table></figure>
+<p>Python 中只有模块（<code>module</code>），类（<code>class</code>）以及函数（<code>def</code>、<code>lambda</code>）才会引入新的作用域，其它的代码块（如<code>if/elif/else</code>、<code>try/except</code>、<code>for/while</code>等）是不会引入新的作用域的，也就是说这些语句内定义的变量，外部也可以访问，如下代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">if</span> <span class="literal">True</span>:</span><br><span class="line"><span class="meta">... </span> msg = <span class="string">&#x27;I am from Runoob&#x27;</span></span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>msg</span><br><span class="line"><span class="string">&#x27;I am from Runoob&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span></span><br></pre></td></tr></table></figure>
+<p>实例中 msg 变量定义在 if 语句块中，但外部还是可以访问的。</p>
+<p>如果将 msg 定义在函数中，则它就是局部变量，外部不能访问:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line"><span class="meta">... </span>    msg_inner = <span class="string">&#x27;I am from Runoob&#x27;</span></span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>msg_inner</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">NameError: name <span class="string">&#x27;msg_inner&#x27;</span> <span class="keyword">is</span> <span class="keyword">not</span> defined</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span></span><br></pre></td></tr></table></figure>
+<h2 id="全局变量和局部变量"><a href="#全局变量和局部变量" class="headerlink" title="全局变量和局部变量"></a>全局变量和局部变量</h2><p>定义在函数内部的变量拥有一个局部作用域，定义在函数外的拥有全局作用域。</p>
+<p>局部变量只能在其被声明的函数内部访问，而全局变量可以在整个程序范围内访问。调用函数时，所有在函数内声明的变量名称都将被加入到作用域中。</p>
+<h3 id="global和nonlocal关键字"><a href="#global和nonlocal关键字" class="headerlink" title="global和nonlocal关键字"></a>global和nonlocal关键字</h3><h4 id="为什么要用global和nonlocal关键字"><a href="#为什么要用global和nonlocal关键字" class="headerlink" title="为什么要用global和nonlocal关键字"></a>为什么要用global和nonlocal关键字</h4><p>当内部作用域想修改外部作用域的变量时，会出现下面的报错：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定义出错</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">out_fun</span>():</span><br><span class="line">    <span class="comment"># 在out_fun内部，in_fun外部定义变量</span></span><br><span class="line">    var=<span class="number">0</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;内部函数执行【前】,变量var的值是：\n&quot;</span>,var)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 内部函数</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">in_fun</span>():</span><br><span class="line">        var+=<span class="number">1</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;in_fun内部,变量var的值是：\n&quot;</span>, var)</span><br><span class="line">    <span class="comment"># 内部函数实现</span></span><br><span class="line">    in_fun()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;内部函数执行【后】,变量var的值是：\n&quot;</span>,var)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 外部函数实现</span></span><br><span class="line">out_fun()</span><br><span class="line"><span class="comment"># 会报错</span></span><br></pre></td></tr></table></figure>
+<p>报错信息如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">UnboundLocalError: cannot access local variable <span class="string">&#x27;var&#x27;</span> where it <span class="keyword">is</span> <span class="keyword">not</span> associated <span class="keyword">with</span> a value</span><br><span class="line">内部函数执行【前】,变量var的值是：</span><br><span class="line"> <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>出错信息在<code>var+=1</code>这个语句中。</p>
+<p>在Python 3中，如果在内部函数中赋值给一个变量，Python默认这个变量是局部变量，除非你明确地声明它是非局部变量（<code>nonlocal</code>）或者全局变量（<code>global</code>）。因此，当你在 <code>in_fun</code> 中执行 <code>var += 1</code> 时，<strong>Python会认为你是在尝试定义一个局部变量 <code>var</code></strong>，但是你又没有在 <code>in_fun</code> 的函数体中为其赋初值，只是尝试增加它的值，这就导致了错误。</p>
+<p>这不同于直接定义<code>var=2</code>，因为<code>var=2</code>是直接重新定义，Python会认为<code>var</code>是一个新的、<code>in_fun</code>内部的局部变量。但是如果写成<code>var+=1</code>，Python会寻找<code>var</code>等于几，但是找不到，因为没有声明过。</p>
+<p>为了解决这个问题，可以用<code>nonlocal</code>关键字。</p>
+<h4 id="nonlocal关键字"><a href="#nonlocal关键字" class="headerlink" title="nonlocal关键字"></a>nonlocal关键字</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># nonlocal</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">out_fun</span>():</span><br><span class="line">    <span class="comment"># 在out_fun内部，in_fun外部定义变量</span></span><br><span class="line">    var=<span class="number">0</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;内部函数执行【前】,变量var的值是：\n&quot;</span>,var)</span><br><span class="line">    <span class="comment"># 内部函数</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">in_fun</span>():</span><br><span class="line">        <span class="comment">#  告诉Python var是外部函数的局部变量</span></span><br><span class="line">        <span class="keyword">nonlocal</span> var</span><br><span class="line">        var+=<span class="number">1</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;使用了nonlocal关键字声明后，in_fun内部,变量var的值是：\n&quot;</span>, var)</span><br><span class="line">        <span class="comment"># 输出1</span></span><br><span class="line">    <span class="comment"># 内部函数实现</span></span><br><span class="line">    in_fun()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;内部函数执行【后】,变量var的值是：\n&quot;</span>,var)  <span class="comment"># var此时为1，因为内部函数修改过了</span></span><br><span class="line">    <span class="comment"># 输出0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 外部函数实现</span></span><br><span class="line">out_fun()</span><br><span class="line"><span class="comment"># 依次输出0，1，1</span></span><br></pre></td></tr></table></figure>
+<p>但是，在out_fun()外部使用下列语句会出错:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下面的print语句会报错</span></span><br><span class="line"><span class="built_in">print</span>(var)</span><br></pre></td></tr></table></figure>
+<p>因为<code>var</code>是定义在<code>out_fun</code>内的局部变量，虽然在<code>in_fun</code>中声明，但是并不能在外部访问。</p>
+<h4 id="global-关键字"><a href="#global-关键字" class="headerlink" title="global 关键字"></a>global 关键字</h4><p>  除此之外，我们还可以用global关键字，实现</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># global关键字</span></span><br><span class="line">var_a=<span class="number">1</span></span><br><span class="line">var_b=<span class="number">2</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">out_fun</span>():</span><br><span class="line">    <span class="comment"># 访问全局变量需要声明</span></span><br><span class="line">    <span class="keyword">global</span> var_a</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;外部函数访问全局变量var_a,结果是：&quot;</span>,var_a)</span><br><span class="line">    var_a+=<span class="number">1</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;外部函数修改全局变量var_a,结果是：&quot;</span>,var_a)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">in_fun</span>():</span><br><span class="line">        <span class="comment"># 访问全局变量需要声明</span></span><br><span class="line">        <span class="keyword">global</span> var_b</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;内部函数访问全局变量var_b,结果是：&quot;</span>, var_b)</span><br><span class="line">        var_b += <span class="number">1</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;内部函数修改全局变量var_b,结果是：&quot;</span>, var_b)</span><br><span class="line"></span><br><span class="line">    in_fun()</span><br><span class="line"></span><br><span class="line">out_fun()</span><br><span class="line"><span class="comment"># 依次输出1,2,2,3</span></span><br></pre></td></tr></table></figure>
+<p>值得注意的是，如果我们直接在<code>out_fun</code> 内部，<code>in_fun</code>外部定义了<code>var_b</code>（而不是在<code>out_fun</code>函数外部），此时在<code>in_fun()</code>函数里面声明<code>global var_b</code>，会出错，因为<mark><code>global</code>声明的变量类型必须是在函数外面的全局变量。</mark></p>
+<p>如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">out_fun</span>():</span><br><span class="line">    var_b = <span class="number">2</span></span><br><span class="line">    <span class="comment"># 访问全局变量需要声明</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">in_fun</span>():</span><br><span class="line">        <span class="comment"># 访问全局变量需要声明</span></span><br><span class="line">        <span class="keyword">global</span> var_b</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;内部函数访问全局变量var_b,结果是：&quot;</span>, var_b)</span><br><span class="line">        var_b += <span class="number">1</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;内部函数修改全局变量var_b,结果是：&quot;</span>, var_b)</span><br><span class="line"></span><br><span class="line">    in_fun()</span><br><span class="line"></span><br><span class="line">out_fun()</span><br><span class="line"><span class="comment"># 依次输出1,2,2,3</span></span><br></pre></td></tr></table></figure>
+<p>报错如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">  File <span class="string">&quot;E:\codes\Python\python_relearning\namespace.py&quot;</span>, line <span class="number">84</span>, <span class="keyword">in</span> in_fun</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;内部函数访问全局变量var_b,结果是：&quot;</span>, var_b)</span><br><span class="line">                                  ^^^^^</span><br><span class="line">NameError: name <span class="string">&#x27;var_b&#x27;</span> <span class="keyword">is</span> <span class="keyword">not</span> defined. Did you mean: <span class="string">&#x27;vars&#x27;</span>?</span><br></pre></td></tr></table></figure>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://www.runoob.com/python3/python3-namespace-scope.html">Python3 命名空间和作用域 | 菜鸟教程</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://liuchaoyuan.github.io">Sinohope</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://liuchaoyuan.github.io/2024/08/03/Python%20Relearning-Namespaces%20Scope/">http://liuchaoyuan.github.io/2024/08/03/Python%20Relearning-Namespaces%20Scope/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://liuchaoyuan.github.io" target="_blank">The Site Of Liu</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Python/">Python</a><a class="post-meta__tags" href="/tags/namespace/">namespace</a><a class="post-meta__tags" href="/tags/Scope/">Scope</a><a class="post-meta__tags" href="/tags/%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4/">命名空间</a></div><div class="post-share"><div class="social-share" data-image="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" data-sites="qq,wechat,weibo,facebook,twitter"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>投喂作者</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/image/reward/wechatpay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/reward/wechatpay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/image/reward/alipay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/reward/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="prev-post pull-left" href="/2024/07/31/Python-Relearning-os-pathlib/" title="Python-Relearning-os"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Python-Relearning-os</div></div></a><a class="next-post pull-right" href="/2024/08/03/Python%20Relearning-datetime/" title="Python Relearning-datetime"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Python Relearning-datetime</div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a href="/2024/07/27/Python%20Relearing-Function%20lambda%20re/" title="Python Relearing-Function&#x2F;lambda&#x2F;re"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-27</div><div class="title">Python Relearing-Function&#x2F;lambda&#x2F;re</div></div></a><a href="/2024/07/25/Python%20Relearning-Branches,%20loops,%20comprehensions%20and%20iterators/" title="Python Relearning-Branches, loops, comprehensions and iterators"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-25</div><div class="title">Python Relearning-Branches, loops, comprehensions and iterators</div></div></a><a href="/2024/08/20/Python%20Relearning-Generator%20and%20Iterator/" title="Python Relearning-Generator and Iterator"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-20</div><div class="title">Python Relearning-Generator and Iterator</div></div></a><a href="/2024/08/22/Python%20Relearning-MultiProcessing/" title="Python Relearning-MultiProcessing"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-22</div><div class="title">Python Relearning-MultiProcessing</div></div></a><a href="/2024/07/24/Python%20Relearning-ListTupleDictSet/" title="Python Relearning-List&#x2F;Tuple&#x2F;Dict&#x2F;Set"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-24</div><div class="title">Python Relearning-List&#x2F;Tuple&#x2F;Dict&#x2F;Set</div></div></a><a href="/2024/08/10/Python%20Relearning-Numpy/" title="Python Relearning-Numpy"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/All_imagesPython.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-10</div><div class="title">Python Relearning-Numpy</div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/%E5%89%91%E5%BF%83.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Sinohope</div><div class="author-info-description">The World Of Sinohope</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">101</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/LiuChaoyuan"><i class="fab fa-github"></i><span>Follow Me On Github</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到小刘的小站</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4-Namespace"><span class="toc-number">1.</span> <span class="toc-text">命名空间(Namespace)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E7%B1%BB"><span class="toc-number">1.1.</span> <span class="toc-text">分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E6%89%BE%E9%A1%BA%E5%BA%8F"><span class="toc-number">1.2.</span> <span class="toc-text">查找顺序:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%EF%BC%9A"><span class="toc-number">1.3.</span> <span class="toc-text">生命周期：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B"><span class="toc-number">1.4.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8%E5%9F%9F%EF%BC%88Scope%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">作用域（Scope）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%88%86%E7%B1%BB"><span class="toc-number">2.1.</span> <span class="toc-text">作用域分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E5%92%8C%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F"><span class="toc-number">2.2.</span> <span class="toc-text">全局变量和局部变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#global%E5%92%8Cnonlocal%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">2.2.1.</span> <span class="toc-text">global和nonlocal关键字</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8global%E5%92%8Cnonlocal%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">2.2.1.1.</span> <span class="toc-text">为什么要用global和nonlocal关键字</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#nonlocal%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">2.2.1.2.</span> <span class="toc-text">nonlocal关键字</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#global-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">2.2.1.3.</span> <span class="toc-text">global 关键字</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-number">3.</span> <span class="toc-text">参考文章</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/12/15/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E9%A1%B5/" title="Operating-System-存储管理之分页"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating-System-存储管理之分页"/></a><div class="content"><a class="title" href="/2024/12/15/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E9%A1%B5/" title="Operating-System-存储管理之分页">Operating-System-存储管理之分页</a><time datetime="2024-12-15T11:37:25.000Z" title="发表于 2024-12-15 19:37:25">2024-12-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/14/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E5%8C%BA/" title="Operating System-存储管理之分区"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating System-存储管理之分区"/></a><div class="content"><a class="title" href="/2024/12/14/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E5%8C%BA/" title="Operating System-存储管理之分区">Operating System-存储管理之分区</a><time datetime="2024-12-14T12:54:53.000Z" title="发表于 2024-12-14 20:54:53">2024-12-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/14/Operating-System-%E7%BA%BF%E7%A8%8B/" title="Operating System-线程"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating System-线程"/></a><div class="content"><a class="title" href="/2024/12/14/Operating-System-%E7%BA%BF%E7%A8%8B/" title="Operating System-线程">Operating System-线程</a><time datetime="2024-12-14T04:25:03.000Z" title="发表于 2024-12-14 12:25:03">2024-12-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/13/Operating-System-%E6%AD%BB%E9%94%81/" title="Operating System-死锁"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating System-死锁"/></a><div class="content"><a class="title" href="/2024/12/13/Operating-System-%E6%AD%BB%E9%94%81/" title="Operating System-死锁">Operating System-死锁</a><time datetime="2024-12-13T13:03:24.000Z" title="发表于 2024-12-13 21:03:24">2024-12-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/12/Matrix-Computations-%E5%8F%A4%E5%85%B8%E8%BF%AD%E4%BB%A3%E6%B3%95%E6%B1%82%E8%A7%A3%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84/" title="Matrix Computations-古典迭代法求解线性方程组"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Matrix Computations-古典迭代法求解线性方程组"/></a><div class="content"><a class="title" href="/2024/12/12/Matrix-Computations-%E5%8F%A4%E5%85%B8%E8%BF%AD%E4%BB%A3%E6%B3%95%E6%B1%82%E8%A7%A3%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84/" title="Matrix Computations-古典迭代法求解线性方程组">Matrix Computations-古典迭代法求解线性方程组</a><time datetime="2024-12-12T03:44:39.000Z" title="发表于 2024-12-12 11:44:39">2024-12-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By Sinohope</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+      
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/gh/xiabo2/CDN@latest/fishes.js"></script><script type="text/javascript" src="/js/fairyDustCursor.js"></script><div class="aplayer no-destroy" data-id="12355351036" data-server="netease" data-type="playlist" data-fixed="true" data-mini="true" data-listFolded="true" data-order="random" data-preload="auto" data-autoplay="false" muted></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>

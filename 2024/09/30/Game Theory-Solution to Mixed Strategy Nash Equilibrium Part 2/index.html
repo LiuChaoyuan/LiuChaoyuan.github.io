@@ -1,0 +1,468 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Game Theory-Solution to Mixed Strategy Nash Equilibrium Part 2 | The Site Of Liu</title><meta name="author" content="Sinohope"><meta name="copyright" content="Sinohope"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="&#x2F;&#x2F;文章描述">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Game Theory-Solution to Mixed Strategy Nash Equilibrium Part 2">
+<meta property="og:url" content="http://liuchaoyuan.github.io/2024/09/30/Game%20Theory-Solution%20to%20Mixed%20Strategy%20Nash%20Equilibrium%20Part%202/index.html">
+<meta property="og:site_name" content="The Site Of Liu">
+<meta property="og:description" content="&#x2F;&#x2F;文章描述">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/John_F_Nash.png">
+<meta property="article:published_time" content="2024-09-30T09:35:29.000Z">
+<meta property="article:modified_time" content="2025-08-26T13:57:42.410Z">
+<meta property="article:author" content="Sinohope">
+<meta property="article:tag" content="规划法">
+<meta property="article:tag" content="零和博弈">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/John_F_Nash.png"><link rel="shortcut icon" href="/image/cat.png"><link rel="canonical" href="http://liuchaoyuan.github.io/2024/09/30/Game%20Theory-Solution%20to%20Mixed%20Strategy%20Nash%20Equilibrium%20Part%202/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.clarity.ms"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "oic38wrclh");</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"简","msgToSimplifiedChinese":"繁"},
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been(现在距离此文章的最后更新日期已经过了)","messageNext":"days since the last update, the content of the article may be outdated.(天，文章的内容可能过时，请注意甄别)"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Game Theory-Solution to Mixed Strategy Nash Equilibrium Part 2',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-08-26 21:57:42'
+}</script><script src="/styles/fish.js"></script><script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script><link rel="stylesheet" href="/css/bilibili.css"><link rel="stylesheet" href="/css/chamber/cursors.css"><link rel="stylesheet" href="/css/fontDiy/fontDiy.css"><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-image: url(https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/cloud_and_moon.webp);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/%E5%89%91%E5%BF%83.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">101</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/update"><i class="fa-fw fas fa-bell"></i><span> 动态</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-chart-pie"></i><span> 博客统计</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/charts/"><i class="fa-fw far fa-chart-bar"></i><span> 文章统计</span></a></li><li><a class="site-page child" href="/census/"><i class="fa-fw fas fa-chart-area"></i><span> 访问统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/top/"><i class="fa-fw fab fa-hotjar"></i><span> 阅读排行榜</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/books/"><i class="fa-fw fas fa-book"></i><span> 书籍</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/songs/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/John_F_Nash.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/cat.png" alt="Logo"><span class="site-name">The Site Of Liu</span></a><a class="nav-page-title" href="/"><span class="site-name">Game Theory-Solution to Mixed Strategy Nash Equilibrium Part 2</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/update"><i class="fa-fw fas fa-bell"></i><span> 动态</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-chart-pie"></i><span> 博客统计</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/charts/"><i class="fa-fw far fa-chart-bar"></i><span> 文章统计</span></a></li><li><a class="site-page child" href="/census/"><i class="fa-fw fas fa-chart-area"></i><span> 访问统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/top/"><i class="fa-fw fab fa-hotjar"></i><span> 阅读排行榜</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/books/"><i class="fa-fw fas fa-book"></i><span> 书籍</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/songs/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Game Theory-Solution to Mixed Strategy Nash Equilibrium Part 2</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-09-30T09:35:29.000Z" title="发表于 2024-09-30 17:35:29">2024-09-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-08-26T13:57:42.410Z" title="更新于 2025-08-26 21:57:42">2025-08-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="规划法求解Nash均衡"><a href="#规划法求解Nash均衡" class="headerlink" title="规划法求解Nash均衡"></a>规划法求解Nash均衡</h1><h2 id="两人的情况"><a href="#两人的情况" class="headerlink" title="两人的情况"></a>两人的情况</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>所谓规划求解法，就是将求解博弈问题的混合战略Nash均，转换为一个规划问题进行求解。相对于支撑求解法，规划求解法对两人有限博弈问题的Nash均衡求解尤为有效。下面对规划求解法的基本原理和步骤进行介绍。</p>
+<p>在一个两人有限战略式博弈中，设 $S<em>1={s_1^1,…,s_1^m},S_1={s_2^1,…,s_2^n}$ 。用矩阵 $\mathbf U_1=(a</em>{ij})<em>{m\times n}$ 表示参与人 $1$ 的支付，其中 $a$ 表示参与人 $1$ 在战略组合 $(s_1^i,s_2^j)$ 下的支付，即 $a</em>{ij}=u<em>1(s_1^i,s_2^j)$ ；用矩阵 $\mathbf U_2=(b</em>{ij})<em>{m\times n}$ 表示参与人 $2$ 的支付，其中 $b</em>{ij}$ 表示参与人 $2$ 在战略组合 $(s<em>1^i,s_2^j)$ 下的支付，即 $b</em>{ij}=u_2(s_1^i,s_2^j)$ 。设参与人 $1$ 和参与人 $2$ 的混合战略分别为 $\boldsymbol \sigma_1=(\sigma_1^1,\cdots,\sigma_1^m) $和$\boldsymbol \sigma_2=(\sigma_2^1,\cdots,\sigma_2^n) $,则 </p>
+<script type="math/tex; mode=display">
+v_1(\boldsymbol {\sigma_1,\sigma_1})=\boldsymbol {\sigma_1 U_1\sigma_2^T}\\
+v_2(\boldsymbol {\sigma_1,\sigma_1})=\boldsymbol {\sigma_1 U_2\sigma_2^T}</script><p>一个两人有限战略式博弈的 Nash均衡可以通过求解以下规划问题得到：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\max &&z =\boldsymbol{\sigma_{1}U_{1}\sigma_{2}^{T}-v_{1}+\sigma_{1}U_{2}\sigma_{2}^{T}-v_{2}} \\
+&\text{s.t.}&& \boldsymbol{U_{1}\sigma_{2}^{T}\leq\upsilon_{1} E_{m}^{T}}\\
+&&&\left(\boldsymbol{\sigma}_{1}\boldsymbol{U}_{2}\right)^{\mathrm{T}}\leqslant\boldsymbol{\upsilon}_{2}\boldsymbol{E}_{n}^{\mathrm{T}} \\
+&&&\boldsymbol {\sigma_{1}E_{m}^{\mathrm{T}}=\sigma_{2}E_{n}^{\mathrm{T}}}=1 \\
+&&&\sigma_{1}^{i}\geqslant0,i=1,\cdots,m \\
+&&&\sigma_{2}^{j}\geqslant0,j=1,\cdots,n
+\end{aligned}</script><p>其中，</p>
+<script type="math/tex; mode=display">
+\boldsymbol E_m=[1,\cdots ,1]_{1\times m}\\
+\boldsymbol E_n=[1,\cdots ,1]_{1\times n}</script><p>$v_1、v_2$ 分别是参与人 $1$ 和参与人 $2$ 在Nash均衡下的期望支付。</p>
+<h3 id="例"><a href="#例" class="headerlink" title="例"></a>例</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>$A(\sigma_2^A)$</th>
+<th>$B(\sigma_2^B)$</th>
+<th>$C(\sigma_2^C)$</th>
+<th>$D(\sigma_2^D)$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$U(\sigma_1^U)$</td>
+<td>$3,5$</td>
+<td>$1,4$</td>
+<td>$5,7$</td>
+<td>$4,2$</td>
+</tr>
+<tr>
+<td>$L(\sigma_1^L)$</td>
+<td>$4,3$</td>
+<td>$2,5$</td>
+<td>$0,3$</td>
+<td>$2,6$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>上述博弈问题中，</p>
+<script type="math/tex; mode=display">
+\boldsymbol U_1=
+\begin{bmatrix}
+3 & 1 &5 &4\\
+4 &2 &0 &2
+\end{bmatrix}
+\qquad
+\boldsymbol U_2=
+\begin{bmatrix}
+5 & 4 &7 &2\\
+3 &5 &3 &6
+\end{bmatrix}
+\\
+\boldsymbol \sigma_1=(\sigma_1^U,\sigma_1^L) \qquad \boldsymbol \sigma_2=(\sigma_2^A,\sigma_2^B,\sigma_2^C,\sigma_2^D)</script><p>设 $\boldsymbol {v_1、v_2}$ 分别是参与人 $1$ 和参与人 $2$ 在Nash均衡下的期望支付。</p>
+<p>我们可以列出来以下方程:</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\max \quad z &=\begin{pmatrix}   \boldsymbol \sigma_{1}^{U} &  \boldsymbol \sigma_{1}^{L} \end{pmatrix}
+\begin{bmatrix}
+3 & 1 & 5 & 4 \\
+4 & 2 & 0 & 2
+\end{bmatrix}
+\begin{pmatrix}  \boldsymbol \sigma_{2}^{A} \\ \boldsymbol \sigma_{2}^{B} \\ \boldsymbol \sigma_{2}^{C} \\ \boldsymbol \sigma_{2}^{D}\end{pmatrix}
+- \boldsymbol v_1 \\
+&\quad + \begin{pmatrix} \boldsymbol \sigma_{1}^{U} & \boldsymbol \sigma_{1}^{L} \end{pmatrix}
+\begin{bmatrix}
+5 & 4 & 7 & 2 \\
+3 & 5 & 3 & 6
+\end{bmatrix}
+\begin{pmatrix}\boldsymbol { \boldsymbol \sigma_{2}^{A} \\ \boldsymbol \sigma_{2}^{B} \\ \boldsymbol \sigma_{2}^{C} \\ \boldsymbol \sigma_{2}^{D} }\end{pmatrix}
+- \boldsymbol v_2 \\
+\text{s.t.} \quad &
+\begin{bmatrix}
+3 & 1 & 5 & 4 \\
+4 & 2 & 0 & 2
+\end{bmatrix}
+\begin{pmatrix} \boldsymbol\sigma_{2}^{A} \\ \boldsymbol \sigma_{2}^{B} \\ \boldsymbol \sigma_{2}^{C} \\ \boldsymbol \sigma_{2}^{D} \end{pmatrix}
+\leqslant
+\begin{pmatrix} \boldsymbol v_1 \\ \boldsymbol v_1 \end{pmatrix}, \\
+&\left(\begin{pmatrix} \boldsymbol \sigma_{1}^{U} & \boldsymbol \sigma_{1}^{L} \end{pmatrix}
+\begin{bmatrix}
+5 & 4 & 7 & 2 \\
+3 & 5 & 3 & 6
+\end{bmatrix}\right)^T
+\leqslant
+\begin{pmatrix} \boldsymbol v_1 \\ \boldsymbol v_2 \\ \boldsymbol v_3 \\ \boldsymbol v_4 \end{pmatrix}, \\
+&\boldsymbol {\sigma_{1}^{U} + \sigma_{1}^{L}} = 1, \\
+&\boldsymbol {\sigma_{2}^{A} + \sigma_{2}^{B} + \sigma_{2}^{C} + \sigma_{2}^{D}} = 1, \\
+&\boldsymbol \sigma_{1}^{U} \geq 0, \ \boldsymbol \sigma_{1}^{L} \geq 0, \\
+&\boldsymbol \sigma_{2}^{A} \geq 0, \ \boldsymbol \sigma_{2}^{B} \geq 0, \ \boldsymbol \sigma_{2}^{C} \geq 0, \ \boldsymbol \sigma_{2}^{D} \geq 0.
+\end{aligned}
+$$ {&}
+
+求解上述规划问题，可以得到三个Nash均衡，即一个纯战略Nash均衡和两个混合战略Nash均衡:</script><p>(U,C)\<br>\left(<br>\left(\frac{1}{3},\frac{2}{3}\right),<br>\left(0,\frac{2}{3},0,\frac{1}{3}\right)<br>\right)\<br>\left(<br>\left(\frac{2}{5},\frac{3}{5}\right),<br>\left(0,\frac{5}{6},\frac{1}{6},0\right)<br>\right)</p>
+<script type="math/tex; mode=display">
+
+
+
+## 多人博弈情况
+
+利用规划问题求解Nash均衡的思路，还可以推广到有限 $n$ 人的战略式博弈 $G=<\Gamma;S_1,\cdots,S_n;u_1,\cdots,u_n>$ ,对 $\forall i \in \Gamma$ ,设$S_{i}=\left\{s_{i}^{1},\cdots,s_{i}^{K_{i}}\right\},\sigma_{i}=\left(\sigma_{i}^{1},\cdots,\sigma_{i}^{K_{i}}\right)$,求解下列规划问题即可得到博弈问题的解。</script><p>\begin{aligned}<br>&amp;\max z = &amp;&amp; \sum<em>{i=1}^{n}\left(v</em>{i}\left(\boldsymbol \sigma<em>{i},\boldsymbol \sigma</em>{-i}\right) - \boldsymbol v<em>{i}\right) \<br>&amp;\text{s.t.} &amp;&amp; v</em>{i}\left(s<em>{i}^{j},\boldsymbol \sigma</em>{-i}\right) \leqslant \boldsymbol v<em>{i}, &amp;&amp; \forall i \in \Gamma, \forall s</em>{i}^{j} \in S<em>{i}, \<br>&amp;&amp;&amp; \sum</em>{j} \boldsymbol \sigma<em>{i}^{j} = 1, &amp;&amp; \forall i \in \Gamma, \<br>&amp;&amp;&amp; \boldsymbol \sigma</em>{i}^{j} \geqslant 0, &amp;&amp; \forall i \in \Gamma, \forall j \in \left{1,\cdots,K_{i}\right}.<br>\end{aligned}</p>
+<script type="math/tex; mode=display">
+其中， $\boldsymbol v_i(i=1,\cdots,n)$ 为参与人 $i$ 在Nash均衡下的期望支付。
+
+# 零和博弈
+
+所谓零和博弈，指的是在任何博弈情况下两个参与人的支付之和为 $0$ ,即对于 $\forall i \in \{1,2,\cdots,m\}$ 和 $\forall j \in \{1,2,\cdots,n\}$ ,有 $a_{ij}+b_{ij}=0$ ,我们设 $\boldsymbol {U_1=U}$ ,那么 $\boldsymbol {U_2=-U}$ ,所以给定了支付矩阵 $\boldsymbol U$,就给出来了所有参与人的支付。
+
+## 极大极小化行为和鞍点(saddle point)
+
+所谓极大极小化行为，指的是某一参与人在使自己的支付最小化的战略中，选择使得自己支付最大化的行为。
+
+如下表所示:</script><p>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \min\<br>\ \ \ \ \ \ \ \ \ \ \ \ U = \begin{bmatrix}<br>1 &amp; 4 &amp; 2 \<br>4 &amp; 3 &amp; 2 \<br>1 &amp; 0 &amp; 1<br>\end{bmatrix}<br>\begin{array}{c}<br>1 \<br>(2) \<br>1<br>\end{array}<br>\<br>\max \ \ \ \ \ \ \ \ \ \ 4\quad 4\quad \left(2\right)</p>
+<script type="math/tex; mode=display">
+上述是参与人 $1$ 的支付矩阵。
+
+对于参与人 $1$ ,当他分别选择战略 $a_1,a_2,a_3$的时候，参与人 $2$ 知道自己和参与人 $1$ 的支付之和为 $0$ ,所以参与人 $2$ **为了使自己的支付最大化，必然要使得参与人 $1$ 的支付最小化**，即参与人 $2$ 会在对应的行中，选择参与人 $1$ 获得支付最小的，即参与人 $2$ 会分别选择战略 $b_1,b_3,b_2$ ,这样可以使得参与人 $1$ 支付最小，自己的支付达到最大。此时参与人 $1$ 和参与人 $2$ 的支付分别为 $v_1=1,2,0,v_2=-1,-2,0$.
+
+但是参与人 $1$ 也知道这一点，他知道上面的支付是自己最小的支付，所以他要**“瘸子里挑将军”，在所有不利于自己的战略中，挑选一个最有利的**。所以参与人 $1$ 一定会选择战略 $a_2$ ,这个时候，按照上述分析，参与人 $2$ 选择战略 $b_3$ 以使对方支付最小，自己支付最大。这样的话，参与人 $1$ 和参与人 $2$ 的支付分别为 $v_1=2,v_2=-2$ .
+
+回顾上述思路，参与人 $1$ 先是站在参与人 $2$ 的角度考虑，挑选了一个对于参与人 $1$ 来说支付最小的，然后又从中挑选了一个支付最大的。因此这种行为被称为参与人$1$的“**极大极小化行为**”
+
+对于参与人 $2$ 来说，也可以照此分析，由于上述矩阵是参与人 $1$ 的支付矩阵，因此参与人 $2$ 就表现出 “**极小极大化行为**”。
+
+>**定义：鞍点**
+>
+>对于给定的零和博弈的支付矩阵 $U$ ,如果存在某个 $i^*$ 和 $j^*$ ,使得:
+></script><blockquote>
+<p>a<em>{i^<em>,j^</em>}=\max_i \min_j a</em>{ij}= \min<em>j\max_i a</em>{ij}</p>
+<p>$$<br>那么称  $i^<em>$ 行 $j^</em>$ 列对应的点为 <strong>鞍点</strong>(saddle point)</p>
+</blockquote>
+<p>关于鞍点和Nash均衡，我们有如下定理:</p>
+<blockquote>
+<p><strong>定理：鞍点和Nash均衡</strong></p>
+<p>在Nash均衡中，如果支付矩阵 $\boldsymbol U$ 存在鞍点，那么鞍点对应的战略组合即为Nash均衡。</p>
+</blockquote>
+<p>我们可以定义混合战略的鞍点</p>
+<blockquote>
+<p><strong>定义:混合战略意义下的鞍点</strong></p>
+<p>对于给定的零和博弈的支付矩阵 $\boldsymbol U$ ，如果存在参与人 $1$ 的某个混合战略 $\boldsymbol \sigma_1^<em>=(\sigma_1^{1</em>},\cdots,\sigma_1^{m<em>})$和参与人 $2$ 的某个混合战略 $\boldsymbol \sigma_2^</em>=(\sigma_2^{1<em>},\cdots,\sigma_2^{n</em>})$ ,使得:</p>
+<script type="math/tex; mode=display">
+v_1(\boldsymbol \sigma_1^*,\boldsymbol \sigma_2^*)=\max_{\sigma_1} \min_{\sigma_2} v_1(\boldsymbol \sigma_1,\boldsymbol \sigma_2)=\min_{\sigma_2} \max_{\sigma_1}v_1(\boldsymbol \sigma_1,\boldsymbol \sigma_2)</script><p>那么称战略组合$(\boldsymbol \sigma_1^<em>,\boldsymbol \sigma_2^</em>)$ 为支付矩阵 $\boldsymbol U$ 的鞍点。</p>
+</blockquote>
+<h2 id="von-Neumann极大极小定理"><a href="#von-Neumann极大极小定理" class="headerlink" title="von Neumann极大极小定理"></a>von Neumann极大极小定理</h2><blockquote>
+<p><strong>von Neumann极大极小定理</strong></p>
+<p>在零和博弈中，对于给定的支付矩阵 $\boldsymbol U$ ，如果存在混合战略 $\boldsymbol \sigma_1^<em>=(\sigma_1^{1</em>},\cdots,\sigma_1^{m<em>})$ 和 $\boldsymbol \sigma_2^</em>=(\sigma_2^{1<em>},\cdots,\sigma_2^{n</em>})$以及一个常数 $v$ ,使得</p>
+<script type="math/tex; mode=display">
+\forall j,\qquad \sum\limits _{i=1}^m a_{ij}\boldsymbol \sigma_1^{i*}\geq v\\
+\forall i,\qquad \sum\limits _{j=1}^n a_{ij}\boldsymbol \sigma_2^{j*}\leq v</script><p>那么称战略组合 $(\boldsymbol \sigma_1^<em>,\boldsymbol \sigma_2^</em>)$ 为博弈的Nash均衡，其中 $v$ 为参与人 $1$ 在均衡中所得到的期望支付，亦称该博弈的值。</p>
+</blockquote>
+<h2 id="零和博弈问题转化为对偶的规划问题"><a href="#零和博弈问题转化为对偶的规划问题" class="headerlink" title="零和博弈问题转化为对偶的规划问题"></a>零和博弈问题转化为对偶的规划问题</h2><p>对于给定的零和博弈问题，如果<strong>博弈的值 $v&gt;0$</strong> ，那么博弈的 Nash均衡为下列对偶问题的解:</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\min \sum_{i=1}^{m} p_{i} \\
+&\text{s.t.} \quad \sum_{i=1}^{m} a_{ij} p_{i} \geq 1 \quad (j = 1, \cdots, n), \\
+&\quad \quad \ p_{i} \geq 0 \quad (i = 1, \cdots, m), \\
+&\quad \text{和}\\
+&\max \sum_{j=1}^{n} q_{j} \\
+&\text{s.t.} \quad \sum_{j=1}^{n} a_{ij} q_{j} \leq 1 \quad (i = 1, \cdots, m), \\
+&\quad \quad \ q_{j} \geq 0 \quad (j = 1, \cdots, n).
+\end{aligned}</script><p>其中，Nash均衡支付为 $v=\frac{1}{\sum\limits<em>{i=1}^m p_i}=\frac{1}{\sum\limits</em>{j=1}^n q_j}$ ,Nash均衡战略 $\sigma_1^<em>=(vp_1,\cdots,vp_i,\cdots,vp_m),\sigma_2^</em>=(vq_1,\cdots,vq_j,\cdots,vq_n)$.</p>
+<p>如果支付矩阵 $\boldsymbol U=(a<em>{ij})</em>{m\times n}$中每个元素都大于零，即 $a_{ij}&gt;0$ ,则博弈的值 $v&gt;0$ ;</p>
+<p>由此，如果发现给定的支付矩阵 $\boldsymbol U$ 中存在小于 $0$ 的元素，那么可以把每个元素都加上一个常数，从而使得每个元素都大于 $0$ ,这样的话，可以保证博弈的值 $v&gt;0$ ,就可以应用上面的方法求解博弈问题了。</p>
+<h3 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h3><p>给定博弈如下，求解Nash均衡</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>$L$</th>
+<th>$M$</th>
+<th>$N$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$U$</td>
+<td>$2,-2$</td>
+<td>$-2,2$</td>
+<td>$1,-1$</td>
+</tr>
+<tr>
+<td>$C$</td>
+<td>$-1,1$</td>
+<td>$1,-1$</td>
+<td>$0,0$</td>
+</tr>
+<tr>
+<td>$D$</td>
+<td>$3,-3$</td>
+<td>$0,0$</td>
+<td>$2,2$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>解:</p>
+<p>支付矩阵为:</p>
+<script type="math/tex; mode=display">
+\boldsymbol U=\begin{bmatrix}
+2 &-2&1\\
+-1 &1&0\\
+3 &0&2
+\end{bmatrix}</script><p>我们可以加上一个常数 $2$ ,得到下面的支付矩阵:</p>
+<script type="math/tex; mode=display">
+\boldsymbol U'=\begin{bmatrix}
+4 &0&3\\
+1 &3&2\\
+5 &2&4
+\end{bmatrix}</script><p>设参与人 $1$ 和参与人 $2$ 的混合战略分别是  $\sigma_1=(v’p_1,v’p_2,v’p_3),\sigma_2=(v’q_1,v’q_2,v’q_3)$, $v$ 为原博弈的值， $v’$ 为新博弈的值，且 $v’=v+2$ ,利用对偶线性规划方法求解新战略式博弈的Nash均衡，构造规划问题如下:</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\min \{p_1 + p_2 + p_3\} \\
+&\text{s.t.} \quad 4p_1 + p_2 + 5p_3 \geq 1, \\
+&\quad \quad \ 3p_2 + 2p_3 \geq 1, \\
+&\quad \quad \ 3p_1 + 2p_2 + 4p_3 \geq 1, \\
+&\quad \quad \ p_1 \geq 0, \ p_2 \geq 0, \ p_3 \geq 0,
+\\[10pt]
+&\max \{q_1 + q_2 + q_3\} \\
+&\text{s.t.} \quad 4q_1 + 3q_3 \leq 1, \\
+&\quad \quad \ q_1 + 3q_2 + 2q_3 \leq 1, \\
+&\quad \quad \ 5q_1 + 2q_2 + 4q_3 \leq 1, \\
+&\quad \quad \ q_1 \geq 0, \ q_2 \geq 0, \ q_3 \geq 0.
+\end{aligned}</script><p>上述对偶问题的解是</p>
+<script type="math/tex; mode=display">
+(p_1,p_2,p_3)=(0,\frac{3}{13},\frac{2}{13})\\
+(q_1,q_2,q_3)=(\frac{1}{13},\frac{4}{13},0)\\
+v'=\frac{13}{5}\\</script><p>因此，所求的混合战略Nash均衡为:</p>
+<script type="math/tex; mode=display">
+\boldsymbol {
+(\sigma_1^*,\sigma_2^*)
+}
+=\left(
+\left(0,\frac{3}{5},\frac{2}{5}\right),
+\left(\frac{1}{5},\frac{4}{5},0\right)
+\right)\\
+v_1=v'-2=\frac{3}{5}\\
+v_2=-v_1=-\frac{3}{5}</script></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://liuchaoyuan.github.io">Sinohope</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://liuchaoyuan.github.io/2024/09/30/Game%20Theory-Solution%20to%20Mixed%20Strategy%20Nash%20Equilibrium%20Part%202/">http://liuchaoyuan.github.io/2024/09/30/Game%20Theory-Solution%20to%20Mixed%20Strategy%20Nash%20Equilibrium%20Part%202/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://liuchaoyuan.github.io" target="_blank">The Site Of Liu</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%A7%84%E5%88%92%E6%B3%95/">规划法</a><a class="post-meta__tags" href="/tags/%E9%9B%B6%E5%92%8C%E5%8D%9A%E5%BC%88/">零和博弈</a></div><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/John_F_Nash.png" data-sites="qq,wechat,weibo,facebook,twitter"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>投喂作者</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/image/reward/wechatpay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/reward/wechatpay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/image/reward/alipay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/reward/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="prev-post pull-left" href="/2024/09/30/Game%20Theory-Subgame%20perfect%20Nash%20Equlibrium/" title="Game Theory-Subgame perfect Nash Equlibrium"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/John_F_Nash.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Game Theory-Subgame perfect Nash Equlibrium</div></div></a><a class="next-post pull-right" href="/2024/10/07/%E5%8F%A4%E8%A9%A9/" title="古詩"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/%E5%B1%B1%E9%9B%A8.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">古詩</div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/%E5%89%91%E5%BF%83.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Sinohope</div><div class="author-info-description">The World Of Sinohope</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">101</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/LiuChaoyuan"><i class="fab fa-github"></i><span>Follow Me On Github</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到小刘的小站</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%84%E5%88%92%E6%B3%95%E6%B1%82%E8%A7%A3Nash%E5%9D%87%E8%A1%A1"><span class="toc-number">1.</span> <span class="toc-text">规划法求解Nash均衡</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%A4%E4%BA%BA%E7%9A%84%E6%83%85%E5%86%B5"><span class="toc-number">1.1.</span> <span class="toc-text">两人的情况</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">1.1.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B"><span class="toc-number">1.1.2.</span> <span class="toc-text">例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#von-Neumann%E6%9E%81%E5%A4%A7%E6%9E%81%E5%B0%8F%E5%AE%9A%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text">von Neumann极大极小定理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9B%B6%E5%92%8C%E5%8D%9A%E5%BC%88%E9%97%AE%E9%A2%98%E8%BD%AC%E5%8C%96%E4%B8%BA%E5%AF%B9%E5%81%B6%E7%9A%84%E8%A7%84%E5%88%92%E9%97%AE%E9%A2%98"><span class="toc-number">1.3.</span> <span class="toc-text">零和博弈问题转化为对偶的规划问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98"><span class="toc-number">1.3.1.</span> <span class="toc-text">例题</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/12/15/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E9%A1%B5/" title="Operating-System-存储管理之分页"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating-System-存储管理之分页"/></a><div class="content"><a class="title" href="/2024/12/15/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E9%A1%B5/" title="Operating-System-存储管理之分页">Operating-System-存储管理之分页</a><time datetime="2024-12-15T11:37:25.000Z" title="发表于 2024-12-15 19:37:25">2024-12-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/14/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E5%8C%BA/" title="Operating System-存储管理之分区"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating System-存储管理之分区"/></a><div class="content"><a class="title" href="/2024/12/14/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E5%8C%BA/" title="Operating System-存储管理之分区">Operating System-存储管理之分区</a><time datetime="2024-12-14T12:54:53.000Z" title="发表于 2024-12-14 20:54:53">2024-12-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/14/Operating-System-%E7%BA%BF%E7%A8%8B/" title="Operating System-线程"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating System-线程"/></a><div class="content"><a class="title" href="/2024/12/14/Operating-System-%E7%BA%BF%E7%A8%8B/" title="Operating System-线程">Operating System-线程</a><time datetime="2024-12-14T04:25:03.000Z" title="发表于 2024-12-14 12:25:03">2024-12-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/13/Operating-System-%E6%AD%BB%E9%94%81/" title="Operating System-死锁"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating System-死锁"/></a><div class="content"><a class="title" href="/2024/12/13/Operating-System-%E6%AD%BB%E9%94%81/" title="Operating System-死锁">Operating System-死锁</a><time datetime="2024-12-13T13:03:24.000Z" title="发表于 2024-12-13 21:03:24">2024-12-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/12/Matrix-Computations-%E5%8F%A4%E5%85%B8%E8%BF%AD%E4%BB%A3%E6%B3%95%E6%B1%82%E8%A7%A3%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84/" title="Matrix Computations-古典迭代法求解线性方程组"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Matrix Computations-古典迭代法求解线性方程组"/></a><div class="content"><a class="title" href="/2024/12/12/Matrix-Computations-%E5%8F%A4%E5%85%B8%E8%BF%AD%E4%BB%A3%E6%B3%95%E6%B1%82%E8%A7%A3%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84/" title="Matrix Computations-古典迭代法求解线性方程组">Matrix Computations-古典迭代法求解线性方程组</a><time datetime="2024-12-12T03:44:39.000Z" title="发表于 2024-12-12 11:44:39">2024-12-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By Sinohope</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+      
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/gh/xiabo2/CDN@latest/fishes.js"></script><script type="text/javascript" src="/js/fairyDustCursor.js"></script><div class="aplayer no-destroy" data-id="12355351036" data-server="netease" data-type="playlist" data-fixed="true" data-mini="true" data-listFolded="true" data-order="random" data-preload="auto" data-autoplay="false" muted></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>

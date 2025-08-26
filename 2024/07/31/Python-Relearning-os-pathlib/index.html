@@ -1,0 +1,464 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Python-Relearning-os | The Site Of Liu</title><meta name="author" content="Sinohope"><meta name="copyright" content="Sinohope"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="&#x2F;&#x2F;文章描述">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python-Relearning-os">
+<meta property="og:url" content="http://liuchaoyuan.github.io/2024/07/31/Python-Relearning-os-pathlib/index.html">
+<meta property="og:site_name" content="The Site Of Liu">
+<meta property="og:description" content="&#x2F;&#x2F;文章描述">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp">
+<meta property="article:published_time" content="2024-07-31T13:37:46.000Z">
+<meta property="article:modified_time" content="2025-08-26T13:57:42.519Z">
+<meta property="article:author" content="Sinohope">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="os库">
+<meta property="article:tag" content="pathlib库">
+<meta property="article:tag" content="编码">
+<meta property="article:tag" content="utf-8">
+<meta property="article:tag" content="sys">
+<meta property="article:tag" content="platfrom库">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp"><link rel="shortcut icon" href="/image/cat.png"><link rel="canonical" href="http://liuchaoyuan.github.io/2024/07/31/Python-Relearning-os-pathlib/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.clarity.ms"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "oic38wrclh");</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"简","msgToSimplifiedChinese":"繁"},
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been(现在距离此文章的最后更新日期已经过了)","messageNext":"days since the last update, the content of the article may be outdated.(天，文章的内容可能过时，请注意甄别)"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Python-Relearning-os',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-08-26 21:57:42'
+}</script><script src="/styles/fish.js"></script><script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script><link rel="stylesheet" href="/css/bilibili.css"><link rel="stylesheet" href="/css/chamber/cursors.css"><link rel="stylesheet" href="/css/fontDiy/fontDiy.css"><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-image: url(https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/cloud_and_moon.webp);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/%E5%89%91%E5%BF%83.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">101</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/update"><i class="fa-fw fas fa-bell"></i><span> 动态</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-chart-pie"></i><span> 博客统计</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/charts/"><i class="fa-fw far fa-chart-bar"></i><span> 文章统计</span></a></li><li><a class="site-page child" href="/census/"><i class="fa-fw fas fa-chart-area"></i><span> 访问统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/top/"><i class="fa-fw fab fa-hotjar"></i><span> 阅读排行榜</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/books/"><i class="fa-fw fas fa-book"></i><span> 书籍</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/songs/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/cat.png" alt="Logo"><span class="site-name">The Site Of Liu</span></a><a class="nav-page-title" href="/"><span class="site-name">Python-Relearning-os</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/update"><i class="fa-fw fas fa-bell"></i><span> 动态</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-chart-pie"></i><span> 博客统计</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/charts/"><i class="fa-fw far fa-chart-bar"></i><span> 文章统计</span></a></li><li><a class="site-page child" href="/census/"><i class="fa-fw fas fa-chart-area"></i><span> 访问统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/top/"><i class="fa-fw fab fa-hotjar"></i><span> 阅读排行榜</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/books/"><i class="fa-fw fas fa-book"></i><span> 书籍</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/songs/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Python-Relearning-os</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-07-31T13:37:46.000Z" title="发表于 2024-07-31 21:37:46">2024-07-31</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-08-26T13:57:42.519Z" title="更新于 2025-08-26 21:57:42">2025-08-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/">计算机</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">5.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>19分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><ul>
+<li><p>sticky是<code>sticky</code> 值越大，顶置的文章越靠前</p>
+</li>
+<li><p>thumbnail: “IMAGE_LINK”</p>
+<p>redefine对首页文章添加缩略图</p>
+</li>
+<li><p>摘要</p>
+<p>excerpt: “这是文章摘要 This is the excerpt of the post”或者直接设置为false</p>
+</li>
+<li><p>massage: 文章的密码的提示，但是似乎没有什么用，总是显示Hey,password is required here.</p>
+</li>
+</ul>
+<h1 id="查看Python版本"><a href="#查看Python版本" class="headerlink" title="查看Python版本"></a>查看Python版本</h1><h2 id="在命令行中"><a href="#在命令行中" class="headerlink" title="在命令行中"></a>在命令行中</h2><ul>
+<li><h3 id="系统的Python版本"><a href="#系统的Python版本" class="headerlink" title="系统的Python版本"></a>系统的Python版本</h3><p><code>windows+R</code>打开<code>cmd</code>，输入<code>python -V</code>或者<code>python --version</code>，即可查看Python的版本，此版本是存入系统的环境变量的版本。</p>
+</li>
+<li><h3 id="anaconda-的Python版本"><a href="#anaconda-的Python版本" class="headerlink" title="anaconda 的Python版本"></a>anaconda 的Python版本</h3><p><code>Windows</code>键输入<code>anaconda</code>,调出来<code>anaconda prompt</code>的终端，此时进入到base环境中，可以输入 <code>conda env list</code>，就可以查看所有的虚拟环境。</p>
+<p>然后输入<code>conda activate(空格)环境名</code>,比如<code>conda activate Python_relearning</code>就可以激活对应的环境，接着就可以重复”系统的Python版本“的查看方法，输入<code>python -V</code>或者<code>python --version</code>，即可查看Python的版本。</p>
+<p>退出环境输入<code>conda deactivate</code> 即可,就可退出到base环境。</p>
+</li>
+</ul>
+<h2 id="在python中查看"><a href="#在python中查看" class="headerlink" title="在python中查看"></a>在python中查看</h2><p>无论是在Pycharm中，还是在终端的python窗口中，都可以用下面的命令：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="built_in">print</span>(sys.version_info)</span><br></pre></td></tr></table></figure>
+<p>上述命令返回一个包含了版本号5个组成部分的元组，这5个部分分别是<strong>主要版本号（major）、次要版本号（minor）、微型版本号（micro）、发布级别（releaselevel）和序列号（serial）</strong></p>
+<p>如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sys.version_info(major=3, minor=11, micro=0, releaselevel=&#x27;final&#x27;, serial=0)</span><br></pre></td></tr></table></figure>
+<p>还可以直接用下面的简单的命令：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="built_in">print</span>(sys.version)</span><br></pre></td></tr></table></figure>
+<p>这个命令直接返回包含主版本和次版本的字符串，还包括发布公司等信息：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">3.11</span><span class="number">.0</span> | packaged by Anaconda, Inc. | (main, Mar  <span class="number">1</span> <span class="number">2023</span>, <span class="number">18</span>:<span class="number">18</span>:<span class="number">21</span>) [MSC v<span class="number">.1916</span> <span class="number">64</span> bit (AMD64)]</span><br></pre></td></tr></table></figure>
+<h2 id="使用platform模块"><a href="#使用platform模块" class="headerlink" title="使用platform模块"></a>使用platform模块</h2><p>详见本文的”platform模块“的内容</p>
+<h1 id="Pycharm乱码问题解决"><a href="#Pycharm乱码问题解决" class="headerlink" title="Pycharm乱码问题解决"></a>Pycharm乱码问题解决</h1><h2 id="更改文件编码设置"><a href="#更改文件编码设置" class="headerlink" title="更改文件编码设置"></a>更改文件编码设置</h2><p>在Pycharm上方导航栏，找到文件，</p>
+<p>文件——&gt;设置——&gt;编辑器——&gt;文件编码</p>
+<p>将设置统一改为”utf-8”,并且设置为”不含BOOM“，如下图所示：</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/2024/07/31/Python-Relearning-os-pathlib/2024-08-01-10-33-04-image.png" class="">
+<h2 id=""><a href="#" class="headerlink" title=" "></a> </h2><h2 id="更改Python文件模板"><a href="#更改Python文件模板" class="headerlink" title="更改Python文件模板"></a>更改Python文件模板</h2><p>在Pycharm上方导航栏，找到文件，</p>
+<p>文件——&gt;设置——&gt;编辑器——&gt;文件和代码模板，在文件标签中找到”Python Script“</p>
+<p>加入以下内容：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/user/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br></pre></td></tr></table></figure>
+<p>如下图所示：</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/2024/07/31/Python-Relearning-os-pathlib/2024-08-01-10-36-32-image.png" class="">
+<h2 id="检查默认编码信息"><a href="#检查默认编码信息" class="headerlink" title="检查默认编码信息"></a>检查默认编码信息</h2><p>使用sys库里面的函数<code>getdefaultencoding()</code>，即可查看编码信息:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">default_encoding = sys.getdefaultencoding()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Python解释器的默认编码：&quot;</span>,default_encoding)</span><br></pre></td></tr></table></figure>
+<h1 id="platform模块"><a href="#platform模块" class="headerlink" title="platform模块"></a>platform模块</h1><p><code>platform</code>模块是Python标准库的一部分，因此无需额外安装。只需在Python脚本中导入即可开始使用。</p>
+<h2 id="获取操作系统及计算机信息"><a href="#获取操作系统及计算机信息" class="headerlink" title="获取操作系统及计算机信息"></a>获取操作系统及计算机信息</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> platform</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取操作系统名称</span></span><br><span class="line">os_name = platform.system()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取操作系统版本</span></span><br><span class="line">os_version = platform.release()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取计算机名称</span></span><br><span class="line">computer_name = platform.node()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取计算机处理器的名称</span></span><br><span class="line">processor_name = platform.processor()</span><br></pre></td></tr></table></figure>
+<h2 id="获取python信息"><a href="#获取python信息" class="headerlink" title="获取python信息"></a>获取python信息</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> platform</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取Python版本，如返回&#x27;3.11.0&#x27;</span></span><br><span class="line">python_version = platform.python_version()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取Python实现名称，如CPython、Jython或者IronPython</span></span><br><span class="line">python_implementation = platform.python_implementation()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取当前Python解释器的编译器信息，如GCC、Clang或者Microsoft Visual C++</span></span><br><span class="line">python_compiler = platform.python_compiler()</span><br></pre></td></tr></table></figure>
+<h1 id="路径的常识"><a href="#路径的常识" class="headerlink" title="路径的常识"></a>路径的常识</h1><p><strong>“./“：代表目前所在的目录。</strong></p>
+<p><strong>“ . ./“代表上一层目录。</strong></p>
+<p><strong>“/“：代表根目录。</strong>  </p>
+<ul>
+<li><p>路径最后加/，比如”mypath/“表示在mypath文件夹下面，不加/,比如”mypath”，表示在mypath的上一级目录中。</p>
+</li>
+<li><p>“root/a/../b/../file.txt”实际路径是”root/file.txt”,因为a,b都被后面的../省略了，</p>
+</li>
+<li><p>但是”root/a../b/../file.txt”路径却是”root/a../file.txt”，因为a后面的../返回前一级目录，但是并不存在前一级目录（相比于上面一个例子少了一个/）,所以把a..视为一个目录名字。</p>
+</li>
+<li></li>
+</ul>
+<h1 id="os模块"><a href="#os模块" class="headerlink" title="os模块"></a>os模块</h1><h2 id="os-path——常用的路径操作"><a href="#os-path——常用的路径操作" class="headerlink" title="os.path——常用的路径操作"></a>os.path——常用的路径操作</h2><h3 id="显示绝对路径"><a href="#显示绝对路径" class="headerlink" title="显示绝对路径"></a>显示绝对路径</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 绝对路径显示1</span></span><br><span class="line">abspath=os.path.abspath(<span class="string">&#x27;os.path.py&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;本文件的绝对路径：&quot;</span>,abspath)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绝对路径显示2</span></span><br><span class="line">abspath=os.path.normpath(os.path.join(os.getcwd()))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;当前工作的的绝对路径：&quot;</span>,abspath)</span><br></pre></td></tr></table></figure>
+<h3 id="连接两个或更多的路径名组件"><a href="#连接两个或更多的路径名组件" class="headerlink" title="连接两个或更多的路径名组件"></a>连接两个或更多的路径名组件</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 连接两个或更多的路径名组件</span></span><br><span class="line">Path1 = <span class="string">&#x27;home&#x27;</span></span><br><span class="line">Path2 = <span class="string">&#x27;develop&#x27;</span></span><br><span class="line">Path3 = <span class="string">&#x27;code&#x27;</span></span><br><span class="line">path_a=os.path.join(Path1,Path2,Path3)</span><br><span class="line">path_b=os.path.join(Path1,Path2,Path3,<span class="string">&#x27;&#x27;</span>) <span class="comment"># 多加一个空字符，可以在最后多加一个\  </span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;末尾不带反斜杠：&#x27;</span>,path_a)  <span class="comment"># 输出home\develop\code</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;末尾带反斜杠：&#x27;</span>,path_b)  <span class="comment"># 输出 home\develop\</span></span><br><span class="line"><span class="comment"># 如果参数中存在绝对路径或者以 &quot; \ &quot; 或“ / ”开头的路径，</span></span><br><span class="line"><span class="comment"># os.path.join() 会按顺序取最后的绝对路径或者 &quot; \ &quot; 或 “ / ” 开头的路径作为基础，</span></span><br><span class="line"><span class="comment"># 并将其与其余的相对路径组合。</span></span><br></pre></td></tr></table></figure>
+<p>如果参数中存在绝对路径或者以 “ \ “ 或“ / ”开头的路径，os.path.join() 会按顺序取最后的绝对路径或者 “ \ “ 或 “ / ” 开头的路径作为基础，并将其与其余的相对路径组合。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">path1=<span class="string">&#x27;/a/b/c&#x27;</span></span><br><span class="line">path2=<span class="string">&#x27;/d/e&#x27;</span>  <span class="comment"># 最后一个“ / ” 开头的路径</span></span><br><span class="line">path3=<span class="string">&#x27;f&#x27;</span></span><br><span class="line"><span class="built_in">print</span>(os.path.join(path1,path2,path3))</span><br><span class="line"><span class="comment"># 输出：/d/e\f</span></span><br></pre></td></tr></table></figure>
+<h3 id="检查指定的路径是否存在"><a href="#检查指定的路径是否存在" class="headerlink" title="检查指定的路径是否存在"></a>检查指定的路径是否存在</h3><p>返回布尔值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">exists = os.path.exists(<span class="string">r&#x27;E:\codes\Python\python_relearning&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(exists)</span><br></pre></td></tr></table></figure>
+<h3 id="检查路径是否为文件"><a href="#检查路径是否为文件" class="headerlink" title="检查路径是否为文件"></a>检查路径是否为文件</h3><p>返回布尔值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">is_file = os.path.isfile(<span class="string">r&#x27;E:\codes\Python\python_relearning&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(is_file)</span><br></pre></td></tr></table></figure>
+<h3 id="检查路径是否为目录"><a href="#检查路径是否为目录" class="headerlink" title="检查路径是否为目录"></a>检查路径是否为目录</h3><p>返回布尔值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">is_dir = os.path.isdir(<span class="string">r&#x27;E:\codes\Python\python_relearning&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(is_dir)</span><br></pre></td></tr></table></figure>
+<h3 id="获取路径中的最后一级目录-（basename）"><a href="#获取路径中的最后一级目录-（basename）" class="headerlink" title="获取路径中的最后一级目录 （basename）"></a>获取路径中的最后一级目录 （basename）</h3><p>如果最后一个是文件，则返回文件名</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">base_name = os.path.basename(<span class="string">r&#x27;E:\codes\Python\python_relearning&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;base_name:&#x27;</span>,base_name)</span><br></pre></td></tr></table></figure>
+<h3 id="获取文件路径-dirname"><a href="#获取文件路径-dirname" class="headerlink" title="获取文件路径 (dirname)"></a>获取文件路径 (dirname)</h3><p>返回路径中的目录名。如果路径以目录名结尾，那么就是这个目录的路径。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dir_name1=os.path.dirname(<span class="string">r&#x27;E:\codes\Python\python_relearning&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(dir_name1) <span class="comment"># 输出：E:\codes\Python  </span></span><br><span class="line"></span><br><span class="line">dir_name1=os.path.dirname(<span class="string">r&#x27;E:\codes\Python\python_relearning\os.path.py&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(dir_name1) <span class="comment"># 输出：E:\codes\Python\python_relearning</span></span><br></pre></td></tr></table></figure>
+<h3 id="分割目录名和文件名"><a href="#分割目录名和文件名" class="headerlink" title="分割目录名和文件名"></a>分割目录名和文件名</h3><p>仅仅是对于字符串的操作，<strong>以最后一个\为分隔符</strong>，返回元组</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dir_name, base_name = os.path.split(<span class="string">r&#x27;E:\codes\Python\python_relearning\os.path.py&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Directory: <span class="subst">&#123;dir_name&#125;</span>,\nBase Name: <span class="subst">&#123;base_name&#125;</span>&quot;</span>)</span><br><span class="line"><span class="comment"># 第一行输出E:\codes\Python\python_relearning,</span></span><br><span class="line"><span class="comment"># 第二行输出os.path.py</span></span><br></pre></td></tr></table></figure>
+<h3 id="分离文件名和扩展名"><a href="#分离文件名和扩展名" class="headerlink" title="分离文件名和扩展名"></a>分离文件名和扩展名</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">filename, extension = os.path.splitext(<span class="string">r&#x27;E:\codes\Python\python_relearning\os.path.py&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;File name: <span class="subst">&#123;filename&#125;</span>&quot;</span>)   <span class="comment"># 输出：E:\codes\Python\python_relearning\os.path</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Extension: <span class="subst">&#123;extension&#125;</span>&quot;</span>)   <span class="comment"># 输出：.py</span></span><br></pre></td></tr></table></figure>
+<h3 id="从绝对路径出发，找到相对路径"><a href="#从绝对路径出发，找到相对路径" class="headerlink" title="从绝对路径出发，找到相对路径"></a>从绝对路径出发，找到相对路径</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 第一个参数加\</span></span><br><span class="line">relative_path = os.path.relpath(<span class="string">r&#x27;\os.path.py&#x27;</span>, <span class="string">r&#x27;E:\\codes&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Relative path: <span class="subst">&#123;relative_path&#125;</span>&quot;</span>)   <span class="comment"># 输出：..\os.path.py</span></span><br><span class="line"><span class="comment"># 第一个参数不加\</span></span><br><span class="line">relative_path = os.path.relpath(<span class="string">r&#x27;os.path.py&#x27;</span>, <span class="string">r&#x27;E:\\codes&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Relative path: <span class="subst">&#123;relative_path&#125;</span>&quot;</span>)   <span class="comment"># Python\python_relearning\os.path.py</span></span><br></pre></td></tr></table></figure>
+<p>关于加不加\，下面是AI生成的回答：</p>
+<blockquote>
+<p>在您的代码示例中，您使用 <code>os.path.relpath()</code> 函数计算相对路径，但是您提供的第一个参数（目标路径）的形式影响了结果。这里需要理解 <code>os.path.relpath()</code> 函数如何处理相对路径和绝对路径。  </p>
+<ol>
+<li><p>当第一个参数（目标路径）以反斜杠 <code>\</code> 开头时，Python 在 Windows 系统上会将其解释为<strong>相对于当前驱动器的根目录的路径</strong>。因此，<code>r&#39;\os.path.py&#39;</code> 实际上表示的是一个从当前驱动器根目录开始的路径。<br>下面是您的第一个代码示例的详细解释：  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">relative_path = os.path.relpath(<span class="string">r&#x27;\os.path.py&#x27;</span>, <span class="string">r&#x27;E:\codes&#x27;</span>)  </span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Relative path: <span class="subst">&#123;relative_path&#125;</span>&quot;</span>) <span class="comment"># 输出：..\os.path.py  </span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<ul>
+<li><code>r&#39;\os.path.py&#39;</code> 被解释为从当前驱动器的根目录开始的路径。  </li>
+<li><code>r&#39;E:\\codes&#39;</code> 是一个绝对路径。  </li>
+<li><code>os.path.relpath()</code> 计算从 <code>r&#39;E:\\codes&#39;</code> 到 <code>r&#39;\os.path.py&#39;</code> 的相对路径，结果是 <code>..\os.path.py</code>，因为 <code>os.path.py</code> 在 <code>E:\codes</code> 的上一级目录。  </li>
+</ul>
+<ol>
+<li><p>当第一个参数（目标路径）不以反斜杠 <code>\</code> 开头时，它被视为相对于当前工作目录的路径。<br>下面是您的第二个代码示例的详细解释：  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">relative_path = os.path.relpath(<span class="string">r&#x27;os.path.py&#x27;</span>, <span class="string">r&#x27;E:\codes&#x27;</span>)  </span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Relative path: <span class="subst">&#123;relative_path&#125;</span>&quot;</span>) <span class="comment"># 输出：Python\python_relearning\os.path.py  </span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<ul>
+<li><code>r&#39;os.path.py&#39;</code> 被解释为相对于当前工作目录的路径。  </li>
+<li><code>r&#39;E:\\codes&#39;</code> 是一个绝对路径。  </li>
+<li><code>os.path.relpath()</code> 计算从 <code>r&#39;E:\\codes&#39;</code> 到 <code>r&#39;os.path.py&#39;</code> 的相对路径。由于 <code>os.path.py</code> 被视为相对于当前工作目录的路径，假设当前工作目录是 <code>E:\codes\Python\python_relearning</code>，则结果是 <code>Python\python_relearning\os.path.py</code>。<br>请注意，第二个示例的输出取决于当前工作目录的实际位置。如果当前工作目录不是 <code>E:\codes\Python\python_relearning</code>，则输出会有所不同。<br>因此，确保您了解 <code>os.path.relpath()</code> 如何处理不同类型的路径，并正确提供目标路径和起始路径。</li>
+</ul>
+</blockquote>
+<h3 id="规范路径"><a href="#规范路径" class="headerlink" title="规范路径"></a>规范路径</h3><p><code>os.path.normpath()</code> 函数用于规范化路径名，它将解析路径中的多余分隔符和上级目录引用（如 <code>..</code>）。下面是该函数的具体行为和规则：</p>
+<ol>
+<li><p><strong>解析路径分隔符</strong>：它会将路径中的多个连续路径分隔符（例如 <code>/</code> 或 <code>\</code>）替换为单个路径分隔符。</p>
+</li>
+<li><p><strong>解析当前目录引用</strong>：它会移除路径中的 <code>.</code>，这代表当前目录。</p>
+</li>
+<li><p><strong>解析上级目录引用</strong>：它会移除路径中的 <code>..</code>，这代表上级目录，同时也会移除 <code>..</code> 前面的目录名，除非 <code>..</code> 指向根目录。</p>
+</li>
+</ol>
+<p>例程如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">normalized_path = os.path.normpath(<span class="string">r&#x27;path/to\.\\ignored\..\test.txt&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Normalized path: <span class="subst">&#123;normalized_path&#125;</span>&quot;</span>)</span><br><span class="line"><span class="comment"># 输出path\to\test.txt</span></span><br></pre></td></tr></table></figure>
+<p>更多例程： </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">normalized_path_0 = os.path.normpath(<span class="string">r&#x27;a../b..\file.txt&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Normalized path: <span class="subst">&#123;normalized_path_0&#125;</span>&quot;</span>)  <span class="comment"># 输出 a..\b..\file.txt</span></span><br><span class="line"></span><br><span class="line">normalized_path_1 = os.path.normpath(<span class="string">r&#x27;root/a/../..\file.txt&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Normalized path: <span class="subst">&#123;normalized_path_1&#125;</span>&quot;</span>)  <span class="comment"># 输出root\a..\file.txt</span></span><br><span class="line"></span><br><span class="line">normalized_path_2 = os.path.normpath(<span class="string">r&#x27;root/a../\..\file.txt&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Normalized path: <span class="subst">&#123;normalized_path_2&#125;</span>&quot;</span>)  <span class="comment"># 输出root\file.txt</span></span><br></pre></td></tr></table></figure>
+<h2 id="OS模块其他功能"><a href="#OS模块其他功能" class="headerlink" title="OS模块其他功能"></a>OS模块其他功能</h2><h3 id="汇总-查找表"><a href="#汇总-查找表" class="headerlink" title="汇总 查找表"></a>汇总 查找表</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">os.mknod(<span class="string">&quot;text.txt&quot;</span>)：创建空文件</span><br><span class="line">os.system():运行shell命令</span><br><span class="line">os.exit():终止当前进程</span><br><span class="line">os.getcwd() 取得当前工作目录</span><br><span class="line">os.getenv()和os.putenv:分别用来读取和设置环境变量</span><br><span class="line">os.environ[<span class="string">&#x27;MY_USER&#x27;</span>]</span><br><span class="line">os.chdir(<span class="string">&#x27;dirname&#x27;</span>) 改变目录</span><br><span class="line">os.mkdir/makedirs(<span class="string">&#x27;dirname&#x27;</span>)创建目录/多层目录</span><br><span class="line">os.rmdir/removedirs(<span class="string">&#x27;dirname&#x27;</span>) 删除目录/多层目录</span><br><span class="line">os.remove(‘path/filename’) 删除文件</span><br><span class="line">os.rename(oldname, newname) 重命名文件</span><br><span class="line">os.walk() 生成目录树下的所有文件名</span><br><span class="line">os.stat（file）:获得文件属性</span><br><span class="line">os.listdir(<span class="string">&#x27;dirname&#x27;</span>) 列出指定目录的文件</span><br><span class="line">os.chmod() 改变目录权限  </span><br><span class="line">os.access(path, mode) <span class="comment"># 检测是否有访问权限的路径。</span></span><br><span class="line"></span><br><span class="line">os.path.abspath(path) <span class="comment">#返回绝对路径</span></span><br><span class="line">os.path.basename(path) <span class="comment">#返回文件名</span></span><br><span class="line">os.path.commonprefix(<span class="built_in">list</span>) <span class="comment">#返回list(多个路径)中，所有path共有的最长的路径。&#x27;</span></span><br><span class="line">os.path.dirname(path) <span class="comment">#返回文件路径</span></span><br><span class="line">os.path.exists(path) <span class="comment">#路径存在则返回True,路径损坏返回False</span></span><br><span class="line">os.path.lexists              <span class="comment">#路径存在则返回True,路径损坏也返回True</span></span><br><span class="line">os.path.expanduser(path)    <span class="comment">#把path中包含的&quot;~&quot;和&quot;~user&quot;转换成用户目录</span></span><br><span class="line">os.path.expandvars(path)    <span class="comment">#根据环境变量的值替换path中包含的”$name”和”$&#123;name&#125;”</span></span><br><span class="line">os.path.getatime(path)      <span class="comment">#返回最后一次进入此path的时间。</span></span><br><span class="line">os.path.getmtime(path)      <span class="comment">#返回在此path下最后一次修改的时间。</span></span><br><span class="line">os.path.getctime(path)      <span class="comment">#返回path的大小</span></span><br><span class="line">os.path.getsize(path)       <span class="comment">#返回文件大小，如果文件不存在就返回错误</span></span><br><span class="line">os.path.isabs(path)         <span class="comment">#判断是否为绝对路径</span></span><br><span class="line">os.path.isfile(path)        <span class="comment">#判断路径是否为文件</span></span><br><span class="line">os.path.isdir(path)         <span class="comment">#判断路径是否为目录</span></span><br><span class="line">os.path.islink(path)        <span class="comment">#判断路径是否为链接</span></span><br><span class="line">os.path.ismount(path)       <span class="comment">#判断路径是否为挂载点（）</span></span><br><span class="line">os.path.join(path1[, path2[, ...]])         <span class="comment">#把目录和文件名合成一个路径&#x27;</span></span><br><span class="line">os.path.normcase(path)      <span class="comment">#转换path的大小写和斜杠</span></span><br><span class="line">os.path.normpath(path)      <span class="comment">#规范path字符串形式</span></span><br><span class="line">os.path.realpath(path)      <span class="comment">#返回path的真实路径</span></span><br><span class="line">os.path.relpath(path[, start])  <span class="comment">#从start开始计算相对路径&#x27;</span></span><br><span class="line">os.path.samefile(path1, path2)  <span class="comment">#判断目录或文件是否相同&#x27;</span></span><br><span class="line">os.path.sameopenfile(fp1, fp2)  <span class="comment">#判断fp1和fp2是否指向同一文件&#x27;</span></span><br><span class="line">os.path.samestat(stat1, stat2)  <span class="comment">#判断stat tuple stat1和stat2是否指向同一个文件&#x27;</span></span><br><span class="line">os.path.split(path)     <span class="comment">#把路径分割成dirname和basename，返回一个元组</span></span><br><span class="line">os.path.splitdrive(path)     <span class="comment">#一般用在windows下，返回驱动器名和路径组成的元组</span></span><br><span class="line">os.path.splitext(path)  <span class="comment">#分割路径，返回路径名和文件扩展名的元组</span></span><br><span class="line">os.path.splitunc(path)      <span class="comment">#把路径分割为加载点与文件</span></span><br><span class="line">os.path.walk(path, visit, arg)  <span class="comment">#遍历path，进入每个目录都调用visit函数，visit函数必须有&#x27;</span></span><br><span class="line"><span class="comment">#3个参数(arg, dirname, names)，dirname表示当前目录的目录名，names代表当前目录下的所有</span></span><br><span class="line"><span class="comment">#文件名，args则为walk的第三个参数</span></span><br><span class="line">os.path.supports_unicode_filenames      <span class="comment">#设置是否支持unicode路径名</span></span><br><span class="line">os.sep:取代操作系统特定的路径分隔符</span><br><span class="line">os.name:指示你正在使用的工作平台。比如对于Windows，它是<span class="string">&#x27;nt&#x27;</span>，而对于Linux/Unix用户，它是<span class="string">&#x27;posix&#x27;</span>。</span><br></pre></td></tr></table></figure>
+<h3 id="获取当前工作目录"><a href="#获取当前工作目录" class="headerlink" title="获取当前工作目录"></a>获取当前工作目录</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.getcwd()</span><br></pre></td></tr></table></figure>
+<p>返回<strong>绝对路径</strong></p>
+<h3 id="列出目录下所有的文件和子目录"><a href="#列出目录下所有的文件和子目录" class="headerlink" title="列出目录下所有的文件和子目录"></a>列出目录下所有的文件和子目录</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.listdir(path)</span><br></pre></td></tr></table></figure>
+<p><strong>返回</strong>指定的文件夹包含的文件或文件夹的名字的<strong>列表</strong>,<strong>列表以字母序</strong>。</p>
+<h3 id="更改工作目录"><a href="#更改工作目录" class="headerlink" title="更改工作目录"></a>更改工作目录</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.chdir(path)</span><br></pre></td></tr></table></figure>
+<p>如果允许访问返回 True , 否则返回False。</p>
+<h3 id="创建一个新目录"><a href="#创建一个新目录" class="headerlink" title="创建一个新目录"></a>创建一个新目录</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.mkdir(path)</span><br></pre></td></tr></table></figure>
+<p>用于创建目录，而<strong>不能创建文件</strong></p>
+<h3 id="递归创建多级目录"><a href="#递归创建多级目录" class="headerlink" title="递归创建多级目录"></a>递归创建多级目录</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.makedirs(name, mode=<span class="number">511</span>, exist_ok=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>exist_ok</strong>：是否在目录存在时触发异常。如果 exist_ok 为 False（默认值），则在目标目录已存在的情况下触发 FileExistsError 异常；如果 exist_ok 为 True，则在目标目录已存在的情况下不会触发 FileExistsError 异常。</li>
+<li>无返回值</li>
+</ul>
+<h3 id="删除空的目录"><a href="#删除空的目录" class="headerlink" title="删除空的目录"></a>删除空的目录</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.rmdir(path)</span><br></pre></td></tr></table></figure>
+<p>用于删除指定路径的目录。<strong>仅当这是文件夹是空</strong>才可以, 否则, 抛出OSError。并且不能删除多级目录，如果传入参数是多级目录，<strong>仅仅会删除掉最后一级目录。</strong></p>
+<h2 id="递归删除多级空目录"><a href="#递归删除多级空目录" class="headerlink" title="递归删除多级空目录"></a>递归删除多级空目录</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.removedirs(path)</span><br></pre></td></tr></table></figure>
+<p>同样，<strong>要求目录为空</strong></p>
+<h3 id="列出包含的文件或者文件夹列表"><a href="#列出包含的文件或者文件夹列表" class="headerlink" title="列出包含的文件或者文件夹列表"></a>列出包含的文件或者文件夹列表</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.listdir(path)</span><br></pre></td></tr></table></figure>
+<p>列表以字母顺序。 它不包括 . 和 .. 即使它在文件夹中。</p>
+<h3 id="删除指定路径的文件"><a href="#删除指定路径的文件" class="headerlink" title="删除指定路径的文件"></a>删除指定路径的文件</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.remove(path)</span><br></pre></td></tr></table></figure>
+<p>path指向的路径<strong>必须是文件</strong>，如果指定的路径是一个目录，将抛出OSError。</p>
+<h3 id="重命名文件或者目录"><a href="#重命名文件或者目录" class="headerlink" title="重命名文件或者目录"></a>重命名文件或者目录</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.rename(src, dst)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><strong>src</strong> — 要修改的目录名或者文件路径</p>
+</li>
+<li><p><strong>dst</strong> — 修改后的目录名或者文件路径</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置要创建的目录路径</span></span><br><span class="line">path = <span class="string">&quot;aa/bb/cc&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建目录</span></span><br><span class="line">os.makedirs(path, exist_ok=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改目录名称</span></span><br><span class="line">os.renames(path,<span class="string">&#x27;1/2/3&#x27;</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="检查访问权限"><a href="#检查访问权限" class="headerlink" title="检查访问权限"></a>检查访问权限</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.access(path, mode);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><strong>path</strong> — 要用来检测是否有访问权限的路径。</p>
+</li>
+<li><p><strong>mode</strong> — <code>mode</code>为<code>F_OK</code>，测试存在的路径，或者它可以是包含<code>R_OK</code>, <code>W_OK</code>和<code>X_OK</code>或者<code>R_OK</code>, <code>W_OK</code>和<code>X_OK</code>其中之一或者更多。</p>
+<ul>
+<li><strong>os.F_OK:</strong> 作为<code>access()</code>的<code>mode</code>参数，测试<code>path</code>是否存在。</li>
+<li><strong>os.R_OK:</strong> 包含在<code>access()</code>的<code>mode</code>参数中 ， 测试<code>path</code>是否可读。</li>
+<li><strong>os.W_OK</strong> 包含在<code>access()</code>的<code>mode</code>参数中 ， 测试<code>path</code>是否可写。</li>
+<li><strong>os.X_OK</strong> 包含在<code>access()</code>的<code>mode</code>参数中 ，测试<code>path</code>是否可执行。</li>
+</ul>
+</li>
+</ul>
+<h3 id="更改文件或目录的权限"><a href="#更改文件或目录的权限" class="headerlink" title="更改文件或目录的权限"></a>更改文件或目录的权限</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.chmod(path, mode)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><strong>path</strong> — 文件名路径或目录路径。</p>
+</li>
+<li><p><strong>flags</strong> — 可用以下选项按位或操作生成， 目录的读权限表示可以获取目录里文件名列表， ，执行权限表示可以把工作目录切换到此目录 ，删除添加目录里的文件必须同时有写和执行权限 ，文件权限以用户id-&gt;组id-&gt;其它顺序检验,最先匹配的允许或禁止权限被应用。</p>
+<ul>
+<li><strong>stat.S_IXOTH:</strong> 其他用户有执行权0o001</li>
+<li><strong>stat.S_IWOTH:</strong> 其他用户有写权限0o002</li>
+<li><strong>stat.S_IROTH:</strong> 其他用户有读权限0o004</li>
+<li><strong>stat.S_IRWXO:</strong> 其他用户有全部权限(权限掩码)0o007</li>
+<li><strong>stat.S_IXGRP:</strong> 组用户有执行权限0o010</li>
+<li><strong>stat.S_IWGRP:</strong> 组用户有写权限0o020</li>
+<li><strong>stat.S_IRGRP:</strong> 组用户有读权限0o040</li>
+<li><strong>stat.S_IRWXG:</strong> 组用户有全部权限(权限掩码)0o070</li>
+<li><strong>stat.S_IXUSR:</strong> 拥有者具有执行权限0o100</li>
+<li><strong>stat.S_IWUSR:</strong> 拥有者具有写权限0o200</li>
+<li><strong>stat.S_IRUSR:</strong> 拥有者具有读权限0o400</li>
+<li><strong>stat.S_IRWXU:</strong> 拥有者有全部权限(权限掩码)0o700</li>
+<li><strong>stat.S_ISVTX:</strong> 目录里文件目录只有拥有者才可删除更改0o1000</li>
+<li><strong>stat.S_ISGID:</strong> 执行此文件其进程有效组为文件所在组0o2000</li>
+<li><strong>stat.S_ISUID:</strong> 执行此文件其进程有效用户为文件所有者0o4000</li>
+<li><strong>stat.S_IREAD:</strong> windows下设为只读</li>
+<li><strong>stat.S_IWRITE:</strong> windows下取消只读</li>
+</ul>
+</li>
+</ul>
+<h3 id="获取文件或者目录的状态信息"><a href="#获取文件或者目录的状态信息" class="headerlink" title="获取文件或者目录的状态信息"></a>获取文件或者目录的状态信息</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.stat(path)</span><br></pre></td></tr></table></figure>
+<h4 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h4><p>stat 结构:</p>
+<ul>
+<li><strong>st_mode:</strong> inode 保护模式</li>
+<li><strong>st_ino:</strong> inode 节点号。</li>
+<li><strong>st_dev:</strong> inode 驻留的设备。</li>
+<li><strong>st_nlink:</strong> inode 的链接数。</li>
+<li><strong>st_uid:</strong> 所有者的用户ID。</li>
+<li><strong>st_gid:</strong> 所有者的组ID。</li>
+<li><strong>st_size:</strong> 普通文件以字节为单位的大小；包含等待某些特殊文件的数据。</li>
+<li><strong>st_atime:</strong> 上次访问的时间。</li>
+<li><strong>st_mtime:</strong> 最后一次修改的时间。</li>
+<li><strong>st_ctime:</strong> 由操作系统报告的”ctime”。在某些系统上（如Unix）是最新的元数据更改的时间，在其它系统上（如Windows）是创建时间（详细信息参见平台的文档）。</li>
+</ul>
+<h3 id="遍历指定目录及其所有子目录"><a href="#遍历指定目录及其所有子目录" class="headerlink" title="遍历指定目录及其所有子目录"></a>遍历指定目录及其所有子目录</h3><p><code>os.walk(top[, topdown=True[, onerror=None[, followlinks=False]]])</code></p>
+<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><ul>
+<li><p><strong>top</strong> — 是你所要遍历的目录的地址, 返回的是一个三元组(root,dirs,files)。</p>
+<ul>
+<li>root 所指的是当前正在遍历的这个文件夹的本身的地址</li>
+<li>dirs 是一个 list ，内容是该文件夹中所有的目录的名字(不包括子目录)</li>
+<li>files 同样是 list , 内容是该文件夹中所有的文件(不包括子目录)</li>
+</ul>
+</li>
+<li><p><strong>topdown</strong> —可选，为 True，则优先遍历 top 目录，否则优先遍历 top 的子目录(默认为开启)。如果 topdown 参数为 True，walk 会遍历top文件夹，与top 文件夹中每一个子目录。</p>
+</li>
+<li><p><strong>onerror</strong> — 可选，需要一个 callable 对象，当 walk 需要异常时，会调用。</p>
+</li>
+<li><p><strong>followlinks</strong> — 可选，如果为 True，则会遍历目录下的快捷方式(linux 下是软连接 symbolic link )实际所指的目录(默认关闭)，如果为 False，则优先遍历 top 的子目录。</p>
+</li>
+</ul>
+<p><strong>返回生成器。</strong></p>
+<p>假设我们有下面的目录结构：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">+--A</span><br><span class="line">| +--B3</span><br><span class="line">| | +--C0</span><br><span class="line">| | | +--Dt0.txt</span><br><span class="line">| | +--Ct0.txt</span><br><span class="line">| | +--Ct1.txt</span><br><span class="line">| +--B4</span><br><span class="line">| | +--C1</span><br><span class="line">| | | +--Dt1.txt</span><br><span class="line">| | +--Ct2.txt</span><br><span class="line">| +--Bt0.txt</span><br><span class="line">| +--Bt1.txt</span><br></pre></td></tr></table></figure>
+<p>其中A文件夹和执行程序的Python文件放在同一个目录下面</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">start_path=<span class="string">&#x27;A&#x27;</span></span><br><span class="line"><span class="comment"># 查看返回的三元组</span></span><br><span class="line">tri_tuple=os.walk(start_path)</span><br><span class="line">tri_tuple_list=<span class="built_in">list</span>(tri_tuple)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;返回的三元组转化为列表&#x27;</span>.center(<span class="number">20</span>,<span class="string">&#x27;-&#x27;</span>))</span><br><span class="line"><span class="built_in">print</span>(tri_tuple_list)</span><br><span class="line"><span class="comment"># 输出：[(&#x27;A&#x27;, [&#x27;B3&#x27;, &#x27;B4&#x27;], [&#x27;Bt0.txt&#x27;, &#x27;Bt1.txt&#x27;]), (&#x27;A\\B3&#x27;, [&#x27;C0&#x27;], [&#x27;Ct0.txt&#x27;, &#x27;Ct1.txt&#x27;]), (&#x27;A\\B3\\C0&#x27;, [], [&#x27;Dt0.txt&#x27;]), (&#x27;A\\B4&#x27;, [&#x27;C1&#x27;], [&#x27;Ct2.txt&#x27;]), (&#x27;A\\B4\\C1&#x27;, [], [&#x27;Dt1.txt&#x27;])]</span></span><br></pre></td></tr></table></figure>
+<h4 id="将三元组分别转化为列表打印输出"><a href="#将三元组分别转化为列表打印输出" class="headerlink" title="将三元组分别转化为列表打印输出"></a>将三元组分别转化为列表打印输出</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">start_path=<span class="string">&#x27;A&#x27;</span></span><br><span class="line"></span><br><span class="line">root_list=[root <span class="keyword">for</span> root, dirs, files <span class="keyword">in</span> os.walk(start_path)]  </span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;root_list:&#x27;</span>,root_list)</span><br><span class="line"><span class="comment"># 输出:root_list: [&#x27;A&#x27;, &#x27;A\\B3&#x27;, &#x27;A\\B3\\C0&#x27;, &#x27;A\\B4&#x27;, &#x27;A\\B4\\C1&#x27;]</span></span><br><span class="line"></span><br><span class="line">dirs_list=[dirs <span class="keyword">for</span> root, dirs, files <span class="keyword">in</span> os.walk(start_path)]  </span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;dirs_list:&#x27;</span>,dirs_list)</span><br><span class="line"><span class="comment"># 输出：dirs_list: [[&#x27;B3&#x27;, &#x27;B4&#x27;], [&#x27;C0&#x27;], [], [&#x27;C1&#x27;], []]</span></span><br><span class="line"></span><br><span class="line">files_list=[files <span class="keyword">for</span> root, dirs, files <span class="keyword">in</span> os.walk(start_path)]  </span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;files_list:&#x27;</span>,files_list)</span><br><span class="line"><span class="comment"># 输出：files_list: [[&#x27;Bt0.txt&#x27;, &#x27;Bt1.txt&#x27;], [&#x27;Ct0.txt&#x27;, &#x27;Ct1.txt&#x27;], [&#x27;Dt0.txt&#x27;], [&#x27;Ct2.txt&#x27;], [&#x27;Dt1.txt&#x27;]]</span></span><br></pre></td></tr></table></figure>
+<h4 id="过滤特定格式文件"><a href="#过滤特定格式文件" class="headerlink" title="过滤特定格式文件"></a>过滤特定格式文件</h4><p>如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">start_path=<span class="string">&#x27;A&#x27;</span></span><br><span class="line"><span class="keyword">for</span> root, dirs, files <span class="keyword">in</span> os.walk(start_path):</span><br><span class="line">    <span class="keyword">for</span> file <span class="keyword">in</span> files:</span><br><span class="line">        <span class="keyword">if</span> file.endswith(<span class="string">&#x27;.txt&#x27;</span>):</span><br><span class="line">            <span class="built_in">print</span>(os.path.join(root, file)</span><br></pre></td></tr></table></figure>
+<h1 id="pathlib模块"><a href="#pathlib模块" class="headerlink" title="pathlib模块"></a>pathlib模块</h1><h1 id="参考教程"><a href="#参考教程" class="headerlink" title="参考教程"></a>参考教程</h1><ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.runoob.com/python3/python3-os-file-methods.html">Python3 OS 文件/目录方法 | 菜鸟教程</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://geek-docs.com/python/python-os-module/os-module-python-examples.html">Python OS模块|极客教程</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://it1314.top/article/936/">Pycharm 控制台中文乱码的四种解决方案，统一设置 UTF-8 - 计算机毕业设计源码网</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/miracleoa/article/details/106115730">【anaconda】conda创建、查看、删除虚拟环境（anaconda命令集）_conda 创建环境-CSDN博客</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://geek-docs.com/python/python-ask-answer/128_tk_1704195262.html">Python platform模块|极客教程</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/os.path.html">https://docs.python.org/zh-cn/3/library/os.path.html</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/dotnet/standard/io/file-path-formats">Windows 系统中的文件路径格式 - .NET | Microsoft Learn</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/xixihahalelehehe/article/details/104253123?ydreferer=aHR0cHM6Ly93d3cuZ29vZ2xlLmNvbS8%3D">python os模块文件目录操作详解_python os加载目录-CSDN博客</a></p>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://liuchaoyuan.github.io">Sinohope</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://liuchaoyuan.github.io/2024/07/31/Python-Relearning-os-pathlib/">http://liuchaoyuan.github.io/2024/07/31/Python-Relearning-os-pathlib/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://liuchaoyuan.github.io" target="_blank">The Site Of Liu</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Python/">Python</a><a class="post-meta__tags" href="/tags/os%E5%BA%93/">os库</a><a class="post-meta__tags" href="/tags/pathlib%E5%BA%93/">pathlib库</a><a class="post-meta__tags" href="/tags/%E7%BC%96%E7%A0%81/">编码</a><a class="post-meta__tags" href="/tags/utf-8/">utf-8</a><a class="post-meta__tags" href="/tags/sys/">sys</a><a class="post-meta__tags" href="/tags/platfrom%E5%BA%93/">platfrom库</a></div><div class="post-share"><div class="social-share" data-image="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" data-sites="qq,wechat,weibo,facebook,twitter"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>投喂作者</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/image/reward/wechatpay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/reward/wechatpay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/image/reward/alipay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/reward/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="prev-post pull-left" href="/2024/07/31/Python%20Relearning-file%20try%20Error/" title="Python Relearning-file try Error"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Python Relearning-file try Error</div></div></a><a class="next-post pull-right" href="/2024/08/03/Python%20Relearning-Namespaces%20Scope/" title="Python Relearning-Namespaces Scope"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Python Relearning-Namespaces Scope</div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a href="/2024/07/27/Python%20Relearing-Function%20lambda%20re/" title="Python Relearing-Function&#x2F;lambda&#x2F;re"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-27</div><div class="title">Python Relearing-Function&#x2F;lambda&#x2F;re</div></div></a><a href="/2024/07/25/Python%20Relearning-Branches,%20loops,%20comprehensions%20and%20iterators/" title="Python Relearning-Branches, loops, comprehensions and iterators"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-25</div><div class="title">Python Relearning-Branches, loops, comprehensions and iterators</div></div></a><a href="/2024/08/20/Python%20Relearning-Generator%20and%20Iterator/" title="Python Relearning-Generator and Iterator"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-20</div><div class="title">Python Relearning-Generator and Iterator</div></div></a><a href="/2024/08/22/Python%20Relearning-MultiProcessing/" title="Python Relearning-MultiProcessing"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-22</div><div class="title">Python Relearning-MultiProcessing</div></div></a><a href="/2024/08/03/Python%20Relearning-Namespaces%20Scope/" title="Python Relearning-Namespaces Scope"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-03</div><div class="title">Python Relearning-Namespaces Scope</div></div></a><a href="/2024/07/24/Python%20Relearning-ListTupleDictSet/" title="Python Relearning-List&#x2F;Tuple&#x2F;Dict&#x2F;Set"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-24</div><div class="title">Python Relearning-List&#x2F;Tuple&#x2F;Dict&#x2F;Set</div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/%E5%89%91%E5%BF%83.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Sinohope</div><div class="author-info-description">The World Of Sinohope</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">101</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/LiuChaoyuan"><i class="fab fa-github"></i><span>Follow Me On Github</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到小刘的小站</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8BPython%E7%89%88%E6%9C%AC"><span class="toc-number">1.</span> <span class="toc-text">查看Python版本</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%B8%AD"><span class="toc-number">1.1.</span> <span class="toc-text">在命令行中</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E7%9A%84Python%E7%89%88%E6%9C%AC"><span class="toc-number">1.1.1.</span> <span class="toc-text">系统的Python版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#anaconda-%E7%9A%84Python%E7%89%88%E6%9C%AC"><span class="toc-number">1.1.2.</span> <span class="toc-text">anaconda 的Python版本</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8python%E4%B8%AD%E6%9F%A5%E7%9C%8B"><span class="toc-number">1.2.</span> <span class="toc-text">在python中查看</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8platform%E6%A8%A1%E5%9D%97"><span class="toc-number">1.3.</span> <span class="toc-text">使用platform模块</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Pycharm%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3"><span class="toc-number">2.</span> <span class="toc-text">Pycharm乱码问题解决</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9%E6%96%87%E4%BB%B6%E7%BC%96%E7%A0%81%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.1.</span> <span class="toc-text">更改文件编码设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text"> </span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9Python%E6%96%87%E4%BB%B6%E6%A8%A1%E6%9D%BF"><span class="toc-number">2.3.</span> <span class="toc-text">更改Python文件模板</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E9%BB%98%E8%AE%A4%E7%BC%96%E7%A0%81%E4%BF%A1%E6%81%AF"><span class="toc-number">2.4.</span> <span class="toc-text">检查默认编码信息</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#platform%E6%A8%A1%E5%9D%97"><span class="toc-number">3.</span> <span class="toc-text">platform模块</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8F%8A%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BF%A1%E6%81%AF"><span class="toc-number">3.1.</span> <span class="toc-text">获取操作系统及计算机信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96python%E4%BF%A1%E6%81%AF"><span class="toc-number">3.2.</span> <span class="toc-text">获取python信息</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B7%AF%E5%BE%84%E7%9A%84%E5%B8%B8%E8%AF%86"><span class="toc-number">4.</span> <span class="toc-text">路径的常识</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#os%E6%A8%A1%E5%9D%97"><span class="toc-number">5.</span> <span class="toc-text">os模块</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#os-path%E2%80%94%E2%80%94%E5%B8%B8%E7%94%A8%E7%9A%84%E8%B7%AF%E5%BE%84%E6%93%8D%E4%BD%9C"><span class="toc-number">5.1.</span> <span class="toc-text">os.path——常用的路径操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%98%BE%E7%A4%BA%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84"><span class="toc-number">5.1.1.</span> <span class="toc-text">显示绝对路径</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E4%B8%A4%E4%B8%AA%E6%88%96%E6%9B%B4%E5%A4%9A%E7%9A%84%E8%B7%AF%E5%BE%84%E5%90%8D%E7%BB%84%E4%BB%B6"><span class="toc-number">5.1.2.</span> <span class="toc-text">连接两个或更多的路径名组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E6%8C%87%E5%AE%9A%E7%9A%84%E8%B7%AF%E5%BE%84%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8"><span class="toc-number">5.1.3.</span> <span class="toc-text">检查指定的路径是否存在</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E8%B7%AF%E5%BE%84%E6%98%AF%E5%90%A6%E4%B8%BA%E6%96%87%E4%BB%B6"><span class="toc-number">5.1.4.</span> <span class="toc-text">检查路径是否为文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E8%B7%AF%E5%BE%84%E6%98%AF%E5%90%A6%E4%B8%BA%E7%9B%AE%E5%BD%95"><span class="toc-number">5.1.5.</span> <span class="toc-text">检查路径是否为目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E8%B7%AF%E5%BE%84%E4%B8%AD%E7%9A%84%E6%9C%80%E5%90%8E%E4%B8%80%E7%BA%A7%E7%9B%AE%E5%BD%95-%EF%BC%88basename%EF%BC%89"><span class="toc-number">5.1.6.</span> <span class="toc-text">获取路径中的最后一级目录 （basename）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84-dirname"><span class="toc-number">5.1.7.</span> <span class="toc-text">获取文件路径 (dirname)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%89%B2%E7%9B%AE%E5%BD%95%E5%90%8D%E5%92%8C%E6%96%87%E4%BB%B6%E5%90%8D"><span class="toc-number">5.1.8.</span> <span class="toc-text">分割目录名和文件名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E7%A6%BB%E6%96%87%E4%BB%B6%E5%90%8D%E5%92%8C%E6%89%A9%E5%B1%95%E5%90%8D"><span class="toc-number">5.1.9.</span> <span class="toc-text">分离文件名和扩展名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8E%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84%E5%87%BA%E5%8F%91%EF%BC%8C%E6%89%BE%E5%88%B0%E7%9B%B8%E5%AF%B9%E8%B7%AF%E5%BE%84"><span class="toc-number">5.1.10.</span> <span class="toc-text">从绝对路径出发，找到相对路径</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%84%E8%8C%83%E8%B7%AF%E5%BE%84"><span class="toc-number">5.1.11.</span> <span class="toc-text">规范路径</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OS%E6%A8%A1%E5%9D%97%E5%85%B6%E4%BB%96%E5%8A%9F%E8%83%BD"><span class="toc-number">5.2.</span> <span class="toc-text">OS模块其他功能</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B1%87%E6%80%BB-%E6%9F%A5%E6%89%BE%E8%A1%A8"><span class="toc-number">5.2.1.</span> <span class="toc-text">汇总 查找表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E5%B7%A5%E4%BD%9C%E7%9B%AE%E5%BD%95"><span class="toc-number">5.2.2.</span> <span class="toc-text">获取当前工作目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%97%E5%87%BA%E7%9B%AE%E5%BD%95%E4%B8%8B%E6%89%80%E6%9C%89%E7%9A%84%E6%96%87%E4%BB%B6%E5%92%8C%E5%AD%90%E7%9B%AE%E5%BD%95"><span class="toc-number">5.2.3.</span> <span class="toc-text">列出目录下所有的文件和子目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9%E5%B7%A5%E4%BD%9C%E7%9B%AE%E5%BD%95"><span class="toc-number">5.2.4.</span> <span class="toc-text">更改工作目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9B%AE%E5%BD%95"><span class="toc-number">5.2.5.</span> <span class="toc-text">创建一个新目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%92%E5%BD%92%E5%88%9B%E5%BB%BA%E5%A4%9A%E7%BA%A7%E7%9B%AE%E5%BD%95"><span class="toc-number">5.2.6.</span> <span class="toc-text">递归创建多级目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E7%A9%BA%E7%9A%84%E7%9B%AE%E5%BD%95"><span class="toc-number">5.2.7.</span> <span class="toc-text">删除空的目录</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%92%E5%BD%92%E5%88%A0%E9%99%A4%E5%A4%9A%E7%BA%A7%E7%A9%BA%E7%9B%AE%E5%BD%95"><span class="toc-number">5.3.</span> <span class="toc-text">递归删除多级空目录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%97%E5%87%BA%E5%8C%85%E5%90%AB%E7%9A%84%E6%96%87%E4%BB%B6%E6%88%96%E8%80%85%E6%96%87%E4%BB%B6%E5%A4%B9%E5%88%97%E8%A1%A8"><span class="toc-number">5.3.1.</span> <span class="toc-text">列出包含的文件或者文件夹列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%8C%87%E5%AE%9A%E8%B7%AF%E5%BE%84%E7%9A%84%E6%96%87%E4%BB%B6"><span class="toc-number">5.3.2.</span> <span class="toc-text">删除指定路径的文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6%E6%88%96%E8%80%85%E7%9B%AE%E5%BD%95"><span class="toc-number">5.3.3.</span> <span class="toc-text">重命名文件或者目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90"><span class="toc-number">5.3.4.</span> <span class="toc-text">检查访问权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9%E6%96%87%E4%BB%B6%E6%88%96%E7%9B%AE%E5%BD%95%E7%9A%84%E6%9D%83%E9%99%90"><span class="toc-number">5.3.5.</span> <span class="toc-text">更改文件或目录的权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E6%96%87%E4%BB%B6%E6%88%96%E8%80%85%E7%9B%AE%E5%BD%95%E7%9A%84%E7%8A%B6%E6%80%81%E4%BF%A1%E6%81%AF"><span class="toc-number">5.3.6.</span> <span class="toc-text">获取文件或者目录的状态信息</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="toc-number">5.3.6.1.</span> <span class="toc-text">返回值</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%81%8D%E5%8E%86%E6%8C%87%E5%AE%9A%E7%9B%AE%E5%BD%95%E5%8F%8A%E5%85%B6%E6%89%80%E6%9C%89%E5%AD%90%E7%9B%AE%E5%BD%95"><span class="toc-number">5.3.7.</span> <span class="toc-text">遍历指定目录及其所有子目录</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E6%95%B0"><span class="toc-number">5.3.7.1.</span> <span class="toc-text">参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%86%E4%B8%89%E5%85%83%E7%BB%84%E5%88%86%E5%88%AB%E8%BD%AC%E5%8C%96%E4%B8%BA%E5%88%97%E8%A1%A8%E6%89%93%E5%8D%B0%E8%BE%93%E5%87%BA"><span class="toc-number">5.3.7.2.</span> <span class="toc-text">将三元组分别转化为列表打印输出</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4%E7%89%B9%E5%AE%9A%E6%A0%BC%E5%BC%8F%E6%96%87%E4%BB%B6"><span class="toc-number">5.3.7.3.</span> <span class="toc-text">过滤特定格式文件</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#pathlib%E6%A8%A1%E5%9D%97"><span class="toc-number">6.</span> <span class="toc-text">pathlib模块</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%95%99%E7%A8%8B"><span class="toc-number">7.</span> <span class="toc-text">参考教程</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/12/15/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E9%A1%B5/" title="Operating-System-存储管理之分页"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating-System-存储管理之分页"/></a><div class="content"><a class="title" href="/2024/12/15/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E9%A1%B5/" title="Operating-System-存储管理之分页">Operating-System-存储管理之分页</a><time datetime="2024-12-15T11:37:25.000Z" title="发表于 2024-12-15 19:37:25">2024-12-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/14/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E5%8C%BA/" title="Operating System-存储管理之分区"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating System-存储管理之分区"/></a><div class="content"><a class="title" href="/2024/12/14/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E5%8C%BA/" title="Operating System-存储管理之分区">Operating System-存储管理之分区</a><time datetime="2024-12-14T12:54:53.000Z" title="发表于 2024-12-14 20:54:53">2024-12-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/14/Operating-System-%E7%BA%BF%E7%A8%8B/" title="Operating System-线程"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating System-线程"/></a><div class="content"><a class="title" href="/2024/12/14/Operating-System-%E7%BA%BF%E7%A8%8B/" title="Operating System-线程">Operating System-线程</a><time datetime="2024-12-14T04:25:03.000Z" title="发表于 2024-12-14 12:25:03">2024-12-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/13/Operating-System-%E6%AD%BB%E9%94%81/" title="Operating System-死锁"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating System-死锁"/></a><div class="content"><a class="title" href="/2024/12/13/Operating-System-%E6%AD%BB%E9%94%81/" title="Operating System-死锁">Operating System-死锁</a><time datetime="2024-12-13T13:03:24.000Z" title="发表于 2024-12-13 21:03:24">2024-12-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/12/Matrix-Computations-%E5%8F%A4%E5%85%B8%E8%BF%AD%E4%BB%A3%E6%B3%95%E6%B1%82%E8%A7%A3%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84/" title="Matrix Computations-古典迭代法求解线性方程组"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Matrix Computations-古典迭代法求解线性方程组"/></a><div class="content"><a class="title" href="/2024/12/12/Matrix-Computations-%E5%8F%A4%E5%85%B8%E8%BF%AD%E4%BB%A3%E6%B3%95%E6%B1%82%E8%A7%A3%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84/" title="Matrix Computations-古典迭代法求解线性方程组">Matrix Computations-古典迭代法求解线性方程组</a><time datetime="2024-12-12T03:44:39.000Z" title="发表于 2024-12-12 11:44:39">2024-12-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By Sinohope</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+      
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/gh/xiabo2/CDN@latest/fishes.js"></script><script type="text/javascript" src="/js/fairyDustCursor.js"></script><div class="aplayer no-destroy" data-id="12355351036" data-server="netease" data-type="playlist" data-fixed="true" data-mini="true" data-listFolded="true" data-order="random" data-preload="auto" data-autoplay="false" muted></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>

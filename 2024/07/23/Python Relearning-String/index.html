@@ -1,0 +1,546 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Python Relearning-String | The Site Of Liu</title><meta name="author" content="Sinohope"><meta name="copyright" content="Sinohope"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="琐碎的语法 运算符 &#x2F;&#x2F;向下取整，靠近负无穷  海象运算符(a:&#x3D;3)&gt;2，先赋值再操作，不能单独作为赋值语句。  位运算符  &amp;按位与  |按位或  ^按位异或  ~按位取反  &lt;&lt;、&gt;&gt;左移、右移    逻辑运算符  and 布尔与  or布尔或  not布尔非    成员运算符 in 和not in  身份运算符 is和not is is 用于判断两个变">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python Relearning-String">
+<meta property="og:url" content="http://liuchaoyuan.github.io/2024/07/23/Python%20Relearning-String/index.html">
+<meta property="og:site_name" content="The Site Of Liu">
+<meta property="og:description" content="琐碎的语法 运算符 &#x2F;&#x2F;向下取整，靠近负无穷  海象运算符(a:&#x3D;3)&gt;2，先赋值再操作，不能单独作为赋值语句。  位运算符  &amp;按位与  |按位或  ^按位异或  ~按位取反  &lt;&lt;、&gt;&gt;左移、右移    逻辑运算符  and 布尔与  or布尔或  not布尔非    成员运算符 in 和not in  身份运算符 is和not is is 用于判断两个变">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp">
+<meta property="article:published_time" content="2024-07-23T06:45:43.000Z">
+<meta property="article:modified_time" content="2025-08-26T13:57:42.517Z">
+<meta property="article:author" content="Sinohope">
+<meta property="article:tag" content="字符串">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="转义字符">
+<meta property="article:tag" content="字符串格式化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp"><link rel="shortcut icon" href="/image/cat.png"><link rel="canonical" href="http://liuchaoyuan.github.io/2024/07/23/Python%20Relearning-String/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.clarity.ms"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "oic38wrclh");</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"简","msgToSimplifiedChinese":"繁"},
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been(现在距离此文章的最后更新日期已经过了)","messageNext":"days since the last update, the content of the article may be outdated.(天，文章的内容可能过时，请注意甄别)"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Python Relearning-String',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-08-26 21:57:42'
+}</script><script src="/styles/fish.js"></script><script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script><link rel="stylesheet" href="/css/bilibili.css"><link rel="stylesheet" href="/css/chamber/cursors.css"><link rel="stylesheet" href="/css/fontDiy/fontDiy.css"><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-image: url(https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/cloud_and_moon.webp);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/%E5%89%91%E5%BF%83.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">101</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/update"><i class="fa-fw fas fa-bell"></i><span> 动态</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-chart-pie"></i><span> 博客统计</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/charts/"><i class="fa-fw far fa-chart-bar"></i><span> 文章统计</span></a></li><li><a class="site-page child" href="/census/"><i class="fa-fw fas fa-chart-area"></i><span> 访问统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/top/"><i class="fa-fw fab fa-hotjar"></i><span> 阅读排行榜</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/books/"><i class="fa-fw fas fa-book"></i><span> 书籍</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/songs/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/cat.png" alt="Logo"><span class="site-name">The Site Of Liu</span></a><a class="nav-page-title" href="/"><span class="site-name">Python Relearning-String</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/update"><i class="fa-fw fas fa-bell"></i><span> 动态</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-chart-pie"></i><span> 博客统计</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/charts/"><i class="fa-fw far fa-chart-bar"></i><span> 文章统计</span></a></li><li><a class="site-page child" href="/census/"><i class="fa-fw fas fa-chart-area"></i><span> 访问统计</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/top/"><i class="fa-fw fab fa-hotjar"></i><span> 阅读排行榜</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/books/"><i class="fa-fw fas fa-book"></i><span> 书籍</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/songs/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Python Relearning-String</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-07-23T06:45:43.000Z" title="发表于 2024-07-23 14:45:43">2024-07-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-08-26T13:57:42.517Z" title="更新于 2025-08-26 21:57:42">2025-08-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/">计算机</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="琐碎的语法"><a href="#琐碎的语法" class="headerlink" title="琐碎的语法"></a>琐碎的语法</h1><ul>
+<li><h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><ul>
+<li><p><code>//</code>向下取整，靠近负无穷</p>
+</li>
+<li><p>海象运算符<code>(a:=3)&gt;2</code>，先赋值再操作，不能单独作为赋值语句。</p>
+</li>
+<li><p>位运算符</p>
+<ul>
+<li><p><code>&amp;</code>按位与</p>
+</li>
+<li><p><code>|</code>按位或</p>
+</li>
+<li><p><code>^</code>按位异或</p>
+</li>
+<li><p><code>~</code>按位取反</p>
+</li>
+<li><p><code>&lt;&lt;、&gt;&gt;</code>左移、右移</p>
+</li>
+</ul>
+</li>
+<li><p>逻辑运算符</p>
+<ul>
+<li><p><code>and</code> 布尔与</p>
+</li>
+<li><p><code>or</code>布尔或</p>
+</li>
+<li><p><code>not</code>布尔非</p>
+</li>
+</ul>
+</li>
+<li><p>成员运算符</p>
+<p><code>in</code> 和<code>not in</code></p>
+</li>
+<li><p>身份运算符</p>
+<p><code>is</code>和<code>not is</code></p>
+<p><strong>is</strong> 用于判断两个变量引用对象是否为同一个， <strong>==</strong> 用于判断引用变量的值是否相等。</p>
+<p><code>a is b</code> 相当于 <code>id(a)==id(b)</code>，<code>id()</code>能够获取对象的内存地址。</p>
+<p>如果 <code>a=10;b=a;</code> 则此时<code>a</code> 和 <code>b</code> 的内存地址一样的;</p>
+<p>但当 a=[1,2,3<code>]</code>; 另 <code>b=a[:]</code> 时，虽然<code>a</code> 和 <code>b</code> 的值一样，但内存地址不一样。</p>
+</li>
+</ul>
+</li>
+<li><h2 id="连续赋值"><a href="#连续赋值" class="headerlink" title="连续赋值"></a>连续赋值</h2><p><code>a = b = c = 1</code></p>
+</li>
+<li><h2 id="支持复数"><a href="#支持复数" class="headerlink" title="支持复数"></a>支持复数</h2><p><code>a=3+4j</code></p>
+<p><code>a=complex(3,4)</code></p>
+</li>
+<li><h2 id="布尔类型"><a href="#布尔类型" class="headerlink" title="布尔类型"></a>布尔类型</h2><ul>
+<li><p>bool是int的子集，可以使用 <code>bool()</code> 函数将其他类型的值转换为布尔值。以下值在转换为布尔值时为 <code>False</code>：<code>None</code>、<code>False</code>、零 (<code>0</code>、<code>0.0</code>、<code>0j</code>)、空序列（如 <code>&#39;&#39;</code>、<code>()</code>、<code>[]</code>）和空映射（如 <code>&#123;&#125;</code>）。其他所有值转换为布尔值时均为 <code>True</code>。</p>
+</li>
+<li><p>布尔类型也可以被转换成其他数据类型</p>
+</li>
+<li><p>布尔类型可以和其他数据类型进行比较，比如数字、字符串等。在比较时，Python 会将 True 视为 1，False 视为 0。</p>
+</li>
+</ul>
+</li>
+<li><h2 id="只有一个元素的元组"><a href="#只有一个元素的元组" class="headerlink" title="只有一个元素的元组"></a>只有一个元素的元组</h2><p>需要注意在元素后面添加一个逗号，以区分它是一个元组而不是一个普通的值</p>
+<p><code>not_a_tuple = (42)</code></p>
+<p><code>tuple=(42,)</code></p>
+</li>
+<li><h2 id="bytes类型"><a href="#bytes类型" class="headerlink" title="bytes类型"></a><code>bytes</code>类型</h2><p><code>bytes</code>类型表示的是不可变的二进制序列，与字符串类型不同的是，<code>bytes</code>类型中的元素是整数值（0 到 255 之间的整数），而不是 Unicode 字符。</p>
+<p>创建byte类型：</p>
+<ul>
+<li><h3 id="使用b前缀"><a href="#使用b前缀" class="headerlink" title="使用b前缀"></a>使用b前缀</h3><p><code>x=b&quot;Hello&quot;</code></p>
+</li>
+<li><h3 id="bytes-函数将其他类型的对象转换为byte类型"><a href="#bytes-函数将其他类型的对象转换为byte类型" class="headerlink" title="bytes()函数将其他类型的对象转换为byte类型"></a><code>bytes()</code>函数将其他类型的对象转换为byte类型</h3><p><code>x = bytes(&quot;hello&quot;, encoding=&quot;utf-8&quot;) #默认为utf-8，可以省略</code></p>
+</li>
+</ul>
+</li>
+<li><h2 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h2><ul>
+<li><p><code>int()、float()、str()</code></p>
+</li>
+<li><p><code>complex(x[,y])</code> ,返回复数，y默认是0</p>
+</li>
+<li><p><code>repr(object)</code>，将参数<code>object</code>转化为字符串形式，如果里面有转义字符，会转化为其相应的转义字符。repr()函数主要 用于调试，如果没有等价的语法，则会发生SyntaxError 异常。</p>
+</li>
+<li><p><code>eval()</code>函数，作用是用来计算在字符串中的有效Python表达式,并返回一个对象。通俗来说就是把传入的字符串的引号去掉，返回引号去掉的值。<code>eval(&quot;[21,4+4]&quot;)</code>返回<code>[21,8]</code></p>
+<p>同时<code>eval</code>还有两个可选参数，<code>globals()</code>和<code>locals()</code>，eval会现在局部命名空间<code>locals()</code>中找参数，然后再全局命名空间<code>globals()</code>中找。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="built_in">eval</span>(<span class="string">&quot;&#123;&#x27;name&#x27;:&#x27;linux&#x27;,&#x27;age&#x27;:age&#125;&quot;</span>,&#123;<span class="string">&quot;age&quot;</span>:<span class="number">1822</span>&#125;,&#123;<span class="string">&quot;age&quot;</span>:<span class="number">1823</span>&#125;))</span><br><span class="line"><span class="comment">#输出结果：&#123;&#x27;name&#x27;: &#x27;linux&#x27;, &#x27;age&#x27;: 1823&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>tuple()、list() 、set() 、frozenset()、dict()</code>函数分别转换为<strong>不可变元组、列表、可变集合、不可变集合、字典。</strong></p>
+</li>
+<li><p><code>chr() 、ord()</code>实现<strong>字符和整数</strong>之间的转换。</p>
+</li>
+<li><p><code>bin()、oct()、hex()</code>分别将一个整数转换为<strong>二进制、八进制、十六进制</strong>字符串</p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="math库数学函数"><a href="#math库数学函数" class="headerlink" title="math库数学函数"></a>math库数学函数</h1><ul>
+<li><p>常数</p>
+<ul>
+<li><p><code>math.e</code></p>
+</li>
+<li><p><code>math.pi</code></p>
+</li>
+<li><p><code>math.tau</code>  $\pi$的二倍，6.28……</p>
+</li>
+<li><p><code>math.nan</code></p>
+</li>
+<li><p><code>math.inf</code></p>
+</li>
+</ul>
+</li>
+<li><p><code>math.abs()</code>,返回绝对值</p>
+</li>
+<li><p><code>math.abs()</code>,返回绝对值</p>
+</li>
+<li><p><code>math.ceil()</code>,向<strong>上</strong>取整</p>
+</li>
+<li><p><code>math.floor(x)</code>,向<strong>下</strong>取整</p>
+</li>
+<li><p><code>math.exp(x)</code>，返回<strong>指数函数</strong></p>
+</li>
+<li><p><code>math.fabs()</code>，浮点数形式返回数字的绝对值</p>
+</li>
+<li><p><code>math.log(x)</code>返回自然对数</p>
+</li>
+<li><p><code>math.log10(x)</code>返回以10为底的对数</p>
+</li>
+<li><p><code>math.modf()</code> 返回x的整数部分与小数部分，两部分的数值符号与x相同，整数部分以浮点型表示。</p>
+</li>
+<li><p><code>math.sqrt()</code>返回平方根</p>
+</li>
+<li><p><code>round(x[,n)</code>返回浮点数 x 的四舍五入值，如给出 n 值，则代表舍入到小数点后的位数。<strong>其实准确的说是保留值将保留到离上一位更近的一端。</strong></p>
+</li>
+<li></li>
+</ul>
+<h1 id="转义字符"><a href="#转义字符" class="headerlink" title="转义字符"></a>转义字符</h1><ul>
+<li><p><code>\a</code> 响铃</p>
+</li>
+<li><p><code>\b</code>退一个字符</p>
+</li>
+<li><p><code>\000</code> 空</p>
+</li>
+<li><p><code>\v</code>纵向制表符</p>
+</li>
+<li><p><code>\t</code>横向制表符</p>
+</li>
+<li><p><code>\r</code> 回车，将 <code>\r</code> 后面的内容移到字符串开头，并逐一替换开头部分的字符，直至将<code>\r</code>后面的内容完全替换完成。</p>
+</li>
+<li><p><code>\f</code>换页</p>
+</li>
+<li><p><code>\yyy</code> 输出八进制数<code>yyy</code>代表的字符 ，y 代表 0~7 的字符，例如：<code>\012</code>代表换行。</p>
+</li>
+<li><p><code>\xyy</code> 十六进制数，以 <code>\x</code> 开头，<code>y</code> 代表的字符，例如：<code>\x0a</code> 代表换行</p>
+</li>
+<li><p><code>r+字符串</code> 表示原始字符，比如<code>r&quot;slk\nsd&quot;</code></p>
+</li>
+</ul>
+<h1 id="格式化字符串"><a href="#格式化字符串" class="headerlink" title="格式化字符串"></a>格式化字符串</h1><p>参考链接<a target="_blank" rel="noopener" href="https://www.runoob.com/python3/python3-string.html">Python3 字符串 | 菜鸟教程</a></p>
+<ul>
+<li><h2 id="格式化符"><a href="#格式化符" class="headerlink" title="格式化符"></a>格式化符</h2></li>
+</ul>
+
+<ul>
+<li><h2 id="格式化操作符辅助指令"><a href="#格式化操作符辅助指令" class="headerlink" title="格式化操作符辅助指令:"></a>格式化操作符辅助指令:</h2></li>
+</ul>
+
+<ul>
+<li><h2 id="f-string"><a href="#f-string" class="headerlink" title="f-string"></a>f-string</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x=<span class="number">1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;<span class="subst">&#123;x+<span class="number">1</span>=&#125;</span>&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>输出:<code>x+1=2</code></p>
+</li>
+</ul>
+<h1 id="字符串内建函数"><a href="#字符串内建函数" class="headerlink" title="字符串内建函数"></a>字符串内建函数</h1><ul>
+<li><h2 id="大小写-格式"><a href="#大小写-格式" class="headerlink" title="大小写/格式"></a>大小写/格式</h2><ul>
+<li><p><code>str.capitalize()</code></p>
+<p>将字符串的第一个字母变成大写，其他字母变小写。</p>
+</li>
+<li><p><code>str.lower()</code></p>
+<p>转换字符串中所有大写字符为小写.</p>
+</li>
+<li><p><code>str.upper()</code></p>
+<p>转换字符串中的小写字母为大写</p>
+</li>
+<li><p><code>str.title()</code></p>
+<p>返回”标题化”的字符串,就是说所有单词都是以大写开始，其余字母均为小写</p>
+</li>
+<li><p><code>str.center(width[, fillchar])</code></p>
+<p>返回一个指定的宽度 width 居中的字符串，如果 width 小于字符串宽度直接返回字符串，否则使用 fillchar 去填充。</p>
+</li>
+<li><p><code>str.islower()</code></p>
+<p>如果字符串中包含至少一个区分大小写的字符，并且所有这些(区分大小写的)字符都是小写，则返回 True，否则返回 False</p>
+</li>
+<li><p><code>str.isupper()</code></p>
+<p>如果字符串中包含至少一个区分大小写的字符，并且所有这些(区分大小写的)字符都是大写，则返回 True，否则返回 False</p>
+</li>
+<li><p><code>str.istitle()</code></p>
+<p>如果字符串是标题化的(所有单词都是以大写开始，其余字母均为小写)则返回 True，否则返回 False</p>
+</li>
+<li><p><code>str.isspace()</code></p>
+<p>如果字符串中只包含空白，则返回 True，否则返回 False.</p>
+</li>
+<li><p><code>str.swapcase()</code></p>
+<p>用于对字符串的大小写字母进行转换，<strong>即将大写字母转换为小写字母，小写字母会转换为大写字母</strong>。</p>
+</li>
+</ul>
+</li>
+<li><h2 id="字符-数字-检测"><a href="#字符-数字-检测" class="headerlink" title="字符/数字/检测"></a>字符/数字/检测</h2><ul>
+<li><p><code>str.isalnum()</code></p>
+<p>检查字符串是否由字母和数字组成，即字符串中的所有字符都是字母或数字。</p>
+<p>如果字符串为空（长度为0），则返回 <code>False</code>，因为空字符串不包含任何字母或数字。</p>
+<p><strong>特殊字符（如标点符号、空格、特殊符号等）不被认为是字母或数字。</strong></p>
+<p><strong>汉字被认为是字母。</strong></p>
+</li>
+<li><p><code>str.isalpha()</code></p>
+<p>当字符串里面<strong>所有字符</strong>都是字母(包含汉字)的时候，返回True，否则返回False。</p>
+<p>空字符返回False.</p>
+</li>
+<li><p><code>str.isdigit()</code></p>
+<p>如果字符串<strong>只包含数字</strong>则返回 True 否则返回 False..</p>
+</li>
+<li><p>str.numeric()</p>
+<p>isnumeric() 方法检测字符串是否只由数字组成，数字可以是： Unicode 数字，全角数字（双字节），罗马数字，汉字数字。</p>
+<p>指数类似 ² 与分数类似 ½ 也属于数字。</p>
+</li>
+</ul>
+</li>
+<li><h2 id="检测特定位置的字符"><a href="#检测特定位置的字符" class="headerlink" title="检测特定位置的字符"></a>检测特定位置的字符</h2><ul>
+<li></li>
+</ul>
+</li>
+<li><h2 id="分割-移除-替换"><a href="#分割-移除-替换" class="headerlink" title="分割/移除/替换"></a>分割/移除/替换</h2><ul>
+<li><p><code>str.strip([chars]);</code></p>
+<p>用于移除字符串<strong>头尾</strong>指定的字符（默认为空格）或字符序列</p>
+</li>
+<li><p><code>str.lstrip([chars])</code></p>
+<p>截掉字符串<strong>左边</strong>的空格或指定字符。</p>
+</li>
+<li><p><code>str.rstrip([chars])</code></p>
+<p>截掉字符串<strong>右边</strong>的空格或指定字符。</p>
+</li>
+<li><p><code>str.split(str=&quot;&quot;, num=string.count(str))</code></p>
+<p>通过指定分隔符对字符串进行切片，该方法将字符串分割成子字符串并返回一个由这些子字符串组成的列表。</p>
+<p>如果第二个参数 num 有指定值，则分割为 num+1 个子字符串。</p>
+</li>
+<li><p><code>str.replace(old, new [, max])</code></p>
+<p>把 将字符串中的 old 替换成 new,如果 max 指定，则替换不超过 max 次。</p>
+</li>
+<li><p><code>str.splitlines([keepends])</code></p>
+<p>按照行(‘\r’, ‘\r\n’, \n’)分隔，返回一个包含各行作为元素的列表，如果参数 keepends 为 False，不包含换行符，如果为 True，则保留换行符。默认为 False</p>
+</li>
+<li><p>翻译函数<code>str.maketrans()</code>和<code>str.translate(table)</code></p>
+<ul>
+<li><p><code>string.maketrans(x[, y[, z]])</code></p>
+<p>用于创建字符映射的转换表，对于接受两个参数的最简单的调用方式，第一个参数是字符串，表示需要转换的字符，第二个参数也是字符串表示转换的目标。</p>
+<p>x — 必需，字符串中要替代的字符组成的字符串。</p>
+<p>y — 可选，相应的映射字符的字符串。</p>
+<p>z — 可选，要删除的字符。</p>
+</li>
+<li><p><code>str.translate(table)</code></p>
+<p>返回翻译后的字符串,若给出了 delete 参数，则将原来的bytes中的属于delete的字符删除，剩下的字符要按照table中给出的映射来进行映射 。</p>
+<p>示例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python3</span></span><br><span class="line"></span><br><span class="line">intab = <span class="string">&quot;aeiou&quot;</span></span><br><span class="line">outtab = <span class="string">&quot;12345&quot;</span></span><br><span class="line">trantab = <span class="built_in">str</span>.maketrans(intab, outtab)   <span class="comment"># 制作翻译表</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">str</span> = <span class="string">&quot;this is string example....wow!!!&quot;</span></span><br><span class="line"><span class="built_in">print</span> (<span class="built_in">str</span>.translate(trantab))</span><br></pre></td></tr></table></figure>
+<p>输出结果如下:</p>
+<p><code>th3s 3s str3ng 2x1mpl2....w4w!!!</code></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><h2 id="计数"><a href="#计数" class="headerlink" title="计数"></a>计数</h2><ul>
+<li><p><code>len(string)</code></p>
+<p>返回字符串长度</p>
+</li>
+<li><p><code>str.count(sub, start= 0,end=len(string))</code></p>
+<p>统计字符串里某个字符或子字符串出现的次数。可选参数为在字符串搜索的开始与结束位置。</p>
+</li>
+</ul>
+</li>
+<li><h2 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h2><ul>
+<li><p><code>str.find(str, beg=0, end=len(string))</code></p>
+<p>`方法检测字符串中是否包含子字符串 str ，如果指定 beg（开始） 和 end（结束） 范围，则检查是否包含在指定范围内，如果指定范围内如果包含指定索引值，<strong>返回</strong>的是索引值在字符串中的<strong>起始位置</strong>。如果不包含索引值，返回-1。</p>
+</li>
+<li><p><code>str.rfind(str, beg=0, end=len(string))</code></p>
+<p><code>rfind()</code>返回字符串最后一次出现的位置，如果没有匹配项则返回-1。</p>
+</li>
+<li><p><code>str.index(str, beg=0, end=len(string))</code></p>
+<p>该方法与 <code>str.find()</code>方法一样，只不过如果str不在 string中会报一个异常。</p>
+</li>
+<li><p><code>rindex( str, beg=0, end=len(string))</code></p>
+<p>类似于 index()，不过是从右边开始.</p>
+</li>
+<li><p><code>str.startswith(substr, beg=0,end=len(string));</code></p>
+<p>用于检查字符串是否是以指定子字符串开头，如果是则返回 True，否则返回 False。如果参数 beg 和 end 指定值，则在指定范围内检查。不包括end本身</p>
+</li>
+<li><p><code>str.endswith(suffix[, start[, end]])</code></p>
+<p>endswith() 方法用于判断字符串是否以指定后缀结尾，如果以指定后缀结尾返回 True，否则返回 False。可选参数 “start” 与 “end” 为检索字符串的开始与结束位置。不包括end本身</p>
+</li>
+</ul>
+</li>
+<li><h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ul>
+<li><p><code>max(str)</code></p>
+<p>返回字符串中最大的字母。</p>
+</li>
+<li><p><code>min(str)</code></p>
+<p>返回字符串中最小的字母。</p>
+</li>
+<li><p><code>str.zfill(width)</code></p>
+<p>返回指定长度的字符串，原字符串右对齐，前面填充0。</p>
+</li>
+<li><p><code>str.ljust(width[, fillchar])</code></p>
+<p>返回一个原字符串左对齐,并使用空格填充至指定长度的新字符串。如果指定的长度小于原字符串的长度则返回原字符串。</p>
+</li>
+<li><p><code>str.rjust(width[, fillchar])</code></p>
+<p>返回一个原字符串右对齐,并使用空格填充至长度 width 的新字符串。如果指定的长度小于字符串的长度则返回原字符串。</p>
+</li>
+<li><p><code>str.join()方法</code></p>
+<p>用于将序列中的元素以指定的字符连接生成一个新的字符串。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python3</span></span><br><span class="line"></span><br><span class="line">s1 = <span class="string">&quot;-&quot;</span></span><br><span class="line">s2 = <span class="string">&quot;&quot;</span></span><br><span class="line">seq = (<span class="string">&quot;r&quot;</span>, <span class="string">&quot;u&quot;</span>, <span class="string">&quot;n&quot;</span>, <span class="string">&quot;o&quot;</span>, <span class="string">&quot;o&quot;</span>, <span class="string">&quot;b&quot;</span>) <span class="comment"># 字符串序列</span></span><br><span class="line"><span class="built_in">print</span> (s1.join( seq ))</span><br><span class="line"><span class="built_in">print</span> (s2.join( seq ))</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.runoob.com/python3/python3-string.html">Python3 字符串 | 菜鸟教程</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.w3ccoo.com/python/python_strings.html">Python 字符串</a></p>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://liuchaoyuan.github.io">Sinohope</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://liuchaoyuan.github.io/2024/07/23/Python%20Relearning-String/">http://liuchaoyuan.github.io/2024/07/23/Python%20Relearning-String/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://liuchaoyuan.github.io" target="_blank">The Site Of Liu</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/">字符串</a><a class="post-meta__tags" href="/tags/Python/">Python</a><a class="post-meta__tags" href="/tags/%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6/">转义字符</a><a class="post-meta__tags" href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F%E5%8C%96/">字符串格式化</a></div><div class="post-share"><div class="social-share" data-image="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" data-sites="qq,wechat,weibo,facebook,twitter"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>投喂作者</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/image/reward/wechatpay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/reward/wechatpay.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/image/reward/alipay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/reward/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="prev-post pull-left" href="/2024/07/23/Hexo%E6%8F%92%E5%85%A5%E8%A7%86%E9%A2%91%E5%92%8C%E9%9F%B3%E4%B9%90/" title="Hexo插入视频和音乐"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/25/Ht9chVeWsxX3QLN.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Hexo插入视频和音乐</div></div></a><a class="next-post pull-right" href="/2024/07/24/Python%20Relearning-ListTupleDictSet/" title="Python Relearning-List/Tuple/Dict/Set"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Python Relearning-List/Tuple/Dict/Set</div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a href="/2024/08/08/C%20language%20Relearning-String/" title="C language Relearning-String"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/C%20lang.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-08</div><div class="title">C language Relearning-String</div></div></a><a href="/2024/07/27/Python%20Relearing-Function%20lambda%20re/" title="Python Relearing-Function&#x2F;lambda&#x2F;re"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-27</div><div class="title">Python Relearing-Function&#x2F;lambda&#x2F;re</div></div></a><a href="/2024/07/25/Python%20Relearning-Branches,%20loops,%20comprehensions%20and%20iterators/" title="Python Relearning-Branches, loops, comprehensions and iterators"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-25</div><div class="title">Python Relearning-Branches, loops, comprehensions and iterators</div></div></a><a href="/2024/08/20/Python%20Relearning-Generator%20and%20Iterator/" title="Python Relearning-Generator and Iterator"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-20</div><div class="title">Python Relearning-Generator and Iterator</div></div></a><a href="/2024/08/22/Python%20Relearning-MultiProcessing/" title="Python Relearning-MultiProcessing"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-22</div><div class="title">Python Relearning-MultiProcessing</div></div></a><a href="/2024/08/03/Python%20Relearning-Namespaces%20Scope/" title="Python Relearning-Namespaces Scope"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2024/07/08/1sNm2lDwKGZQa3j.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-03</div><div class="title">Python Relearning-Namespaces Scope</div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/image/%E5%89%91%E5%BF%83.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Sinohope</div><div class="author-info-description">The World Of Sinohope</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">101</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/LiuChaoyuan"><i class="fab fa-github"></i><span>Follow Me On Github</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到小刘的小站</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%90%90%E7%A2%8E%E7%9A%84%E8%AF%AD%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">琐碎的语法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">1.1.</span> <span class="toc-text">运算符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9E%E7%BB%AD%E8%B5%8B%E5%80%BC"><span class="toc-number">1.2.</span> <span class="toc-text">连续赋值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%AF%E6%8C%81%E5%A4%8D%E6%95%B0"><span class="toc-number">1.3.</span> <span class="toc-text">支持复数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%83%E5%B0%94%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.4.</span> <span class="toc-text">布尔类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AA%E6%9C%89%E4%B8%80%E4%B8%AA%E5%85%83%E7%B4%A0%E7%9A%84%E5%85%83%E7%BB%84"><span class="toc-number">1.5.</span> <span class="toc-text">只有一个元素的元组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bytes%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.6.</span> <span class="toc-text">bytes类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8b%E5%89%8D%E7%BC%80"><span class="toc-number">1.6.1.</span> <span class="toc-text">使用b前缀</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bytes-%E5%87%BD%E6%95%B0%E5%B0%86%E5%85%B6%E4%BB%96%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%AF%B9%E8%B1%A1%E8%BD%AC%E6%8D%A2%E4%B8%BAbyte%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.6.2.</span> <span class="toc-text">bytes()函数将其他类型的对象转换为byte类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="toc-number">1.7.</span> <span class="toc-text">类型转换</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#math%E5%BA%93%E6%95%B0%E5%AD%A6%E5%87%BD%E6%95%B0"><span class="toc-number">2.</span> <span class="toc-text">math库数学函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6"><span class="toc-number">3.</span> <span class="toc-text">转义字符</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">4.</span> <span class="toc-text">格式化字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E7%AC%A6"><span class="toc-number">4.1.</span> <span class="toc-text">格式化符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%93%8D%E4%BD%9C%E7%AC%A6%E8%BE%85%E5%8A%A9%E6%8C%87%E4%BB%A4"><span class="toc-number">4.2.</span> <span class="toc-text">格式化操作符辅助指令:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#f-string"><span class="toc-number">4.3.</span> <span class="toc-text">f-string</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%86%85%E5%BB%BA%E5%87%BD%E6%95%B0"><span class="toc-number">5.</span> <span class="toc-text">字符串内建函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E5%B0%8F%E5%86%99-%E6%A0%BC%E5%BC%8F"><span class="toc-number">5.1.</span> <span class="toc-text">大小写&#x2F;格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6-%E6%95%B0%E5%AD%97-%E6%A3%80%E6%B5%8B"><span class="toc-number">5.2.</span> <span class="toc-text">字符&#x2F;数字&#x2F;检测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A3%80%E6%B5%8B%E7%89%B9%E5%AE%9A%E4%BD%8D%E7%BD%AE%E7%9A%84%E5%AD%97%E7%AC%A6"><span class="toc-number">5.3.</span> <span class="toc-text">检测特定位置的字符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%89%B2-%E7%A7%BB%E9%99%A4-%E6%9B%BF%E6%8D%A2"><span class="toc-number">5.4.</span> <span class="toc-text">分割&#x2F;移除&#x2F;替换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E6%95%B0"><span class="toc-number">5.5.</span> <span class="toc-text">计数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E6%89%BE"><span class="toc-number">5.6.</span> <span class="toc-text">查找</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">5.7.</span> <span class="toc-text">其他</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">6.</span> <span class="toc-text">参考资料</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/12/15/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E9%A1%B5/" title="Operating-System-存储管理之分页"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating-System-存储管理之分页"/></a><div class="content"><a class="title" href="/2024/12/15/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E9%A1%B5/" title="Operating-System-存储管理之分页">Operating-System-存储管理之分页</a><time datetime="2024-12-15T11:37:25.000Z" title="发表于 2024-12-15 19:37:25">2024-12-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/14/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E5%8C%BA/" title="Operating System-存储管理之分区"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating System-存储管理之分区"/></a><div class="content"><a class="title" href="/2024/12/14/Operating-System-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86%E4%B9%8B%E5%88%86%E5%8C%BA/" title="Operating System-存储管理之分区">Operating System-存储管理之分区</a><time datetime="2024-12-14T12:54:53.000Z" title="发表于 2024-12-14 20:54:53">2024-12-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/14/Operating-System-%E7%BA%BF%E7%A8%8B/" title="Operating System-线程"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating System-线程"/></a><div class="content"><a class="title" href="/2024/12/14/Operating-System-%E7%BA%BF%E7%A8%8B/" title="Operating System-线程">Operating System-线程</a><time datetime="2024-12-14T04:25:03.000Z" title="发表于 2024-12-14 12:25:03">2024-12-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/13/Operating-System-%E6%AD%BB%E9%94%81/" title="Operating System-死锁"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Operating System-死锁"/></a><div class="content"><a class="title" href="/2024/12/13/Operating-System-%E6%AD%BB%E9%94%81/" title="Operating System-死锁">Operating System-死锁</a><time datetime="2024-12-13T13:03:24.000Z" title="发表于 2024-12-13 21:03:24">2024-12-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/12/Matrix-Computations-%E5%8F%A4%E5%85%B8%E8%BF%AD%E4%BB%A3%E6%B3%95%E6%B1%82%E8%A7%A3%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84/" title="Matrix Computations-古典迭代法求解线性方程组"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://raw.githubusercontent.com/LiuChaoyuan/Blog_img/master/ds1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Matrix Computations-古典迭代法求解线性方程组"/></a><div class="content"><a class="title" href="/2024/12/12/Matrix-Computations-%E5%8F%A4%E5%85%B8%E8%BF%AD%E4%BB%A3%E6%B3%95%E6%B1%82%E8%A7%A3%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84/" title="Matrix Computations-古典迭代法求解线性方程组">Matrix Computations-古典迭代法求解线性方程组</a><time datetime="2024-12-12T03:44:39.000Z" title="发表于 2024-12-12 11:44:39">2024-12-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By Sinohope</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+      
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/gh/xiabo2/CDN@latest/fishes.js"></script><script type="text/javascript" src="/js/fairyDustCursor.js"></script><div class="aplayer no-destroy" data-id="12355351036" data-server="netease" data-type="playlist" data-fixed="true" data-mini="true" data-listFolded="true" data-order="random" data-preload="auto" data-autoplay="false" muted></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>
