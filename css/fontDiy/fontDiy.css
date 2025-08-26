@@ -8,10 +8,10 @@
 /* 霞婺文楷 */
 @font-face {
   font-family: 'Xiawu';
-  src: url('LLXGWWenKaiMono-Medium.TTF');
-  src: url('LXGWWenKai-Medium.TTF');
-  src: url('LXGWWenKai-Regular.TTF');
-  src: url('LXGWWenKai-Light.TTF');
+  src: url('LXGWWenKaiMono-Medium.ttf');
+  src: url('LXGWWenKai-Medium.ttf');
+  src: url('LXGWWenKai-Regular.ttf');
+  src: url('LXGWWenKai-Light.ttf');
 }
 
 /* 寒蝉锦书宋 */
