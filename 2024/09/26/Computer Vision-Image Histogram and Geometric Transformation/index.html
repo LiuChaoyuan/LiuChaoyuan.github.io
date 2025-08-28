@@ -331,7 +331,7 @@ C=-H(0)\frac{255}{N-H(0)}</script><p>这里面的 $H(0)$ 即累计图像直方�
                             text: ['More', 'Less'],
                             min: 0,
                             max: Math.max(...groupedData[initYear].map(item => item[1])),
-                            inRange: { color: ["#ACE7AE","#69C16D","#549F57"] }
+                            inRange: { color: ["#A3DFF7","#B5D8C4","#F7C9B7"] }
                         },
                         legend: {
                             type: 'scroll',
@@ -418,8 +418,8 @@ C=-H(0)\frac{255}{N-H(0)}</script><p>这里面的 $H(0)$ 即累计图像直方�
                             type: 'line',
                             data: [1,16,10,13,16,8,6],
                             smooth: true,
-                            lineStyle: { color: '#5470C6', width: 2 },
-                            itemStyle: { color: '#5470C6' },
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
                             areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
                             symbolSize: 10,
                             label: {
@@ -453,7 +453,7 @@ C=-H(0)\frac{255}{N-H(0)}</script><p>这里面的 $H(0)$ 即累计图像直方�
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Python","value":12},{"name":"博弈论","value":7},{"name":"矩阵计算","value":7},{"name":"数据结构","value":4},{"name":"操作系统","value":4},{"name":"Nash均衡","value":3},{"name":"复变函数","value":3},{"name":"Butterfly","value":2}],
+                            data: [{"name":"Python","value":12},{"name":"博弈论","value":7},{"name":"矩阵计算","value":7},{"name":"数据结构","value":4},{"name":"操作系统","value":4},{"name":"Nash均衡","value":3},{"name":"复变函数","value":3},{"name":"字符串","value":2}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -461,13 +461,13 @@ C=-H(0)\frac{255}{N-H(0)}</script><p>这里面的 $H(0)$ 即累计图像直方�
                                 fontWeight: 'bold',
                                 fontFamily: 'Microsoft YaHei, SimSun, serif'
                             },
-                            color: ["#5470C6","#91CC75","#FAC858","#EE6666","#73C0DE","#3BA272","#FC8452","#9A60B4"],
+                            color: ["#F2A7D1","#F5E05D","#D74B76","#1EAEAC","#FFC836","#A8A2FF","#A9E9FF","#FF6767"],
                             labelLine: { show: true }
                         }],
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Python","value":12},{"name":"博弈论","value":7},{"name":"矩阵计算","value":7},{"name":"数据结构","value":4},{"name":"操作系统","value":4},{"name":"Nash均衡","value":3},{"name":"复变函数","value":3},{"name":"Butterfly","value":2}].map(tag => tag.name),
+                            data: [{"name":"Python","value":12},{"name":"博弈论","value":7},{"name":"矩阵计算","value":7},{"name":"数据结构","value":4},{"name":"操作系统","value":4},{"name":"Nash均衡","value":3},{"name":"复变函数","value":3},{"name":"字符串","value":2}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         }
                     });
@@ -507,8 +507,8 @@ C=-H(0)\frac{255}{N-H(0)}</script><p>这里面的 $H(0)$ 即累计图像直方�
                             },
                             itemStyle: {
                                 color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-                                    { offset: 0, color: '#91CC75' },
-                                    { offset: 1, color: '#73C0DE' }
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
                                 ])
                             }
                         }]
@@ -554,8 +554,8 @@ C=-H(0)\frac{255}{N-H(0)}</script><p>这里面的 $H(0)$ 即累计图像直方�
                             layout: 'orthogonal',
                             orient: 'TB',
                             itemStyle: {
-                                color: '#91CC75',
-                                borderColor: '#73C0DE'
+                                color: '#4C8C99',
+                                borderColor: '#F9B5E2'
                             },
                             label: {
                                 position: 'bottom',
